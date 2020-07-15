@@ -39,6 +39,8 @@ import eu.coatrack.api.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -91,6 +93,7 @@ public class PaypalController {
     }
 
     @RequestMapping("/pay5euros")
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     public String pay5euros(Authentication authentication) throws PayPalRESTException {
 
         /*

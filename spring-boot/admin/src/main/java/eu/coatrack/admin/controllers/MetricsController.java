@@ -25,8 +25,6 @@ import eu.coatrack.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,7 +57,6 @@ public class MetricsController {
     AntPathMatcher parser = new AntPathMatcher();
 
     @RequestMapping(method = RequestMethod.POST)
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     public Long storeMetricAndProperlySetRelationships(
             @RequestParam("proxyId") String proxyId,
             @RequestParam("apiKeyValue") String apiKeyValue,

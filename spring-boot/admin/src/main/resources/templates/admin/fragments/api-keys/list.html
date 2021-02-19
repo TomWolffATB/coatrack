@@ -6,155 +6,19 @@
                 <div class="x_content">
                     <i class="fa fa-lg fa-info-circle"/>
                     <span id='message'>message</span>
-
                 </div>
             </div>
         </div>
         <div id="extendValidity" title="Change validity end date">
             <div class="x_panel">
                 <div class="x_content">
-
                     <span id='message'> </span>
                     <input type="text" id="datepicker"/>
                 </div>
             </div>
         </div>
-        <script>
-            $(function () {
-
-                $("#infoDialog").dialog({
-                    width: 'auto',
-                    height: "auto",
-                    autoOpen: false,
-                    modal: true,
-                    show: {
-                        effect: "blind",
-                        duration: 1500
-                    },
-                    hide: {
-                        effect: "blind",
-                        duration: 1000
-                    },
-                    buttons: {
-                        "Yes": function () {
-
-                            var id = $(this).data('deleteItem');
-
-                            var token = $("meta[name='_csrf']").attr("content");
-                            var header = $("meta[name='_csrf_header']").attr("content");
-
-                            $.ajax({
-                                url: '/admin/api-keys/' + id + '.json',
-                                headers: {header: token},
-                                type: 'DELETE',
-                                success: function (result) {
-                                    console.log('success:' + JSON.stringify(result));
-
-                                    console.log('remove :' + id);
-
-                                    $("#item" + id).remove();
-                                },
-                                error: function (result) {
-                                    console.log('error:' + JSON.stringify(result));
-                                }
-                            });
-
-                            $(this).dialog("close");
-                        },
-                        "No": function () {
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-                $("#extendValidity").dialog({
-                    width: 'auto',
-                    height: "auto",
-                    autoOpen: false,
-                    modal: true,
-                    show: {
-                        effect: "blind",
-                        duration: 1500
-                    },
-                    hide: {
-                        effect: "blind",
-                        duration: 1000
-                    },
-                    buttons: {
-                        "Yes": function () {
-
-
-                            var id = $(this).data('extendValidityId');
-                            var nextValidDate = document.getElementById('datepicker').value;
-                            var token = $("meta[name='_csrf']").attr("content");
-                            var header = $("meta[name='_csrf_header']").attr("content");
-
-
-                            $.ajax({
-                                url: '/admin/api-keys/' + id + '/extendValidity',
-                                headers: {header: token},
-                                type: 'POST',
-                                data: {nextValidDate: nextValidDate},
-                                success: function (result) {
-                                    $("#item" + id + "ValidUntil").text(nextValidDate);
-                                    $("#item" + id + "ValidUntil").attr("validuntil", nextValidDate);
-                                },
-                                error: function (result) {
-                                    console.log('error:' + JSON.stringify(result));
-                                }
-                            });
-
-                            $(this).dialog("close");
-                        },
-                        "No": function () {
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-
-
-
-
-            });
-
-            function deleteItem(item, consumer) {
-                $("#message").html("Are you sure you want to delete the API key of <strong> " + consumer + "</strong> ? Then " + consumer + " cannot use your API any more");
-                $("#infoDialog").data('deleteItem', item).dialog("open");
-            }
-            function initExtendValidity()
-            {
-                document.getElementById('datepicker').value = '';
-                var SelectedDates = {};
-                $("#datepicker").datepicker({
-                    dateFormat: 'dd/mm/yy',
-                    beforeShowDay: function (date) {
-
-                        var Highlight = SelectedDates[date];
-                        if (Highlight) {
-                            return [true, "Highlighted", Highlight];
-                        } else {
-                            return [true, '', ''];
-                        }
-                    }
-                });
-            }
-            function extendValidity(id)
-            {
-                var originalDate = $("#item" + id + "ValidUntil").attr("validuntil");
-                console.log(originalDate);
-                $("#datepicker").datepicker("destroy");
-                $("#datepicker").datepicker("refresh");
-                initExtendValidity();
-                $("#datepicker").datepicker("setDate", originalDate);
-                $("#extendValidity").data('extendValidityId', id).dialog("open");
-            }
-
-            $(function () {
-                initExtendValidity();
-            });
-        </script>
 
         <div th:fragment="body">
-
             <div class="page-title">
                 <div class="title_left">
                     <h3>
@@ -237,5 +101,126 @@
         </div>
         <div th:include="admin/fragments/scripts :: scripts" th:remove="tag">Javascript Libraries</div>
         <div th:include="admin/fragments/scripts :: initializeDataTables" th:remove="tag">Javascript Libraries</div>
+
+        <script>
+            $(function () {
+                $("#infoDialog").dialog({
+                    width: 'auto',
+                    height: "auto",
+                    autoOpen: false,
+                    modal: true,
+                    show: {
+                        effect: "blind",
+                        duration: 1500
+                    },
+                    hide: {
+                        effect: "blind",
+                        duration: 1000
+                    },
+                    buttons: {
+                        "Yes": function () {
+                            var id = $(this).data('deleteItem');
+                            var token = $("meta[name='_csrf']").attr("content");
+                            var header = $("meta[name='_csrf_header']").attr("content");
+
+                            $.ajax({
+                                url: '/admin/api-keys/' + id + '.json',
+                                headers: {header: token},
+                                type: 'DELETE',
+                                success: function (result) {
+                                    console.log('success:' + JSON.stringify(result));
+                                    console.log('remove :' + id);
+                                    $("#item" + id).remove();
+                                    location.reload();
+                                },
+                                error: function (result) {
+                                    console.log('error:' + JSON.stringify(result));
+                                }
+                            });
+                            $(this).dialog("close");
+                        },
+                        "No": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+                $("#extendValidity").dialog({
+                    width: 'auto',
+                    height: "auto",
+                    autoOpen: false,
+                    modal: true,
+                    show: {
+                        effect: "blind",
+                        duration: 1500
+                    },
+                    hide: {
+                        effect: "blind",
+                        duration: 1000
+                    },
+                    buttons: {
+                        "Yes": function () {
+                            var id = $(this).data('extendValidityId');
+                            var nextValidDate = document.getElementById('datepicker').value;
+                            var token = $("meta[name='_csrf']").attr("content");
+                            var header = $("meta[name='_csrf_header']").attr("content");
+
+                            $.ajax({
+                                url: '/admin/api-keys/' + id + '/extendValidity',
+                                headers: {header: token},
+                                type: 'POST',
+                                data: {nextValidDate: nextValidDate},
+                                success: function (result) {
+                                    $("#item" + id + "ValidUntil").text(nextValidDate);
+                                    $("#item" + id + "ValidUntil").attr("validuntil", nextValidDate);
+                                },
+                                error: function (result) {
+                                    console.log('error:' + JSON.stringify(result));
+                                }
+                            });
+                            $(this).dialog("close");
+                        },
+                        "No": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            });
+
+            function deleteItem(item, consumer) {
+                $("#message").html("Are you sure you want to delete the API key of <strong> " + consumer + "</strong> ? Then " + consumer + " cannot use your API any more");
+                $("#infoDialog").data('deleteItem', item).dialog("open");
+            }
+
+            function initExtendValidity() {
+                document.getElementById('datepicker').value = '';
+                var SelectedDates = {};
+                $("#datepicker").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    beforeShowDay: function (date) {
+                        var Highlight = SelectedDates[date];
+                        if (Highlight) {
+                            return [true, "Highlighted", Highlight];
+                        } else {
+                            return [true, '', ''];
+                        }
+                    }
+                });
+            }
+
+            function extendValidity(id) {
+                var originalDate = $("#item" + id + "ValidUntil").attr("validuntil");
+                console.log(originalDate);
+                $("#datepicker").datepicker("destroy");
+                $("#datepicker").datepicker("refresh");
+                initExtendValidity();
+                $("#datepicker").datepicker("setDate", originalDate);
+                $("#extendValidity").data('extendValidityId', id).dialog("open");
+            }
+
+            $(function () {
+                initExtendValidity();
+            });
+        </script>
+
     </body>
 </html>

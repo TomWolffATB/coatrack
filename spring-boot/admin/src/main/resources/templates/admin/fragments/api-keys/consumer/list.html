@@ -78,7 +78,6 @@
                                         <td th:if="${testService == null}" class="a-center " th:text="${apiKey.created != null} ? ${#dates.format(apiKey.created, 'yyyy-MM-dd')} : ''">Created</td>
                                         <td th:if="${testService == null}" th:id="|@{item}${apiKey.id}@{ValidUntil}|" th:attr="validUntil=${#dates.format(apiKey.validUntil, 'yyyy-MM-dd')}" class="a-center " th:text="${apiKey.validUntil != null} ? ${#dates.format(apiKey.validUntil, 'yyyy-MM-dd')}: ''">Valid until</td>
                                         <td class="right">
-                                            <button th:onclick="|@{location.href='/admin/api-keys/}${apiKey.id}@{'}|" ><i class="fa fa-search-plus"/></button>
                                             <button th:if="${apiKey.serviceApi.serviceAccessPermissionPolicy.displayStringShort == 'Public'}"
                                                     th:onclick="'javascript:deleteItem(' + ${apiKey.id} + ', \'' + ${apiKey.userName} + '\' )'">
                                                 <i class="fa  fa-trash"/>

@@ -73,8 +73,8 @@
                 });
             });
 
-            function deleteItem(item) {
-                $("#confirmApiKeyRemovalmessage").html("Are you sure you want to delete this API key?");
+            function deleteItem(item, message) {
+                $("#confirmApiKeyRemovalmessage").html(message);
                 $("#infoDialog").data('deleteItem', item).dialog("open");
             }
         </script>
@@ -394,11 +394,11 @@
                      "#36CAAB",
                      "#49A9EA"
                      ]
-             
+
                      }]
                      }
                      });
-             
+
                      var canvasDoughnut = new Chart(document.getElementById("canvas1i2"), {
                      type: 'doughnut',
                      showTooltips: false,
@@ -427,11 +427,11 @@
                      "#36CAAB",
                      "#49A9EA"
                      ]
-             
+
                      }]
                      }
                      });
-             
+
                      var canvasDoughnut = new Chart(document.getElementById("canvas1i3"), {
                      type: 'doughnut',
                      showTooltips: false,

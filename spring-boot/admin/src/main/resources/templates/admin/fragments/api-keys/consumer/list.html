@@ -79,7 +79,7 @@
                                         <td th:if="${testService == null}" th:id="|@{item}${apiKey.id}@{ValidUntil}|" th:attr="validUntil=${#dates.format(apiKey.validUntil, 'yyyy-MM-dd')}" class="a-center " th:text="${apiKey.validUntil != null} ? ${#dates.format(apiKey.validUntil, 'yyyy-MM-dd')}: ''">Valid until</td>
                                         <td class="right">
                                             <button th:if="${apiKey.serviceApi.serviceAccessPermissionPolicy.displayStringShort == 'Public'}"
-                                                    th:onclick="'javascript:deleteItem(' + ${apiKey.id} + ', \'' + ${apiKey.userName} + '\' )'">
+                                                    th:onclick="'createInfoBoxMessageAndDeleteKey(' + ${apiKey.id} + ')'">
                                                 <i class="fa  fa-trash"/>
                                             </button>
                                         </td>
@@ -98,5 +98,14 @@
         <div th:include="admin/fragments/scripts :: scripts" th:remove="tag">Javascript Libraries</div>
         <div th:include="admin/fragments/scripts :: initializeDataTables" th:remove="tag">Javascript Libraries</div>
         <div th:include="admin/fragments/scripts :: apiKeyRemoveDialog" th:remove="tag">Javascript Libraries</div>
+
+        <script>
+            function createInfoBoxMessageAndDeleteKey(apiKeyId){
+                infoBoxMessage = "Are you sure you want to delete this API key?";
+                deleteItem(apiKeyId, infoBoxMessage);
+            }
+        </script>
+
+
     </body>
 </html>

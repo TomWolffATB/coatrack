@@ -26,7 +26,6 @@
         <div th:fragment="apiKeyRemoveDialog">
         <script>
             $(function () {
-
                 $("#infoDialog").dialog({
                     width: 'auto',
                     height: "auto",
@@ -42,9 +41,7 @@
                     },
                     buttons: {
                         "Yes": function () {
-
                             var id = $(this).data('deleteItem');
-
                             var token = $("meta[name='_csrf']").attr("content");
                             var header = $("meta[name='_csrf_header']").attr("content");
 
@@ -54,16 +51,13 @@
                                 type: 'DELETE',
                                 success: function (result) {
                                     console.log('success:' + JSON.stringify(result));
-
                                     console.log('remove :' + id);
-
                                     $("#item" + id).remove();
                                 },
                                 error: function (result) {
                                     console.log('error:' + JSON.stringify(result));
                                 }
                             });
-
                             $(this).dialog("close");
                         },
                         "No": function () {
@@ -107,7 +101,6 @@
             <script th:inline="javascript">
 
                 function showDialog(title, result) {
-
                     BootstrapDialog.show({
                         type: BootstrapDialog.TYPE_PRIMARY,
                         title: title,
@@ -121,11 +114,9 @@
                                 }
                             }]
                     })
-
                 }
 
                 function showErrorDialog(title, result) {
-
                     BootstrapDialog.show({
                         type: BootstrapDialog.TYPE_PRIMARY,
                         title: title,
@@ -140,7 +131,6 @@
                                 }
                             }]
                     })
-
                 }
             </script>
         </div>
@@ -210,12 +200,10 @@
 
                 $(function () {
                     var d1 = [];
-                    //var d2 = [];
 
                     //here we generate data for chart
                     for (var i = 0; i < 8; i++) {
                         d1.push([new Date(Date.today().add(i).days()).getTime(), randNum() + i]);
-                        //    d2.push([new Date(Date.today().add(i).days()).getTime(), randNum()]);
                     }
 
                     var chartMinDate = d1[0][0]; //first day
@@ -289,39 +277,13 @@
                             max: chartMaxDate
                         }
                     };
-                    /* commented out, as dummy plot is not needed any more
-                     var plot = $.plot($("#placeholder33x"), [{
-                     label: "API Calls",
-                     data: d1,
-                     lines: {
-                     fillColor: "rgba(150, 202, 89, 0.12)"
-                     }, //#96CA59 rgba(150, 202, 89, 0.42)
-                     points: {
-                     fillColor: "#fff"
-                     }
-                     }], options);
-                     */
                 });
                 //]]>
             </script>
             <!-- /flot -->
             <!--  -->
             <script>
-
                 $('document').ready(function () {
-
-                    /*
-                     $(".sparkline_one").sparkline([2, 4, 3, 4, 5, 4, 5, 4, 3, 4, 5, 6, 4, 5, 6, 3, 5, 4, 5, 4, 5, 4, 3, 4, 5, 6, 7, 5, 4, 3, 5, 6], {
-                     type: 'bar',
-                     height: '125',
-                     barWidth: 13,
-                     colorMap: {
-                     '7': '#a1a1a1'
-                     },
-                     barSpacing: 2,
-                     barColor: '#26B99A'
-                     });
-                     */
                     $(".sparkline11").sparkline([2, 4, 3, 4, 5, 4, 5, 4, 3, 4, 6, 2, 4, 3, 4, 5, 4, 5, 4, 3], {
                         type: 'bar',
                         height: '40',
@@ -364,107 +326,6 @@
                     Chart.defaults.global.legend = {
                         enabled: false
                     };
-
-                    /*
-                     var canvasDoughnut = new Chart(document.getElementById("canvas1i"), {
-                     type: 'doughnut',
-                     showTooltips: false,
-                     tooltipFillColor: "rgba(51, 51, 51, 0.55)",
-                     data: {
-                     labels: [
-                     "Symbian",
-                     "Blackberry",
-                     "Other",
-                     "Android",
-                     "IOS"
-                     ],
-                     datasets: [{
-                     data: [15, 20, 30, 10, 30],
-                     backgroundColor: [
-                     "#BDC3C7",
-                     "#9B59B6",
-                     "#455C73",
-                     "#26B99A",
-                     "#3498DB"
-                     ],
-                     hoverBackgroundColor: [
-                     "#CFD4D8",
-                     "#B370CF",
-                     "#34495E",
-                     "#36CAAB",
-                     "#49A9EA"
-                     ]
-
-                     }]
-                     }
-                     });
-
-                     var canvasDoughnut = new Chart(document.getElementById("canvas1i2"), {
-                     type: 'doughnut',
-                     showTooltips: false,
-                     tooltipFillColor: "rgba(51, 51, 51, 0.55)",
-                     data: {
-                     labels: [
-                     "Symbian",
-                     "Blackberry",
-                     "Other",
-                     "Android",
-                     "IOS"
-                     ],
-                     datasets: [{
-                     data: [15, 20, 30, 10, 30],
-                     backgroundColor: [
-                     "#BDC3C7",
-                     "#9B59B6",
-                     "#455C73",
-                     "#26B99A",
-                     "#3498DB"
-                     ],
-                     hoverBackgroundColor: [
-                     "#CFD4D8",
-                     "#B370CF",
-                     "#34495E",
-                     "#36CAAB",
-                     "#49A9EA"
-                     ]
-
-                     }]
-                     }
-                     });
-
-                     var canvasDoughnut = new Chart(document.getElementById("canvas1i3"), {
-                     type: 'doughnut',
-                     showTooltips: false,
-                     tooltipFillColor: "rgba(51, 51, 51, 0.55)",
-                     data: {
-                     labels: [
-                     "Symbian",
-                     "Blackberry",
-                     "Other",
-                     "Android",
-                     "IOS"
-                     ],
-                     datasets: [{
-                     data: [15, 20, 30, 10, 30],
-                     backgroundColor: [
-                     "#BDC3C7",
-                     "#9B59B6",
-                     "#455C73",
-                     "#26B99A",
-                     "#3498DB"
-                     ],
-                     hoverBackgroundColor: [
-                     "#CFD4D8",
-                     "#B370CF",
-                     "#34495E",
-                     "#36CAAB",
-                     "#49A9EA"
-                     ]
-             
-                     }]
-                     }
-                     });
-                     */
                 })
                         ;
             </script>
@@ -546,4 +407,3 @@
         </div>
     </body>
 </html>
-

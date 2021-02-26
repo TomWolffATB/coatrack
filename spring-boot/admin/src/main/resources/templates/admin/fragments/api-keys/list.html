@@ -35,13 +35,10 @@
                     },
                     buttons: {
                         "Yes": function () {
-
-
                             var id = $(this).data('extendValidityId');
                             var nextValidDate = document.getElementById('datepicker').value;
                             var token = $("meta[name='_csrf']").attr("content");
                             var header = $("meta[name='_csrf_header']").attr("content");
-
 
                             $.ajax({
                                 url: '/admin/api-keys/' + id + '/extendValidity',
@@ -66,8 +63,7 @@
                 });
 
             });
-            function initExtendValidity()
-            {
+            function initExtendValidity() {
                 document.getElementById('datepicker').value = '';
                 var SelectedDates = {};
                 $("#datepicker").datepicker({
@@ -83,8 +79,7 @@
                     }
                 });
             }
-            function extendValidity(id)
-            {
+            function extendValidity(id) {
                 var originalDate = $("#item" + id + "ValidUntil").attr("validuntil");
                 console.log(originalDate);
                 $("#datepicker").datepicker("destroy");
@@ -100,7 +95,6 @@
         </script>
 
         <div th:fragment="body">
-
             <div class="page-title">
                 <div class="title_left">
                     <h3>

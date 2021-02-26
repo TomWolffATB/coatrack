@@ -52,7 +52,6 @@
                             <table id="servicesTable" class="table table-striped jambo_table default-data-table">
                                 <thead>
                                     <tr class="heading">
-
                                         <th th:text="#{admin.services.list.col.name}"></th>
                                         <th th:text="#{admin.services.list.col.url}"></th>
                                         <th th:text="#{admin.services.list.col.id}"></th>
@@ -60,12 +59,10 @@
                                         <th th:text="#{admin.services.list.col.pricing}"></th>
                                         <th th:text="#{admin.services.list.col.description}"></th>
                                         <th></th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="service : ${services}" th:id="|@{item}${service.id}|">
-
                                         <td th:text="${service.name}"></td>
                                         <td th:text="${service.localUrl}"></td>
                                         <td th:text="${service.uriIdentifier}"></td>
@@ -78,8 +75,6 @@
                                             <button th:onclick="|@{location.href='/admin/services/}${service.id}@{/formUpdate'}|"><i class="fa  fa-pencil-square-o"/></button>
                                             <button th:onclick="'javascript:deleteItem(\'' + ${service.id} + '\',\'' + ${service.name} +'\' )'"><i class="fa  fa-trash"/></button>
                                         </td>
-
-
                                     </tr>
                                     <tr th:if="${#lists.isEmpty(services)}" >
                                         <td colspan="7"> No items yet  </td>
@@ -95,7 +90,6 @@
         <div th:include="admin/fragments/scripts :: initializeDataTables" th:remove="tag">Javascript Libraries</div>
         <script>
             $(function () {
-
                 $("#infoDialog").dialog({
                     width: 'auto',
                     height: "auto",
@@ -111,23 +105,17 @@
                     },
                     buttons: {
                         "Yes": function () {
-
                             var id = $(this).data('deleteItem');
-
                             var token = $("meta[name='_csrf']").attr("content");
                             var header = $("meta[name='_csrf_header']").attr("content");
 
-
                             $.ajax({
                                 url: '/admin/services/' + id + '.json',
-
                                 headers: {header: token},
                                 type: 'DELETE',
                                 success: function (result) {
                                     console.log('success:' + JSON.stringify(result));
-
                                     console.log('remove :' + id);
-
                                     $("#item" + id).remove();
                                 },
                                 error: function (result) {
@@ -142,54 +130,34 @@
                         }
                     }
                 });
-
-
-
             });
 
             function deleteItem(item, name) {
-
-
                 $.ajax({url: '/admin/services/' + item + '/proxies',
-
                     type: 'GET',
                     success: function (result) {
-
                         console.log('success:' + JSON.stringify(result));
-
                         var message = "";
-
-                        if (result.length > 0)
-                        {
-
+                        if (result.length > 0) {
                             message = "Service Offering <strong>" + name + "</strong> has " + result.length + " gateways assigned.";
-
                             message += "<ul>";
                             for (var i = 0; result.length > i; i++) {
                                 message += "<li>" + result[i].name + "</li>";
                             }
-
                             message += "</ul>";
                         }
-
                         message += "Are you sure you want to delete Service Offering <strong>" + name + "</strong>?";
 
                         $("#message").html(message);
                         $("#infoDialog")
                                 .data('deleteItem', item)
                                 .dialog("open");
-
-
                     },
                     error: function (result) {
                         console.log('error:' + JSON.stringify(result));
                     }
                 });
-
             }
-
-
-
         </script>
     </body>
 </html>

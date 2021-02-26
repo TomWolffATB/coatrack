@@ -66,17 +66,13 @@
                         <div class="x_content">
                             <br/>
 
-
                             <form id="apiKeyForm" class="form-horizontal form-label-left"
                                   action="#" th:action="${mode} == 0 ? @{/admin/api-keys/add} : @{/admin/api-keys/update}" method="POST">
-
                                 <input type="hidden" th:field="${apiKey.id}" />
-
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">
                                         Service linked to this Api Key
                                     </label>
-
                                     <div class="col-md-9 col-sm-9 col-xs-12">
                                         <select id="selectedServiceId" name='selectedServiceId'>
                                             <option th:each="service : ${services}"
@@ -91,7 +87,6 @@
                                     </div>
                                 </div>
 
-
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">
                                         Search for Github user
@@ -102,22 +97,8 @@
                                         <span  class="input-group-btn">
                                             <button id="githubUserSearchButton" type="button" class="btn btn-primary">Search</button>
                                             <div  id="busy_indicator" class="busy_indicator" style="display: none;"/>
-
                                         </span>
-
-
-
-
                                     </div>
-
-
-
-                                    <!--div th:if="${#lists.isEmpty(services)}" class="col-md-9 col-sm-9 col-xs-12">
-                                        <p class="byline">
-                                            <br/>
-                                            You did not yet define any services that could be provided via the new gateway.
-                                        </p>
-                                    </div-->
                                 </div>
 
                                 <h3> Select API user from table
@@ -133,7 +114,6 @@
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
-
                                 </table>
 
                                 <div class="ln_solid"></div>
@@ -142,16 +122,13 @@
                                         <a id="saveApiKeyButton" class="btn btn-success">Submit</a>
                                         <a th:href="@{'/admin/api-keys/'}" class="btn btn-primary"> Cancel</a>
                                         <button class="btn btn-primary" type="reset">Reset</button>
-
                                     </div>
                                 </div>
                             </form>
                         </div>
-
                     </div>
                 </div>
             </div>
-
         </div>
 
         <script th:inline="javascript">
@@ -192,23 +169,17 @@
                     }
                 });
 
-                //
                 // Retrieve the user id just in case we are editing
-
                 var selectedUserId = $('#selectedUserId').val();
 
-                // 
                 // Depending on user, we can retrieve an empty table or a table with existing user
                 var ajaxURL = null;
-                if (selectedUserId !== null && selectedUserId !== "")
-                {
+                if (selectedUserId !== null && selectedUserId !== "") {
                     ajaxURL = "/admin/github/" + selectedUserId;
-                } else
-                {
+                } else {
                     ajaxURL = "/admin/github/search_empty";
                 }
 
-                //
                 // Table used for github users filter
                 table = $('#githubUserTable').DataTable({
                     ajax: ajaxURL,
@@ -229,7 +200,6 @@
                     ]
                 });
 
-                // 
                 // Add behaviour to the table row
                 $('#githubUserTable tbody').on('click', 'tr', function () {
                     if ($(this).hasClass('selected')) {
@@ -240,47 +210,39 @@
                     }
                 });
 
-                //
                 // Add behaviour when the user filters the github account
                 $('#githubUserSearchButton').click(function () {
                     searchGituhbUsers();
                 });
 
-                //
                 // Add behaviour when the user saves the selection
                 $('#saveApiKeyButton').click(function () {
                     // Check if any github user selection
-                    if (table.row('.selected') !== null && table.row('.selected').data() !== null && typeof table.row('.selected').data() !== 'undefined')
-                    {
+                    if (table.row('.selected') !== null && table.row('.selected').data() !== null && typeof table.row('.selected').data() !== 'undefined') {
                         // Check if any service selection
-                        if ($("#selectedServiceId").val() !== null && $("#selectedServiceId").val() !== "" && typeof $("#selectedServiceId").val() !== 'undefined')
-                        {
+                        if ($("#selectedServiceId").val() !== null && $("#selectedServiceId").val() !== "" && typeof $("#selectedServiceId").val() !== 'undefined') {
                             // Retrieve the github username which is common attribute in github user database and coatrack user database
                             $("#selectedUserId").val(table.row('.selected').data().login);
                             $("#apiKeyForm").submit();
 
-                        } else
-                        {
+                        } else {
                             $("#message").html("You must select a service");
                             $("#infoDialog").dialog("open");
                         }
-                    } else
-                    {
+                    } else {
                         $("#message").html("You must select a coatrack user");
                         $("#infoDialog").dialog("open");
                     }
                 });
             });
 
-            function searchGituhbUsers()
-            {
+            function searchGituhbUsers() {
                 $('#githubUserSearchButton').hide();
                 $('#busy_indicator').show();
 
                 table.ajax.url(encodeURI('/admin/github/search/' + $("#githubUserSearchCriteria").val())).load();
             }
-            function searchGituhbUsersCallBack()
-            {
+            function searchGituhbUsersCallBack() {
                 $('#busy_indicator').hide();
                 $('#githubUserSearchButton').show();
 

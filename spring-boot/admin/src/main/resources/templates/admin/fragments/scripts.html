@@ -26,14 +26,14 @@
         <div th:fragment="apiKeyRemoveDialog">
         <script>
             $(function () {
-                $("#infoDialog").dialog({
+                $("#confirmDeletionDialog").dialog({
                     width: 'auto',
                     height: "auto",
                     autoOpen: false,
                     modal: true,
                     show: {
                         effect: "blind",
-                        duration: 1500
+                        duration: 1000
                     },
                     hide: {
                         effect: "blind",
@@ -69,7 +69,7 @@
 
             function deleteItem(item, message) {
                 $("#confirmApiKeyRemovalmessage").html(message);
-                $("#infoDialog").data('deleteItem', item).dialog("open");
+                $("#confirmDeletionDialog").data('deleteItem', item).dialog("open");
             }
         </script>
         </div>

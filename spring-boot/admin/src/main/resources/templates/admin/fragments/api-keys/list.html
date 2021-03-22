@@ -160,7 +160,7 @@
                                         <td><span th:id="|@{item}${apiKey.id}@{ValidUntil}|" th:attr="validUntil=${#dates.format(apiKey.validUntil, 'yyyy-MM-dd')}" class="a-center " th:text="${apiKey.validUntil != null} ? ${#dates.format(apiKey.validUntil, 'yyyy-MM-dd')}: ''">Valid until</span></td>
                                         <td><button th:onclick="'javascript:extendValidity(' + ${apiKey.id} + ' )'"><i class="glyphicon glyphicon-calendar"></i></button></td>
                                         <td class="right">
-                                            <button th:onclick="'createInfoBoxMessageAndDeleteKey(' + ${apiKey.id} + ', \'' + ${apiKey.userName} + '\' )'"><i class="fa  fa-trash"/></button>
+                                            <button th:onclick="'createWarningBoxAndAskForPermissionToDeleteApiKey(' + ${apiKey.id} + ', \'' + ${apiKey.userName} + '\' )'"><i class="fa  fa-trash"/></button>
                                         </td>
                                     </tr>
                                     <tr th:if="${#lists.isEmpty(apiKeys)}" >
@@ -178,10 +178,10 @@
         <div th:include="admin/fragments/scripts :: apiKeyRemoveDialog" th:remove="tag">Javascript Libraries</div>
 
     <script>
-        function createInfoBoxMessageAndDeleteKey(apiKeyId, consumerName){
-            infoBoxMessage = "Are you sure you want to delete the API key of <b>" + consumerName +
-                "</b>? Then, <b>" + consumerName + "</b> can not access this service anymore.";
-            deleteItem(apiKeyId, infoBoxMessage);
+        function createWarningBoxAndAskForPermissionToDeleteApiKey(apiKeyId, consumerName){
+            confirmationMsg = "Are you sure you want to delete the API key of <b>" + consumerName +
+                "</b>? Then, this person can not use this API key anymore to reach its service.";
+            deleteItem(apiKeyId, confirmationMsg);
         }
     </script>
 

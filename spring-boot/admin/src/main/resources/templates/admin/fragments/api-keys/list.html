@@ -174,14 +174,14 @@
             </div>
         </div>
         <div th:include="admin/fragments/scripts :: scripts" th:remove="tag">Javascript Libraries</div>
-        <div th:include="admin/fragments/scripts :: initializeDataTables" th:remove="tag">Javascript Libraries</div>
+        <div th:include="admin/fragments/scripts :: addOrderingToAdminApiKeyList" th:remove="tag">Javascript Libraries</div>
         <div th:include="admin/fragments/scripts :: apiKeyRemoveDialog" th:remove="tag">Javascript Libraries</div>
 
     <script>
         function createWarningBoxAndAskForPermissionToDeleteApiKey(apiKeyId, consumerName){
-            confirmationMsg = "Are you sure you want to delete the API key of <b>" + consumerName +
+            confirmationQuestion = "Are you sure you want to delete the API key of <b>" + consumerName +
                 "</b>? Then, this person can not use this API key anymore to reach its service.";
-            deleteItem(apiKeyId, confirmationMsg);
+            deleteItem(apiKeyId, confirmationQuestion);
         }
     </script>
 

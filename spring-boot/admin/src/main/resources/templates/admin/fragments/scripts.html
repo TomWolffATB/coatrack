@@ -53,6 +53,7 @@
                                     console.log('success:' + JSON.stringify(result));
                                     console.log('remove :' + id);
                                     $("#item" + id).remove();
+                                    location.reload();
                                 },
                                 error: function (result) {
                                     console.log('error:' + JSON.stringify(result));

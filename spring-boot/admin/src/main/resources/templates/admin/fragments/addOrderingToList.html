@@ -1,0 +1,62 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns="http://www.w3.org/1999/xhtml">
+<body>
+
+<div th:fragment="addOrderingToPublicServicesList">
+    <script>
+        $(document).ready(function () {
+            $('table[class*="default-data-table"]').DataTable({});
+        });
+    </script>
+</div>
+
+<div th:fragment="addOrderingToAdminApiKeyList">
+    <script>
+        $(document).ready(function () {
+            $('table[class*="default-data-table"]').DataTable({
+                columnDefs: [
+                    {orderable: false, targets: [5, 6]}
+                ]
+            });
+        });
+    </script>
+</div>
+
+<div th:fragment="addOrderingToConsumerApiKeyList">
+    <script>
+        $(document).ready(function () {
+            $('table[class*="default-data-table"]').DataTable({
+                columnDefs: [
+                    {orderable: false, targets: 6}
+                ]
+            });
+        });
+    </script>
+</div>
+
+<div th:fragment="addOrderingToProxyList">
+    <script>
+        $(document).ready(function () {
+            $('table[class*="default-data-table"]').DataTable({
+                columnDefs: [
+                    {orderable: false, targets: [6, 7, 8]}
+                ]
+            });
+        });
+    </script>
+</div>
+
+<div th:fragment="addOrderingToServiceList">
+    <script>
+        $(document).ready(function () {
+            $('table[class*="default-data-table"]').DataTable({
+                columnDefs: [
+                    {orderable: false, targets: 6}
+                ]
+            });
+        });
+    </script>
+</div>
+
+</body>
+</html>

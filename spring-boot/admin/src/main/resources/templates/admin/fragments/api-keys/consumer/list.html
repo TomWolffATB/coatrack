@@ -5,7 +5,7 @@
             <div class="x_panel">
                 <div class="x_content">
                     <i class="fa fa-lg fa-info-circle"/>
-                    <span id="confirmApiKeyRemovalmessage">message</span>
+                    <span id="confirmApiKeyRemovalMessage">message</span>
                 </div>
             </div>
         </div>
@@ -101,7 +101,7 @@
 
         <script>
             function createWarningBoxAndAskForPermissionToDeleteApiKey(apiKeyId){
-                confirmationQuestion = "Are you sure you want to delete this API key?";
+                const confirmationQuestion = "Are you sure you want to delete this API key?";
                 deleteItem(apiKeyId, confirmationQuestion);
             }
         </script>

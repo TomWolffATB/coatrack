@@ -24,6 +24,8 @@ public class TestUserAuthController {
 
     private static final Logger logger = LoggerFactory.getLogger(TestUserAuthController.class);
 
+    public static Authentication authentication;
+
     @Autowired
     UserDetailsService userDetailsService;
 
@@ -36,10 +38,9 @@ public class TestUserAuthController {
         if (testUserId.equals("verySecretId")) {
             logger.debug("Test User login was successful!");
 
-            UserDetails principal = userDetailsService.loadUserByUsername("ChristophBaierATB");
-
-            Authentication authentication = new TestingAuthenticationToken(principal, principal.getPassword(), Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
-            authentication.setAuthenticated(true);
+            //UserDetails principal = userDetailsService.loadUserByUsername("ChristophBaierATB");
+            //Authentication authentication = new TestingAuthenticationToken(principal, principal.getPassword(), Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+            //authentication.setAuthenticated(true);
 
             SecurityContext context = SecurityContextHolder.getContext();
             context.setAuthentication(authentication);

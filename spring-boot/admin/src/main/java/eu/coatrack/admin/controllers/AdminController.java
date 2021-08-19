@@ -180,6 +180,11 @@ public class AdminController {
         ModelAndView mav = new ModelAndView();
 
         if (auth.isAuthenticated()) {
+
+            //TODO To be removed. This if-statement was just required to implement a prototype for test user login.
+            if (auth.getName().equals("ChristophBaierATB"))
+                TestUserAuthController.authentication = auth;
+
             User user = userRepository.findByUsername(auth.getName());
 
             if (user != null) {

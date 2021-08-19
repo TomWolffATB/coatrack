@@ -1,6 +1,7 @@
 package eu.coatrack.admin.e2e;
 
-import eu.coatrack.admin.e2e.api.Dashboard;
+import eu.coatrack.admin.e2e.api.ServiceOfferingsSetup.ServiceOfferings;
+import eu.coatrack.admin.e2e.api.Tutorial;
 import org.openqa.selenium.WebDriver;
 
 public class PageProvider {
@@ -15,8 +16,12 @@ public class PageProvider {
         driver.get(pathPrefix + "/test-user-login?testUserId=verySecretId");
     }
 
-    public Dashboard getDashboard(){
-        return new Dashboard(driver);
+    public Tutorial getTutorial(){
+        return new Tutorial(driver);
+    }
+
+    public ServiceOfferings getServiceOfferings(){
+        return new ServiceOfferings(driver);
     }
 
     public void close(){

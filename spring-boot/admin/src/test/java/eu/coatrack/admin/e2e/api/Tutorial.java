@@ -10,7 +10,7 @@ import java.util.Random;
 
 import static eu.coatrack.admin.e2e.PageProvider.pathPrefix;
 
-public class Dashboard {
+public class Tutorial {
 
     private final WebDriver driver;
 
@@ -18,11 +18,11 @@ public class Dashboard {
     private String serviceName;
     private String apiKeyValue;
 
-    public Dashboard(WebDriver driver) {
+    public Tutorial(WebDriver driver) {
         this.driver = driver;
     }
 
-    public Dashboard createItemsViaTutorial(){
+    public Tutorial createItemsViaTutorial(){
         driver.get(pathPrefix + "/admin/gettingstarted");
 
         driver.findElement(By.linkText("Tutorial")).click();
@@ -31,8 +31,7 @@ public class Dashboard {
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.id("serviceName")));
         driver.findElement(By.id("serviceName")).click();
 
-        Random random = new Random();
-        serviceName = "my-service" + random.nextInt();
+        serviceName = "my-service" + new Random().nextInt();
 
         driver.findElement(By.id("serviceName")).sendKeys(serviceName);
         driver.findElement(By.linkText("Next")).click();

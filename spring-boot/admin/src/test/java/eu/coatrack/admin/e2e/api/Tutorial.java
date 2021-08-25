@@ -29,7 +29,7 @@ public class Tutorial {
         driver.findElement(By.linkText("Tutorial")).click();
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
-        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.id("serviceName")));
+        waitForElementWithId("serviceName");
         driver.findElement(By.id("serviceName")).click();
 
         serviceName = "my-service" + new Random().nextInt();
@@ -37,12 +37,12 @@ public class Tutorial {
         driver.findElement(By.id("serviceName")).sendKeys(serviceName);
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
-        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.id("serviceUrl")));
+        waitForElementWithId("serviceUrl");
         driver.findElement(By.id("serviceUrl")).click();
         driver.findElement(By.id("serviceUrl")).sendKeys("https://www.bing.com");
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
-        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.id("serviceForFreeYes")));
+        waitForElementWithId("serviceForFreeYes");
         driver.findElement(By.id("serviceForFreeYes")).click();
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
@@ -58,6 +58,10 @@ public class Tutorial {
         apiKeyValue = driver.findElement(By.cssSelector(".row:nth-child(3) p:nth-child(2)")).getText();
 
         return this;
+    }
+
+    private void waitForElementWithId(String id) {
+        new WebDriverWait(driver, 3).until(ExpectedConditions.elementToBeClickable(By.id(id)));
     }
 
     public String getGatewayDownloadLink() {

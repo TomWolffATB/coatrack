@@ -1,9 +1,16 @@
 package eu.coatrack.admin.e2e.api.ServiceOfferingsSetup;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static eu.coatrack.admin.e2e.PageFactory.pathPrefix;
 
@@ -15,7 +22,7 @@ public class ServiceOfferings {
         this.driver = driver;
     }
 
-    public ServiceOfferings createService() {
+    public String createService() {
         driver.get(pathPrefix + "/admin");
 
         driver.findElement(By.linkText("Service Offering Setup")).click();
@@ -34,36 +41,33 @@ public class ServiceOfferings {
         driver.findElement(By.id("description")).click();
         driver.findElement(By.id("description")).sendKeys("Some Description");
 
-        driver.findElement(By.linkText("Next")).click();
-        driver.findElement(By.linkText("Next")).click();
+        driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
+        driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
         driver.findElement(By.id("freeButton")).click();
-        driver.findElement(By.linkText("Next")).click();
-        driver.findElement(By.linkText("Finish")).click();
+        driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
-        /*
-        driver.findElement(By.cssSelector("#item13 > .sorting_1")).click();
-        driver.findElement(By.cssSelector("#item13 > td:nth-child(2)")).click();
-        driver.findElement(By.cssSelector("#item13 > td:nth-child(3)")).click();
-        driver.findElement(By.cssSelector("#item13 > td:nth-child(4)")).click();
-        driver.findElement(By.cssSelector("#item13 > td:nth-child(5)")).click();
-        driver.findElement(By.cssSelector("#item13 > td:nth-child(6)")).click();
-        driver.findElement(By.cssSelector("#item13 .fa-image")).click();
-        driver.findElement(By.cssSelector("#item13 .fa-search-plus")).click();
-        driver.findElement(By.cssSelector("#item13 .fa-pencil-square-o")).click();
-        driver.findElement(By.cssSelector("#item13 button:nth-child(4)")).click();
-        {
-            WebElement element = driver.findElement(By.cssSelector("#item13 button:nth-child(4)"));
-            Actions builder = new Actions(driver);
-            builder.moveToElement(element).perform();
-        }
-        {
-            WebElement element = driver.findElement(By.tagName("body"));
-            Actions builder = new Actions(driver);
-            builder.moveToElement(element, 0, 0).perform();
-        }
-        driver.findElement(By.cssSelector(".ui-dialog-buttonset > button:nth-child(1)")).click();
-        */
-        return this;
+        try {
+            Thread.sleep(1000);
+        } catch (Exception ignored){}
+        driver.findElement(By.linkText("Finish")).sendKeys(Keys.RETURN);
+
+        return serviceName;
     }
+
+    public boolean isServiceWithinList(String serviceName) {
+        driver.get(pathPrefix + "/admin/services");
+        waitForElementWithId("servicesTable");
+        WebElement servicesTable = driver.findElement(By.id("servicesTable"));
+        List<WebElement> rows = servicesTable.findElements(By.cssSelector("tr"));
+        rows.remove(0);
+        List<String> listOfServiceNames = rows.stream().map(row -> row.findElement(By.cssSelector("td")).getText()).collect(Collectors.toList());
+
+        return listOfServiceNames.contains(serviceName);
+    }
+
+    private void waitForElementWithId(String id) {
+        new WebDriverWait(driver, 3).until(ExpectedConditions.presenceOfElementLocated(By.id(id)));
+    }
+
 }

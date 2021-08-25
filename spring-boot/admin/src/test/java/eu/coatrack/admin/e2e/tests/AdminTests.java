@@ -14,7 +14,7 @@ public class AdminTests extends AbstractTestSetup {
         System.out.println("API Key Value: " + tutorial.getApiKeyValue());
         System.out.println("Service Name: " + tutorial.getServiceName());
 
-        //Download file https://www.baeldung.com/java-download-file
+        //Download file
 
         //Run gateway jar
 

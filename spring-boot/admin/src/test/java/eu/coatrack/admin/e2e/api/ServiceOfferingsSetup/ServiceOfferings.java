@@ -8,7 +8,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -57,12 +56,9 @@ public class ServiceOfferings {
 
     public boolean isServiceWithinList(String serviceName) {
         driver.get(pathPrefix + "/admin/services");
-        waitForElementWithId("servicesTable");
-        WebElement servicesTable = driver.findElement(By.id("servicesTable"));
-        List<WebElement> rows = servicesTable.findElements(By.cssSelector("tr"));
-        rows.remove(0);
+        List<WebElement> rows = getServicesRows();
         List<String> listOfServiceNames = rows.stream().map(row -> row.findElement(By.cssSelector("td")).getText()).collect(Collectors.toList());
-
+        driver.navigate().refresh();
         return listOfServiceNames.contains(serviceName);
     }
 
@@ -70,4 +66,31 @@ public class ServiceOfferings {
         new WebDriverWait(driver, 3).until(ExpectedConditions.presenceOfElementLocated(By.id(id)));
     }
 
+    public void deleteService(String serviceName) {
+        driver.get(pathPrefix + "/admin/services");
+
+        List<WebElement> rows = getServicesRows();
+        WebElement rowOfDesiredService = rows.stream().filter(row -> row.findElement(By.cssSelector("td")).getText().equals(serviceName)).findFirst().get();
+        List<WebElement> listOfRowElements = rowOfDesiredService.findElements(By.cssSelector("td"));
+
+        WebElement cellWithTrashButton = listOfRowElements.get(6);
+        WebElement trashButton = cellWithTrashButton.findElements(By.cssSelector("i")).get(3);
+        trashButton.click();
+
+        try {
+            Thread.sleep(2000);
+        } catch (Exception ignored) {}
+        WebElement infoDialog = driver.findElement(By.className("ui-dialog"));
+        List<WebElement> listOfButtons = infoDialog.findElements(By.cssSelector("button"));
+        WebElement yesButton = listOfButtons.stream().filter(button -> button.getText().contains("Yes")).findFirst().get();
+        yesButton.click();
+    }
+
+    private List<WebElement> getServicesRows() {
+        waitForElementWithId("servicesTable");
+        WebElement servicesTable = driver.findElement(By.id("servicesTable"));
+        List<WebElement> rows = servicesTable.findElements(By.cssSelector("tr"));
+        rows.remove(0);
+        return rows;
+    }
 }

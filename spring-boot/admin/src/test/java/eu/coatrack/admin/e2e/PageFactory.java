@@ -1,15 +1,12 @@
 package eu.coatrack.admin.e2e;
 
+import eu.coatrack.admin.e2e.api.LoginPage;
 import eu.coatrack.admin.e2e.api.ServiceOfferingsSetup.ServiceOfferings;
 import eu.coatrack.admin.e2e.api.Tutorial;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.logging.LogType;
-import org.openqa.selenium.logging.LoggingPreferences;
 
 import java.util.Set;
-import java.util.logging.Level;
 
 public class PageFactory {
 
@@ -23,27 +20,28 @@ public class PageFactory {
 
     public PageFactory(WebDriver driver) {
         this.driver = driver;
-        driver.get(pathPrefix + "/test-user-login?testUserId=verySecretId");
+        prepareAuthenticationCookie();
+    }
 
+    private void prepareAuthenticationCookie() {
         if (authenticationCookies == null){
-            //This is meant for testing production builds. Give the tester time to enter his credentials.
-            /*try {
-                Thread.sleep(30_000);
-            } catch (Exception ignored){}*/
+            //This is meant for testing production builds. It gives the tester time to enter his credentials.
+            //waitSecondsForUserToEnterHisCredentials(30);
 
-            //Extra fast login testing. Please, fill in username and password fields.
-            driver.get(pathPrefix + "/");
-            driver.findElement(By.cssSelector("ul:nth-child(1) > li:nth-child(4) > a")).click();
-            driver.findElement(By.id("login_field")).click();
-            driver.findElement(By.id("login_field")).sendKeys(username);
-            driver.findElement(By.id("password")).click();
-            driver.findElement(By.id("password")).sendKeys(password);
-            driver.findElement(By.name("commit")).click();
+            //Extra fast login testing. Please, fill in the username and password fields.
+            new LoginPage(driver).loginToGithub(username, password);
 
+            //TODO I need to find out which cookie(s) are required for being authenticated in a new browser session.
             authenticationCookies = driver.manage().getCookies();
         } else {
             authenticationCookies.forEach(cookie -> driver.manage().addCookie(cookie));
         }
+    }
+
+    private void waitSecondsForUserToEnterHisCredentials(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000L);
+        } catch (Exception ignored) {}
     }
 
     public Tutorial getTutorial(){

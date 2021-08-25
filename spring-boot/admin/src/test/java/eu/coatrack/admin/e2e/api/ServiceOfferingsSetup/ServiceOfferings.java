@@ -2,15 +2,10 @@ package eu.coatrack.admin.e2e.api.ServiceOfferingsSetup;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
-import static eu.coatrack.admin.e2e.PageProvider.pathPrefix;
+import static eu.coatrack.admin.e2e.PageFactory.pathPrefix;
 
 public class ServiceOfferings {
 

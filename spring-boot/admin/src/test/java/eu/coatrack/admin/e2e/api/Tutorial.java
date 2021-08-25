@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Random;
 
-import static eu.coatrack.admin.e2e.PageProvider.pathPrefix;
+import static eu.coatrack.admin.e2e.PageFactory.pathPrefix;
 
 public class Tutorial {
 

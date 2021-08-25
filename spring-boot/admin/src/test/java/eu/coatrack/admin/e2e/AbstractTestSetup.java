@@ -9,12 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 //@SpringBootTest(properties = "spring.main.lazy-initialization=true", classes = YggAdminApplication.class)
 public abstract class AbstractTestSetup {
 
-    protected PageProvider pageProvider;
+    protected PageFactory pageProvider;
 
     @BeforeEach
     protected void setup() {
         //System.setProperty("webdriver.gecko.driver", "c:/Program Files/GeckoDriver/geckodriver.exe");
-        pageProvider = new PageProvider(new FirefoxDriver());
+        pageProvider = new PageFactory(new FirefoxDriver());
     }
 
     @AfterEach

@@ -2,6 +2,8 @@ package eu.coatrack.admin.e2e.api;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static eu.coatrack.admin.e2e.PageFactory.pathPrefix;
 
@@ -21,6 +23,7 @@ public class LoginPage {
         driver.findElement(By.id("password")).click();
         driver.findElement(By.id("password")).sendKeys(password);
         driver.findElement(By.name("commit")).click();
+        driver.get(pathPrefix + "/admin");
     }
 
 }

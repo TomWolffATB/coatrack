@@ -1,6 +1,7 @@
 package eu.coatrack.admin.e2e.api;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -26,7 +27,7 @@ public class Tutorial {
         driver.get(pathPrefix + "/admin/gettingstarted");
 
         driver.findElement(By.linkText("Tutorial")).click();
-        driver.findElement(By.linkText("Next")).click();
+        driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
         new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.id("serviceName")));
         driver.findElement(By.id("serviceName")).click();
@@ -34,13 +35,21 @@ public class Tutorial {
         serviceName = "my-service" + new Random().nextInt();
 
         driver.findElement(By.id("serviceName")).sendKeys(serviceName);
-        driver.findElement(By.linkText("Next")).click();
+        driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
+
+        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.id("serviceUrl")));
         driver.findElement(By.id("serviceUrl")).click();
         driver.findElement(By.id("serviceUrl")).sendKeys("https://www.bing.com");
-        driver.findElement(By.linkText("Next")).click();
+        driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
+
+        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.id("serviceForFreeYes")));
         driver.findElement(By.id("serviceForFreeYes")).click();
-        driver.findElement(By.linkText("Next")).click();
-        driver.findElement(By.linkText("Finish")).click();
+        driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
+
+        try {
+            Thread.sleep(1000);
+        } catch (Exception ignored){}
+        driver.findElement(By.linkText("Finish")).sendKeys(Keys.RETURN);
 
         WebElement gatewayDownloadLinkElement = new WebDriverWait(driver, 60)
                 .until(ExpectedConditions.presenceOfElementLocated(By.linkText("Click here to download your CoatRack Gateway")));

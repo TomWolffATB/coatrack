@@ -19,11 +19,6 @@ public class CreationTests extends AbstractTestSetup {
         assertFalse(serviceOfferings.isServiceWithinList(serviceName));
     }
 
-    @Test
-    public void isPresenceOfServiceDetected(){
-        assertTrue(pageFactory.getServiceOfferings().isServiceWithinList("Humidity by location"));
-    }
-
     //TODO Analog tests for proxies and API keys. Also test the consumer features.
 
 }

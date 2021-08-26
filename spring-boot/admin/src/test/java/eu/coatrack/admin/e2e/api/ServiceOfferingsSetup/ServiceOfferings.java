@@ -49,7 +49,12 @@ public class ServiceOfferings {
         try {
             Thread.sleep(1000);
         } catch (Exception ignored){}
+
         driver.findElement(By.linkText("Finish")).sendKeys(Keys.RETURN);
+
+        try {
+            Thread.sleep(1000);
+        } catch (Exception ignored){}
 
         return serviceName;
     }

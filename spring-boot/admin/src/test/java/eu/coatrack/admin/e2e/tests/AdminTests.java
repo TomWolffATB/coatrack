@@ -8,7 +8,7 @@ public class AdminTests extends AbstractTestSetup {
 
     @Test
     public void tutorialTest(){
-        Tutorial tutorial = pageProvider.getTutorial().createItemsViaTutorial();
+        Tutorial tutorial = pageFactory.getTutorial().createItemsViaTutorial();
 
         System.out.println("Gateway Download Link: " + tutorial.getGatewayDownloadLink());
         System.out.println("API Key Value: " + tutorial.getApiKeyValue());

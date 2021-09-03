@@ -19,6 +19,11 @@ public class CreationTests extends AbstractTestSetup {
         assertFalse(serviceOfferings.isServiceWithinList(serviceName));
     }
 
+    @Test
+    public void shortTest() {
+        pageFactory.loginWithCookieAndClickTurorial();
+    }
+
     //TODO Analog tests for proxies and API keys. Also test the consumer features.
 
 }

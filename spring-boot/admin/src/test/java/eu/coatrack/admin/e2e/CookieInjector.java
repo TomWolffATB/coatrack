@@ -14,21 +14,30 @@ public class CookieInjector {
     private static final String username = "user";
     private static final String password = "password";
     private static Cookie authenticationCookie;
+    private static boolean wasThereAGitHubLoginAttempt = false; //TODO using false credential should result in only one login attempt
 
     public static void injectAuthenticationCookieToDriver(WebDriver driver){
-        File file = new File("./githubSessionCookie.txt");
         if (authenticationCookie != null){
             safelyInjectAuthenticationCookie(driver);
-        } else if (file.exists()){
-            authenticationCookie = readCookieFromFile(file);
-            safelyInjectAuthenticationCookie(driver);
         } else {
-            authenticationCookie = createAndSetAuthenticationCookie(file, driver);
-            storeCookieToLocalFile(file, driver);
+            injectNewlyCreatedCookie(driver);
         }
     }
 
-    private static void storeCookieToLocalFile(File file, WebDriver driver) {
+    private static void injectNewlyCreatedCookie(WebDriver driver) {
+        File file = new File("./githubSessionCookie.txt");
+        //TODO cookie storage files created yesterday should be deleted
+
+        if (file.exists()){
+            authenticationCookie = readCookieFromFile(file);
+            safelyInjectAuthenticationCookie(driver);
+        } else {
+            authenticationCookie = createCookieViaGitHubLogin(driver);
+            storeCookieToLocalFile(file);
+        }
+    }
+
+    private static void storeCookieToLocalFile(File file) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             StringJoiner joiner = new StringJoiner(";");
@@ -40,7 +49,7 @@ public class CookieInjector {
             writer.write(joiner.toString());
             writer.close();
             file.createNewFile();
-        } catch (Exception ignored){}
+        } catch (Exception ignored){} //TODO
     }
 
     private static void safelyInjectAuthenticationCookie(WebDriver driver) {
@@ -49,8 +58,9 @@ public class CookieInjector {
         driver.manage().addCookie(authenticationCookie);
     }
 
-    private static Cookie createAndSetAuthenticationCookie(File file, WebDriver driver) {
+    private static Cookie createCookieViaGitHubLogin(WebDriver driver) {
         new LoginPage(driver).loginToGithub(username, password);
+        wasThereAGitHubLoginAttempt = true;
         Cookie cookie = driver.manage().getCookies().stream().filter(c -> c.getName().equals("SESSION")).findFirst().get();
         return cookie;
     }
@@ -63,7 +73,7 @@ public class CookieInjector {
             cookie = new Cookie.Builder(parts[0], parts[1]).domain(parts[2]).path(parts[3])
                     .expiresOn(null).isSecure(true).isHttpOnly(true).build();
             file.delete();
-        } catch (Exception ignored){}
+        } catch (Exception ignored){} //TODO
         return cookie;
     }
 

@@ -4,9 +4,11 @@ import eu.coatrack.admin.e2e.AbstractTestSetup;
 import eu.coatrack.admin.e2e.api.Tutorial;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
+import java.io.*;
 
 import static eu.coatrack.admin.e2e.CookieInjector.authenticationCookie;
+import static eu.coatrack.admin.e2e.CookieInjector.injectAuthenticationCookieToDriver;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class AdminTests extends AbstractTestSetup {
 
@@ -24,15 +26,31 @@ public class AdminTests extends AbstractTestSetup {
         pr.waitFor();
 
         //Run gateway jar
-        Process pr2 = rt.exec("cmd /c java -jar ./test.jar");
+        Process pr2 = rt.exec("cmd /c start cmd /k java -jar ./test.jar");
 
-        Thread.sleep(60000);
-        pr2.destroy();
+        Thread.sleep(30000);
+
+        //This is somehow not sufficient. This could help: https://stackoverflow.com/questions/19726804/how-to-kill-a-process-in-java-process-destroy
+        pr2.destroyForcibly();
+        Process pr3 = rt.exec("cmd /c taskkill /F /PID " + pr2.pid());
+
+        BufferedReader reader2 = new BufferedReader(new InputStreamReader(pr3.getInputStream()));
+
+        String line2 = reader2.readLine();
+        while (line2 != null){
+            System.out.println(line2);
+            line2 = reader2.readLine();
+        }
 
         //Test if API key reaches bing.com
 
         //Cleanup
-        //TODO Delete gateway file after
+        File file = new File("./test.jar");
+        if (file.exists())
+            file.delete();
+
+        if (file.exists())
+            fail("Cleanup failed. File test.jar could not be deleted.");
     }
 
 }

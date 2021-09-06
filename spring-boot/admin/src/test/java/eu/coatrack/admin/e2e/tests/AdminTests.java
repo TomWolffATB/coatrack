@@ -32,6 +32,7 @@ public class AdminTests extends AbstractTestSetup {
 
         //This is somehow not sufficient. This could help: https://stackoverflow.com/questions/19726804/how-to-kill-a-process-in-java-process-destroy
         pr2.destroyForcibly();
+        /*
         Process pr3 = rt.exec("cmd /c taskkill /F /PID " + pr2.pid());
 
         BufferedReader reader2 = new BufferedReader(new InputStreamReader(pr3.getInputStream()));
@@ -41,6 +42,7 @@ public class AdminTests extends AbstractTestSetup {
             System.out.println(line2);
             line2 = reader2.readLine();
         }
+        */
 
         //Test if API key reaches bing.com
 

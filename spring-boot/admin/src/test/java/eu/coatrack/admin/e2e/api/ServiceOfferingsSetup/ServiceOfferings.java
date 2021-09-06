@@ -61,8 +61,9 @@ public class ServiceOfferings {
 
     public boolean isServiceWithinList(String serviceName) {
         driver.get(pathPrefix + "/admin/services");
-        List<WebElement> rows = getServicesRows();
-        List<String> listOfServiceNames = rows.stream().map(row -> row.findElement(By.cssSelector("td")).getText()).collect(Collectors.toList());
+        List<WebElement> rows = getServiceRows();
+        List<String> listOfServiceNames = rows.stream().map(row -> row.findElement(By.cssSelector("td"))
+                .getText()).collect(Collectors.toList());
         driver.navigate().refresh();
         return listOfServiceNames.contains(serviceName);
     }
@@ -71,16 +72,18 @@ public class ServiceOfferings {
         new WebDriverWait(driver, 3).until(ExpectedConditions.presenceOfElementLocated(By.id(id)));
     }
 
+    //TODO This could maybe be abstracted when Gateways and API keys shall be deleted. It is always the same scheme: Get table, find rows, get a row, press delete button.
     public void deleteAllServices(){
+        //TODO I would like to have a directory for paths to abstract them.
         driver.get(pathPrefix + "/admin/services");
 
-        List<WebElement> rows = getServicesRows();
+        List<WebElement> rows = getServiceRows();
         while (!rows.isEmpty()){
             WebElement row = rows.stream().findFirst().get();
             deleteServiceInRow(row);
 
             driver.navigate().refresh();
-            rows = getServicesRows();
+            rows = getServiceRows();
         }
     }
 
@@ -90,6 +93,7 @@ public class ServiceOfferings {
         WebElement trashButton = cellWithTrashButton.findElements(By.cssSelector("i")).get(3);
         trashButton.click();
 
+        //TODO I would like to have a static sleeping function with the duration of waiting as argument in seconds.
         try {
             Thread.sleep(2000);
         } catch (Exception ignored) {}
@@ -101,17 +105,16 @@ public class ServiceOfferings {
 
     public void deleteService(String serviceName) {
         driver.get(pathPrefix + "/admin/services");
-
-        List<WebElement> rows = getServicesRows();
-        WebElement rowOfDesiredService = rows.stream().filter(row -> row.findElement(By.cssSelector("td")).getText().equals(serviceName)).findFirst().get();
+        WebElement rowOfDesiredService = getServiceRows().stream()
+                .filter(row -> row.findElement(By.cssSelector("td")).getText().equals(serviceName)).findFirst().get();
         deleteServiceInRow(rowOfDesiredService);
     }
 
-    private List<WebElement> getServicesRows() {
-        waitForElementWithId("servicesTable");
+    private List<WebElement> getServiceRows() {
+        waitForElementWithId("servicesTable"); //TODO Make it a static function as it is most probably use in other classes.
         WebElement servicesTable = driver.findElement(By.id("servicesTable"));
         List<WebElement> rows = servicesTable.findElements(By.cssSelector("tr"));
-        rows.remove(0);
+        rows.remove(0); //Removes the table header.
         return rows;
     }
 }

@@ -13,7 +13,7 @@ public class CookieInjector {
 
     private static final String username = "user";
     private static final String password = "password";
-    private static Cookie authenticationCookie;
+    public static Cookie authenticationCookie;
     private static boolean wasThereAGitHubLoginAttempt = false; //TODO using false credential should result in only one login attempt
 
     public static void injectAuthenticationCookieToDriver(WebDriver driver){

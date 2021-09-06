@@ -71,13 +71,21 @@ public class ServiceOfferings {
         new WebDriverWait(driver, 3).until(ExpectedConditions.presenceOfElementLocated(By.id(id)));
     }
 
-    public void deleteService(String serviceName) {
+    public void deleteAllServices(){
         driver.get(pathPrefix + "/admin/services");
 
         List<WebElement> rows = getServicesRows();
-        WebElement rowOfDesiredService = rows.stream().filter(row -> row.findElement(By.cssSelector("td")).getText().equals(serviceName)).findFirst().get();
-        List<WebElement> listOfRowElements = rowOfDesiredService.findElements(By.cssSelector("td"));
+        while (!rows.isEmpty()){
+            WebElement row = rows.stream().findFirst().get();
+            deleteServiceInRow(row);
 
+            driver.navigate().refresh();
+            rows = getServicesRows();
+        }
+    }
+
+    private void deleteServiceInRow(WebElement row) {
+        List<WebElement> listOfRowElements = row.findElements(By.cssSelector("td"));
         WebElement cellWithTrashButton = listOfRowElements.get(6);
         WebElement trashButton = cellWithTrashButton.findElements(By.cssSelector("i")).get(3);
         trashButton.click();
@@ -89,6 +97,14 @@ public class ServiceOfferings {
         List<WebElement> listOfButtons = infoDialog.findElements(By.cssSelector("button"));
         WebElement yesButton = listOfButtons.stream().filter(button -> button.getText().contains("Yes")).findFirst().get();
         yesButton.click();
+    }
+
+    public void deleteService(String serviceName) {
+        driver.get(pathPrefix + "/admin/services");
+
+        List<WebElement> rows = getServicesRows();
+        WebElement rowOfDesiredService = rows.stream().filter(row -> row.findElement(By.cssSelector("td")).getText().equals(serviceName)).findFirst().get();
+        deleteServiceInRow(rowOfDesiredService);
     }
 
     private List<WebElement> getServicesRows() {

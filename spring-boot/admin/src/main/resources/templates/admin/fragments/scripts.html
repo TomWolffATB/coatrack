@@ -24,58 +24,6 @@
             <script src="/webjars/github-com-jaxkodex-jQuery-Smart-Wizard/3.3.1/js/jquery.smartWizard.js"></script>
         </div>
 
-        <div th:fragment="apiKeyRemoveDialog">
-        <script>
-            $(function () {
-                $("#confirmDeletionDialog").dialog({
-                    width: 'auto',
-                    height: "auto",
-                    autoOpen: false,
-                    modal: true,
-                    show: {
-                        effect: "blind",
-                        duration: 1000
-                    },
-                    hide: {
-                        effect: "blind",
-                        duration: 1000
-                    },
-                    buttons: {
-                        "Yes": function () {
-                            var id = $(this).data('deleteItem');
-                            var token = $("meta[name='_csrf']").attr("content");
-                            var header = $("meta[name='_csrf_header']").attr("content");
-
-                            $.ajax({
-                                url: '/admin/api-keys/' + id + '.json',
-                                headers: {header: token},
-                                type: 'DELETE',
-                                success: function (result) {
-                                    console.log('success:' + JSON.stringify(result));
-                                    console.log('remove :' + id);
-                                    $("#item" + id).remove();
-                                    location.reload();
-                                },
-                                error: function (result) {
-                                    console.log('error:' + JSON.stringify(result));
-                                }
-                            });
-                            $(this).dialog("close");
-                        },
-                        "No": function () {
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-            });
-
-            function deleteItem(item, message) {
-                $("#confirmApiKeyRemovalMessage").html(message);
-                $("#confirmDeletionDialog").data('deleteItem', item).dialog("open");
-            }
-        </script>
-        </div>
-
         <div th:fragment="urlValidator">
             <script>
                 /*<![CDATA[*/

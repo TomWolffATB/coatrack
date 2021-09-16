@@ -27,6 +27,11 @@ public class AdminTests extends AbstractTestSetup {
 
         //Run gateway jar
         Process pr2 = rt.exec("cmd /c start cmd /k java -jar ./test.jar");
+        /** Approaches to get this working:
+         1) pr2.send("STRG + C")
+         2) Start commandline window -> after that send the second command to that process
+         3) rt.exec("java -jar ./test.jar");
+         */
 
         Thread.sleep(30000);
 

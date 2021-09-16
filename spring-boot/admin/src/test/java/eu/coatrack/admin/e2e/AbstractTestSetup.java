@@ -17,6 +17,7 @@ public abstract class AbstractTestSetup {
         pageFactory = new PageFactory(new FirefoxDriver());
     }
 
+    //TODO should be executed even when an error is thrown during the test.
     @AfterEach
     private void tearDown(){
         pageFactory.close();

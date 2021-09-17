@@ -147,7 +147,7 @@ public class AdminProxiesController {
     }
 
     @PostMapping(value = "/add")
-    public ModelAndView addProxy(@ModelAttribute Proxy proxy,
+    public String addProxy(@ModelAttribute Proxy proxy,
             @RequestParam(required = false) List<Long> selectedServices) throws IOException, GitAPIException, URISyntaxException {
         log.debug("POST call to proxy/add: " + proxy.toString());
 
@@ -165,7 +165,7 @@ public class AdminProxiesController {
         gitService.addProxy(proxy);
         gitService.commit("Add new proxy with id:" + proxy.getId());
 
-        return proxyListPage();
+        return "redirect:/admin/proxies";
     }
 
     @PostMapping(value = "/update")

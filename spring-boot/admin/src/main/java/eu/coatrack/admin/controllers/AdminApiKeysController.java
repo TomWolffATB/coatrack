@@ -156,7 +156,7 @@ public class AdminApiKeysController {
     }
 
     @RequestMapping(value = "/add", method = POST)
-    public ModelAndView addApiKey(
+    public String addApiKey(
             @RequestParam(required = false) Long selectedServiceId,
             @RequestParam(required = false) String selectedUserId
     ) throws IOException {
@@ -184,10 +184,7 @@ public class AdminApiKeysController {
         createApiKeyAction.setUser(user);
         createApiKeyAction.execute();
 
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName(ADMIN_API_KEY_EDITOR);
-
-        return showApiKeyListbyLoggedInServiceApiOwner();
+        return "redirect:/admin/api-keys";
     }
 
     @RequestMapping(value = "/update", method = POST)

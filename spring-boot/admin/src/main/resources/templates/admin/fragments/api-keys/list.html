@@ -73,7 +73,7 @@
                                             <button th:onclick="|@{location.href='/admin/api-keys/}${apiKey.id}@{/formUpdate'}|">
                                                 <i class="fa fa-pencil-square-o"></i>
                                             </button>
-                                            <button th:attr="onclick='javascript:deleteApiKey(\'' + ${apiKey.id} + '\',\'' + ${apiKey.userName} + '\' )'">
+                                            <button th:attr="onclick='javascript:deleteApiKey(\'' + ${apiKey.id} + '\',\'' + ${apiKey.userName} + '\',\'' + ${true} + '\' )'">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </td>

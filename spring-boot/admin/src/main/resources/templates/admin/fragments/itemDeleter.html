@@ -265,8 +265,15 @@
 
         });
 
-        function deleteApiKey(item, consumer) {
-            $("#message").html("Are you sure you want to delete the API key of <strong>" + consumer + "</strong>? Then, " + consumer + " can't use your API anymore.");
+        function deleteApiKey(item, consumer, isAdmin) {
+            let infoText;
+            if (isAdmin === 'true'){
+                infoText = "Are you sure you want to delete the API key of <strong>" + consumer + "</strong>? Afterwards, " + consumer + " can't use your API anymore."
+            } else {
+                infoText = "Are you sure you want to delete your API key?"
+            }
+
+            $("#message").html(infoText);
             $("#infoDialog").data('deleteItem', item).dialog("open");
         }
         function initExtendValidity()

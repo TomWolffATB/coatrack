@@ -1,4 +1,4 @@
-package eu.coatrack.admin.e2e;
+package eu.coatrack.admin.e2e.configuration;
 
 import eu.coatrack.admin.e2e.api.LoginPage;
 import eu.coatrack.admin.e2e.exceptions.CookieSaveFileReadingError;

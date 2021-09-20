@@ -1,6 +1,6 @@
 package eu.coatrack.admin.e2e.tests;
 
-import eu.coatrack.admin.e2e.api.ServiceOfferingsSetup.ServiceOfferings;
+import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.ServiceOfferings;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -16,11 +16,6 @@ public class CreationTests extends AbstractTestSetup {
 
         serviceOfferings.deleteService(serviceName);
         assertFalse(serviceOfferings.isServiceWithinList(serviceName));
-    }
-
-    @Test
-    public void shortTest() {
-        pageFactory.loginWithCookieAndClickTutorial();
     }
 
     //TODO Analog tests for proxies and API keys. Also test the consumer features.

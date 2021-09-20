@@ -1,4 +1,4 @@
-package eu.coatrack.admin.e2e.api;
+package eu.coatrack.admin.e2e.api.serviceProvider;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;

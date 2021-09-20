@@ -17,61 +17,18 @@
 
 <div th:fragment="proxyDeleter">
     <div th:replace="admin/fragments/itemDeleter :: infoDialog"></div>
+    <div th:replace="admin/fragments/itemDeleter :: infoDialogLogic"></div>
+
     <script>
-        $(function () {
-            $("#infoDialog").dialog({
-                width: 'auto',
-                height: "auto",
-                autoOpen: false,
-                modal: true,
-                show: {
-                    effect: "blind",
-                    duration: 1500
-                },
-                hide: {
-                    effect: "blind",
-                    duration: 1000
-                },
-                buttons: {
-                    "Yes": function () {
-
-                        var id = $(this).data('deleteItem');
-
-                        var token = $("meta[name='_csrf']").attr("content");
-                        var header = $("meta[name='_csrf_header']").attr("content");
-
-                        $.ajax({
-                            url: '/admin/proxies/' + id,
-                            headers: {header: token},
-                            type: 'DELETE',
-                            success: function (result) {
-                                console.log('success:' + JSON.stringify(result));
-
-                                console.log('remove :' + id);
-
-                                $("#item" + id).remove();
-                            },
-                            error: function (result) {
-                                console.log('error:' + JSON.stringify(result));
-                            }
-                        });
-
-                        $(this).dialog("close");
-                        location.reload();
-                    },
-                    "No": function () {
-                        $(this).dialog("close");
-                    }
-                }
-            });
-        });
-
+        doStuff('/admin/proxies/');
         function deleteProxyIfUserGivesPermission(item, name) {
             $("#message").html("Are you sure you want to delete <strong>" + name + "</strong>?")
             $("#infoDialog").data('deleteItem', item).dialog("open");
         }
     </script>
 </div>
+
+
 
 <div th:fragment="serviceDeleter">
     <div th:replace="admin/fragments/itemDeleter :: infoDialog"></div>
@@ -311,6 +268,60 @@
         $(function () {
             initExtendValidity();
         });
+    </script>
+</div>
+
+<div th:fragment="infoDialogLogic">
+    <script>
+        function doStuff(targetUrl){
+            $(function () {
+                $("#infoDialog").dialog({
+                    width: 'auto',
+                    height: "auto",
+                    autoOpen: false,
+                    modal: true,
+                    show: {
+                        effect: "blind",
+                        duration: 1500
+                    },
+                    hide: {
+                        effect: "blind",
+                        duration: 1000
+                    },
+                    buttons: {
+                        "Yes": function () {
+
+                            var id = $(this).data('deleteItem');
+
+                            var token = $("meta[name='_csrf']").attr("content");
+                            var header = $("meta[name='_csrf_header']").attr("content");
+
+                            $.ajax({
+                                url: targetUrl + id,
+                                headers: {header: token},
+                                type: 'DELETE',
+                                success: function (result) {
+                                    console.log('success:' + JSON.stringify(result));
+
+                                    console.log('remove :' + id);
+
+                                    $("#item" + id).remove();
+                                },
+                                error: function (result) {
+                                    console.log('error:' + JSON.stringify(result));
+                                }
+                            });
+
+                            $(this).dialog("close");
+                            location.reload();
+                        },
+                        "No": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            });
+        }
     </script>
 </div>
 

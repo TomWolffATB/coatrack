@@ -5,7 +5,9 @@ function initializeDataTableAndAddOrdering(columnIndexesWithoutOrderingIcon, isH
                 columnDefs: [
                     {orderable: false, targets: columnIndexesWithoutOrderingIcon}
                 ],
-                "scrollX": isHorizontalScrollBarEnabled
+                "scrollX": isHorizontalScrollBarEnabled,
+                "sScrollX": "100%",
+                "sScrollXInner": "100%"
             });
         }
     );

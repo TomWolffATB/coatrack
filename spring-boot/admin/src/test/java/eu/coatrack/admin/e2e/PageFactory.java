@@ -9,7 +9,7 @@ import static eu.coatrack.admin.e2e.CookieInjector.injectAuthenticationCookieToD
 
 public class PageFactory {
 
-    public static final String pathPrefix = "https://coatrack.eu";
+    public static final String pathPrefix = "http://localhost:8080";
     private final WebDriver driver;
 
     public PageFactory(WebDriver driver) {

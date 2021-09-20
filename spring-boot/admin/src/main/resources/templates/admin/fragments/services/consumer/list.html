@@ -81,7 +81,11 @@
             </div>
         </div>
         <div th:include="admin/fragments/scripts :: scripts" th:remove="tag">Javascript Libraries</div>
-        <div th:include="admin/fragments/addOrderingToList :: addOrderingToPublicServicesList" th:remove="tag">Javascript Libraries</div>
+
+        <script type="text/javascript" th:src="@{/js/tableInitializer.js}"></script>
+        <script>
+            initializeDataTableAndAddOrdering([], false);
+        </script>
     </body>
 </html>
 

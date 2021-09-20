@@ -90,6 +90,10 @@
         </div>
         <div th:include="admin/fragments/scripts :: scripts" th:remove="tag">Javascript Libraries</div>
         <div th:replace="admin/fragments/itemDeleter :: apiKeyDeleter"></div>
-        <div th:include="admin/fragments/addOrderingToList :: addOrderingToAdminApiKeyList" th:remove="tag">Javascript Libraries</div>
+
+        <script type="text/javascript" th:src="@{/js/tableInitializer.js}"></script>
+        <script>
+            initializeDataTableAndAddOrdering([5,6], true);
+        </script>
     </body>
 </html>

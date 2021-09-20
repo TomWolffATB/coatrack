@@ -72,7 +72,7 @@
                                         <td th:if="${testService == null}" th:id="|@{item}${apiKey.id}@{ValidUntil}|" th:attr="validUntil=${#dates.format(apiKey.validUntil, 'yyyy-MM-dd')}" class="a-center " th:text="${apiKey.validUntil != null} ? ${#dates.format(apiKey.validUntil, 'yyyy-MM-dd')}: ''">Valid until</td>
                                         <td class="right">
                                             <button th:if="${apiKey.serviceApi.serviceAccessPermissionPolicy == T(eu.coatrack.api.ServiceAccessPermissionPolicy).PUBLIC}"
-                                                    th:attr="onclick='javascript:deleteApiKey(\'' + ${apiKey.id} + '\',\'' + ${apiKey.userName} + '\',\'' + ${false} + '\')'">
+                                                    th:attr="onclick='javascript:deleteApiKeyIfUserGivesPermission(\'' + ${apiKey.id} + '\',\'' + ${apiKey.userName} + '\',\'' + ${false} + '\')'">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </td>

@@ -93,7 +93,7 @@
                                                 <i class="fa fa-pencil-square-o"></i>
                                             </button>
                                         </a>
-                                        <button th:attr="onclick='javascript:deleteProxy(\'' + ${proxy.id} + '\',\'' + ${proxy.name} + '\' )'">
+                                        <button th:attr="onclick='javascript:deleteProxyIfUserGivesPermission(\'' + ${proxy.id} + '\',\'' + ${proxy.name} + '\' )'">
                                             <i class="fa fa-trash"></i>
                                         </button>
                                     </td>

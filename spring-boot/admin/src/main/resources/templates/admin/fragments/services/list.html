@@ -69,7 +69,7 @@
                                             <button th:onclick="|@{location.href='/admin/services/}${service.id}@{/formUpdate'}|">
                                                 <i class="fa  fa-pencil-square-o"></i>
                                             </button>
-                                            <button th:attr="onclick='javascript:deleteService(\'' + ${service.id} + '\',\'' + ${service.name} + '\' )'">
+                                            <button th:attr="onclick='javascript:deleteServiceIfUserGivesPermission(\'' + ${service.id} + '\',\'' + ${service.name} + '\' )'">
                                                 <i class="fa  fa-trash"></i>
                                             </button>
                                         </td>

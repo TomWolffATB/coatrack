@@ -66,7 +66,7 @@
             });
         });
 
-        function deleteProxy(item, name) {
+        function deleteProxyIfUserGivesPermission(item, name) {
             $("#message").html("Are you sure you want to delete <strong>" + name + "</strong>?")
             $("#infoDialog").data('deleteItem', item).dialog("open");
         }
@@ -126,7 +126,7 @@
             });
         });
 
-        function deleteService(item, name) {
+        function deleteServiceIfUserGivesPermission(item, name) {
             $.ajax({url: '/admin/services/' + item + '/proxies',
                 type: 'GET',
                 success: function (result) {
@@ -269,7 +269,7 @@
 
         });
 
-        function deleteApiKey(item, consumer, isAdmin) {
+        function deleteApiKeyIfUserGivesPermission(item, consumer, isAdmin) {
             let infoText;
             if (isAdmin === 'true'){
                 infoText = "Are you sure you want to delete the API key of <strong>" + consumer + "</strong>? Afterwards, " + consumer + " can't use your API anymore."

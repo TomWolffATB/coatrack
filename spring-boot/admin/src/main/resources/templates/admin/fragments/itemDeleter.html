@@ -10,7 +10,7 @@
     <div th:replace="admin/fragments/itemDeleter :: deletionPermissionDialog"></div>
 
     <script>
-        initializePermissionDialog('/admin/proxies/');
+        initializeDeletionPermissionDialog('/admin/proxies/');
 
         function deleteProxyIfUserGivesPermission(item, name) {
             $("#message").html("Are you sure you want to delete <strong>" + name + "</strong>?")
@@ -25,7 +25,7 @@
     <div th:replace="admin/fragments/itemDeleter :: deletionPermissionDialog"></div>
 
     <script>
-        initializePermissionDialog('/admin/services/');
+        initializeDeletionPermissionDialog('/admin/services/');
 
         function deleteServiceIfUserGivesPermission(item, name) {
             $.ajax({url: '/admin/services/' + item + '/proxies',
@@ -70,7 +70,7 @@
 
     <script>
         $(function () {
-            callDeletionPermissionDialog('/admin/api-keys/');
+            initializeDeletionPermissionDialog('/admin/api-keys/');
 
             $("#extendValidity").dialog({
                 width: 'auto',
@@ -176,7 +176,7 @@
     </div>
 
     <script>
-        function callDeletionPermissionDialog(targetUrl) {
+        function initializeDeletionPermissionDialog(targetUrl) {
             $("#deletionPermissionDialog").dialog({
                 width: 'auto',
                 height: "auto",
@@ -221,12 +221,6 @@
                         $(this).dialog("close");
                     }
                 }
-            });
-        }
-
-        function initializePermissionDialog(targetUrl){
-            $(function () {
-                callDeletionPermissionDialog(targetUrl);
             });
         }
     </script>

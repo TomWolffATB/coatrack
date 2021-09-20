@@ -9,7 +9,6 @@ import org.openqa.selenium.WebDriver;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.StringJoiner;
 
 import static eu.coatrack.admin.e2e.PageFactory.pathPrefix;
 
@@ -17,10 +16,10 @@ public class CookieInjector {
 
     private static final String username = "user";
     private static final String password = "password";
-    public static Cookie authenticationCookie;
+    public static Cookie sessionCookie;
 
     public static void injectAuthenticationCookieToDriver(WebDriver driver){
-        if (authenticationCookie != null){
+        if (sessionCookie != null){
             safelyInjectAuthenticationCookie(driver);
         } else {
             injectNewlyCreatedCookie(driver);
@@ -28,16 +27,16 @@ public class CookieInjector {
     }
 
     private static void injectNewlyCreatedCookie(WebDriver driver) {
-        File cookieSaveFile = new File("./githubSessionCookieValue.txt");
+        File cookieSaveFile = new File("./sessionCookieSaveFile.txt");
 
         if (cookieSaveFile.exists() && wasCookieCreatedMoreThanTwoHoursAgo(cookieSaveFile))
             cookieSaveFile.delete();
 
         if (cookieSaveFile.exists()){
-            authenticationCookie = readCookieFromFile(cookieSaveFile);
+            sessionCookie = readCookieFromFile(cookieSaveFile);
             safelyInjectAuthenticationCookie(driver);
         } else {
-            authenticationCookie = createCookieViaGitHubLogin(driver);
+            sessionCookie = createCookieViaGitHubLogin(driver);
             storeCookieToLocalFile(cookieSaveFile);
         }
     }
@@ -55,24 +54,18 @@ public class CookieInjector {
     private static void storeCookieToLocalFile(File cookieSaveFile) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(cookieSaveFile));
-            StringJoiner joiner = new StringJoiner(";");
-            joiner
-                    .add(authenticationCookie.getName())
-                    .add(authenticationCookie.getValue())
-                    .add(authenticationCookie.getDomain())
-                    .add(authenticationCookie.getPath());
-            writer.write(joiner.toString());
+            writer.write(sessionCookie.getValue());
             writer.close();
             cookieSaveFile.createNewFile();
         } catch (Exception e){
-            throw new CookieSaveFileWritingError("An error occurred while writing into the cookie save file.", e);
+            throw new CookieSaveFileWritingError("An error occurred while creating the cookie save file.", e);
         }
     }
 
     private static void safelyInjectAuthenticationCookie(WebDriver driver) {
         driver.get(pathPrefix + "/");
         driver.manage().deleteAllCookies();
-        driver.manage().addCookie(authenticationCookie);
+        driver.manage().addCookie(sessionCookie);
     }
 
     private static Cookie createCookieViaGitHubLogin(WebDriver driver) {
@@ -84,8 +77,8 @@ public class CookieInjector {
         Cookie cookie;
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
-            String[] parts = reader.readLine().split(";");
-            cookie = new Cookie.Builder(parts[0], parts[1]).domain(parts[2]).path(parts[3])
+            String sessionCookieValue = reader.readLine();
+            cookie = new Cookie.Builder("SESSION", sessionCookieValue).domain(null).path("/")
                     .expiresOn(null).isSecure(true).isHttpOnly(true).build();
             file.delete();
         } catch (Exception e){

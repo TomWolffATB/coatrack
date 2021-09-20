@@ -2,10 +2,9 @@ package eu.coatrack.admin.e2e.api;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static eu.coatrack.admin.e2e.PageFactory.pathPrefix;
+import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getDashboard;
+import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getDefaultPage;
 
 public class LoginPage {
 
@@ -16,14 +15,14 @@ public class LoginPage {
     }
 
     public void loginToGithub(String username, String password){
-        driver.get(pathPrefix + "/");
+        driver.get(getDefaultPage());
         driver.findElement(By.cssSelector("ul:nth-child(1) > li:nth-child(4) > a")).click();
         driver.findElement(By.id("login_field")).click();
         driver.findElement(By.id("login_field")).sendKeys(username);
         driver.findElement(By.id("password")).click();
         driver.findElement(By.id("password")).sendKeys(password);
         driver.findElement(By.name("commit")).click();
-        driver.get(pathPrefix + "/admin");
+        driver.get(getDashboard());
     }
 
 }

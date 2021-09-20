@@ -10,12 +10,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import static eu.coatrack.admin.e2e.PageFactory.pathPrefix;
+import static eu.coatrack.admin.e2e.configuration.TestConfiguration.*;
 
 public class CookieInjector {
 
-    private static final String username = "user";
-    private static final String password = "password";
     public static Cookie sessionCookie;
 
     public static void injectAuthenticationCookieToDriver(WebDriver driver){
@@ -63,13 +61,13 @@ public class CookieInjector {
     }
 
     private static void safelyInjectAuthenticationCookie(WebDriver driver) {
-        driver.get(pathPrefix + "/");
+        driver.get(getDefaultPage());
         driver.manage().deleteAllCookies();
         driver.manage().addCookie(sessionCookie);
     }
 
     private static Cookie createCookieViaGitHubLogin(WebDriver driver) {
-        new LoginPage(driver).loginToGithub(username, password);
+        new LoginPage(driver).loginToGithub(getUsername(), getPassword());
         return driver.manage().getCookies().stream().filter(cookie -> cookie.getName().equals("SESSION")).findFirst().get();
     }
 

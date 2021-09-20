@@ -1,5 +1,6 @@
-package eu.coatrack.admin.e2e;
+package eu.coatrack.admin.e2e.tests;
 
+import eu.coatrack.admin.e2e.PageFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.firefox.FirefoxDriver;

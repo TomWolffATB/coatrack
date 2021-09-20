@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Random;
 
-import static eu.coatrack.admin.e2e.PageFactory.pathPrefix;
+import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminTutorialPage;
 
 public class Tutorial {
 
@@ -24,7 +24,7 @@ public class Tutorial {
     }
 
     public Tutorial createItemsViaTutorial(){
-        driver.get(pathPrefix + "/admin/gettingstarted");
+        driver.get(getAdminTutorialPage());
 
         driver.findElement(By.linkText("Tutorial")).click();
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);

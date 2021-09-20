@@ -1,6 +1,5 @@
 package eu.coatrack.admin.e2e.tests;
 
-import eu.coatrack.admin.e2e.AbstractTestSetup;
 import eu.coatrack.admin.e2e.api.ServiceOfferingsSetup.ServiceOfferings;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +20,7 @@ public class CreationTests extends AbstractTestSetup {
 
     @Test
     public void shortTest() {
-        pageFactory.loginWithCookieAndClickTurorial();
+        pageFactory.loginWithCookieAndClickTutorial();
     }
 
     //TODO Analog tests for proxies and API keys. Also test the consumer features.

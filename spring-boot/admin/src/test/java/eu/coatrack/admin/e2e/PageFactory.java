@@ -6,10 +6,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import static eu.coatrack.admin.e2e.CookieInjector.injectAuthenticationCookieToDriver;
+import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getDashboard;
+import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getDefaultPage;
 
 public class PageFactory {
 
-    public static final String pathPrefix = "http://localhost:8080";
     private final WebDriver driver;
 
     public PageFactory(WebDriver driver) {
@@ -29,10 +30,10 @@ public class PageFactory {
         driver.close();
     }
 
-    public void loginWithCookieAndClickTurorial() {
-        driver.get(pathPrefix + "/");
+    public void loginWithCookieAndClickTutorial() {
+        driver.get(getDefaultPage());
         driver.findElement(By.cssSelector("ul:nth-child(1) > li:nth-child(4) > a")).click();
-        driver.get(pathPrefix + "/admin");
+        driver.get(getDashboard());
         driver.findElement(By.linkText("Tutorial")).click();
     }
 }

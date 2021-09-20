@@ -1,6 +1,5 @@
 package eu.coatrack.admin.e2e.tests;
 
-import eu.coatrack.admin.e2e.AbstractTestSetup;
 import eu.coatrack.admin.e2e.api.Tutorial;
 import org.junit.jupiter.api.Test;
 

@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import static eu.coatrack.admin.e2e.PageFactory.pathPrefix;
+import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminServicesPage;
+import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getDashboard;
 
 public class ServiceOfferings {
 
@@ -22,7 +23,7 @@ public class ServiceOfferings {
     }
 
     public String createService() {
-        driver.get(pathPrefix + "/admin");
+        driver.get(getDashboard());
 
         driver.findElement(By.linkText("Service Offering Setup")).click();
         driver.findElement(By.linkText("Service Offerings")).click();
@@ -60,7 +61,7 @@ public class ServiceOfferings {
     }
 
     public boolean isServiceWithinList(String serviceName) {
-        driver.get(pathPrefix + "/admin/services");
+        driver.get(getAdminServicesPage());
         List<WebElement> rows = getServiceRows();
         List<String> listOfServiceNames = rows.stream().map(row -> row.findElement(By.cssSelector("td"))
                 .getText()).collect(Collectors.toList());
@@ -75,7 +76,7 @@ public class ServiceOfferings {
     //TODO This could maybe be abstracted when Gateways and API keys shall be deleted. It is always the same scheme: Get table, find rows, get a row, press delete button.
     public void deleteAllServices(){
         //TODO I would like to have a directory for paths to abstract them.
-        driver.get(pathPrefix + "/admin/services");
+        driver.get(getAdminServicesPage());
 
         List<WebElement> rows = getServiceRows();
         while (!rows.isEmpty()){
@@ -104,7 +105,7 @@ public class ServiceOfferings {
     }
 
     public void deleteService(String serviceName) {
-        driver.get(pathPrefix + "/admin/services");
+        driver.get(getAdminServicesPage());
         WebElement rowOfDesiredService = getServiceRows().stream()
                 .filter(row -> row.findElement(By.cssSelector("td")).getText().equals(serviceName)).findFirst().get();
         deleteServiceInRow(rowOfDesiredService);

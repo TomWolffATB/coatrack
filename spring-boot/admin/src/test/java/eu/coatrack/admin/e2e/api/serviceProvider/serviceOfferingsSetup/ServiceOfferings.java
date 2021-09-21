@@ -58,12 +58,7 @@ public class ServiceOfferings {
     }
 
     public boolean isServiceWithinList(String serviceName) {
-        driver.get(getAdminServicesPage());
-        List<WebElement> rows = tableUtils.getItemRows();
-        List<String> listOfServiceNames = rows.stream().map(row -> row.findElement(By.cssSelector("td"))
-                .getText()).collect(Collectors.toList());
-        driver.navigate().refresh();
-        return listOfServiceNames.contains(serviceName);
+        return tableUtils.isItemWithinList(serviceName);
     }
 
     public void deleteService(String serviceName){
@@ -83,6 +78,4 @@ public class ServiceOfferings {
             rows = tableUtils.getItemRows();
         }
     }
-
-
 }

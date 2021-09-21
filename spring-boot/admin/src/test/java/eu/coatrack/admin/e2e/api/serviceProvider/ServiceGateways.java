@@ -53,12 +53,7 @@ public class ServiceGateways {
     }
 
     public boolean isGatewayWithinList(String gatewayName) {
-        driver.get(getAdminGatewaysPage());
-        List<WebElement> rows = gatewayTableUtils.getItemRows();
-        List<String> listOfGatewayNames = rows.stream().map(row -> row.findElement(By.cssSelector("td"))
-                .getText()).collect(Collectors.toList());
-        driver.navigate().refresh();
-        return listOfGatewayNames.contains(gatewayName);
+        return gatewayTableUtils.isItemWithinList(gatewayName);
     }
 
     public void deleteGateway(String gatewayName) {

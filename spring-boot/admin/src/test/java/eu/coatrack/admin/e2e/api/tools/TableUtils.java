@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminGatewaysPage;
@@ -63,6 +64,15 @@ public class TableUtils {
         List<WebElement> rows = servicesTable.findElements(By.cssSelector("tr"));
         rows.remove(0); //Removes the table header.
         return rows;
+    }
+
+    public boolean isItemWithinList(String itemName) {
+        driver.get(tableUrl);
+        List<WebElement> rows = getItemRows();
+        List<String> listOfItemNames = rows.stream().map(row -> row.findElement(By.cssSelector("td"))
+                .getText()).collect(Collectors.toList());
+        driver.navigate().refresh();
+        return listOfItemNames.contains(itemName);
     }
 
 }

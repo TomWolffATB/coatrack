@@ -33,11 +33,9 @@ public class CreationTests extends AbstractTestSetup {
     @Test
     public void createAndDeleteApiKeyTest() {
         //TODO I think the Api key is just choosing the first available service from the list. It should created to gain access to this specific service.
-        String serviceName = pageFactory.getServiceOfferings().createService();
-
         ApiKeys apiKeys = pageFactory.getApiKeys();
-        String apiKeyValue = apiKeys.createApiKey();
-        System.out.println("Api Key name: " + apiKeyValue);
+        String serviceName = pageFactory.getServiceOfferings().createService();
+        String apiKeyValue = apiKeys.createApiKey(serviceName);
         assertTrue(apiKeys.isApiKeyWithinList(apiKeyValue));
 
         apiKeys.deleteApiKey(apiKeyValue);

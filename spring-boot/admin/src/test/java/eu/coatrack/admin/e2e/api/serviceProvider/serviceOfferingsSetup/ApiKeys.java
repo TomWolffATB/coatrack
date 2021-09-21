@@ -4,6 +4,7 @@ import eu.coatrack.admin.e2e.api.TableType;
 import eu.coatrack.admin.e2e.api.tools.TableUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
@@ -24,14 +25,16 @@ public class ApiKeys {
         apiKeyTableUtils.deleteAllItem();
     }
 
-    public String createApiKey() {
+    public String createApiKey(String serviceName) {
         driver.get(getAdminApiKeysPage());
 
         List<String> listOfApiKeyValuesBeforeCreation = apiKeyTableUtils.getListOfColumnValues(2);
 
         driver.findElement(By.linkText("Create API Key")).click();
-        driver.findElement(By.id("selectedServiceId")).click();
-        driver.findElement(By.cssSelector("#selectedServiceId > option")).click();
+
+        WebElement dropdown = driver.findElement(By.id("selectedServiceId"));
+        dropdown.findElements(By.cssSelector("option")).stream().filter(option -> option.getText().contains(serviceName)).findFirst().get().click();
+
         driver.findElement(By.id("githubUserSearchCriteria")).click();
         driver.findElement(By.id("githubUserSearchCriteria")).sendKeys("ChristophBaierATB");
         driver.findElement(By.id("githubUserSearchButton")).click();

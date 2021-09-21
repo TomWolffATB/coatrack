@@ -20,12 +20,13 @@ public class ServiceOfferings {
 
     public ServiceOfferings(WebDriver driver) {
         this.driver = driver;
-        tableUtils = new TableUtils(driver, "servicesTable");
+        tableUtils = new TableUtils(driver, "servicesTable", getAdminServicesPage());
     }
 
     public String createService() {
-        driver.get(getDashboard());
 
+        //TODO Replace this block of code by one 'driver.get()' statement.
+        driver.get(getDashboard());
         driver.findElement(By.linkText("Service Offering Setup")).click();
         driver.findElement(By.linkText("Service Offerings")).click();
         driver.findElement(By.linkText("Create Service Offering")).click();
@@ -33,7 +34,7 @@ public class ServiceOfferings {
 
         String serviceName = "my-service-" + (new Random().nextInt());
         String serviceId = serviceName + "-id";
-        System.out.println("Service Name: " + serviceName);
+
         driver.findElement(By.id("name")).sendKeys(serviceName);
         driver.findElement(By.id("localUrl")).click();
         driver.findElement(By.id("localUrl")).sendKeys("https://www.bing.com");
@@ -57,7 +58,7 @@ public class ServiceOfferings {
 
     public boolean isServiceWithinList(String serviceName) {
         driver.get(getAdminServicesPage());
-        List<WebElement> rows = tableUtils.getServiceRows();
+        List<WebElement> rows = tableUtils.getItemRows();
         List<String> listOfServiceNames = rows.stream().map(row -> row.findElement(By.cssSelector("td"))
                 .getText()).collect(Collectors.toList());
         driver.navigate().refresh();
@@ -65,20 +66,20 @@ public class ServiceOfferings {
     }
 
     public void deleteService(String serviceName){
-        tableUtils.deleteItem(serviceName);
+        tableUtils.deleteItem(serviceName, 6);
     }
 
     //TODO This could maybe be abstracted when Gateways and API keys shall be deleted. It is always the same scheme: Get table, find rows, get a row, press delete button.
     public void deleteAllServices(){
         driver.get(getAdminServicesPage());
 
-        List<WebElement> rows = tableUtils.getServiceRows();
+        List<WebElement> rows = tableUtils.getItemRows();
         while (!rows.isEmpty()){
             WebElement row = rows.stream().findFirst().get();
-            tableUtils.deleteServiceInRow(row);
+            tableUtils.deleteServiceInRow(row, 6);
 
             driver.navigate().refresh();
-            rows = tableUtils.getServiceRows();
+            rows = tableUtils.getItemRows();
         }
     }
 

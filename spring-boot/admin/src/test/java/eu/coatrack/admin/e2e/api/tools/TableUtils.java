@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
+import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminGatewaysPage;
 import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminServicesPage;
 
 public class TableUtils {
@@ -14,20 +15,22 @@ public class TableUtils {
     private final WebDriver driver;
     private final String tableId;
     private final WaiterUtils waiterUtils;
+    private final String tableUrl;
 
-    public TableUtils(WebDriver driver, String tableId) {
+    public TableUtils(WebDriver driver, String tableId, String tableUrl) {
         this.driver = driver;
         this.tableId = tableId;
         waiterUtils = new WaiterUtils(driver);
+        this.tableUrl = tableUrl;
     }
 
     //TODO When I command the application to delete something and the wring page is opened, the test will fail.
     //TODO This could be prevented by a simple check: If current page is correct, then continue. Else: Go to correct page and then continue.
 
-    public void deleteServiceInRow(WebElement row) {
+    public void deleteServiceInRow(WebElement row, int columnOfTrashButton) {
         List<WebElement> listOfRowElements = row.findElements(By.cssSelector("td"));
-        WebElement cellWithTrashButton = listOfRowElements.get(6);
-        WebElement trashButton = cellWithTrashButton.findElements(By.cssSelector("i")).get(3);
+        WebElement cellWithTrashButton = listOfRowElements.get(columnOfTrashButton);
+        WebElement trashButton = cellWithTrashButton.findElement(By.className("fa-trash"));
         trashButton.click();
 
         sleepMillis(1000);
@@ -37,14 +40,14 @@ public class TableUtils {
         yesButton.click();
     }
 
-    public void deleteItem(String itemName) {
-        driver.get(getAdminServicesPage());
-        WebElement rowOfDesiredService = getServiceRows().stream()
+    public void deleteItem(String itemName, int columnOfTrashButton) {
+        driver.get(tableUrl);
+        WebElement rowOfDesiredService = getItemRows().stream()
                 .filter(row -> row.findElement(By.cssSelector("td")).getText().equals(itemName)).findFirst().get();
-        deleteServiceInRow(rowOfDesiredService);
+        deleteServiceInRow(rowOfDesiredService, columnOfTrashButton);
     }
 
-    public List<WebElement> getServiceRows() {
+    public List<WebElement> getItemRows() {
         waiterUtils.waitForElementWithId(tableId);
         WebElement servicesTable = driver.findElement(By.id(tableId));
         List<WebElement> rows = servicesTable.findElements(By.cssSelector("tr"));

@@ -1,5 +1,6 @@
 package eu.coatrack.admin.e2e.api;
 
+import eu.coatrack.admin.e2e.api.serviceProvider.ServiceGateways;
 import eu.coatrack.admin.e2e.api.serviceProvider.Tutorial;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.ServiceOfferings;
 import org.openqa.selenium.WebDriver;
@@ -21,6 +22,10 @@ public class PageFactory {
 
     public ServiceOfferings getServiceOfferings(){
         return new ServiceOfferings(driver);
+    }
+
+    public ServiceGateways getServiceGateways() {
+        return new ServiceGateways(driver);
     }
 
     public void close(){

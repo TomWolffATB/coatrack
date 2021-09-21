@@ -14,6 +14,11 @@ public class TestConfiguration {
     private static String dashboard = defaultPage + "/admin";
     private static String adminServicesPage = defaultPage + "/admin/services";
     private static String adminTutorialPage = defaultPage + "/admin/gettingstarted";
+    private static String adminGatewaysPage = defaultPage + "/admin/proxies";
+
+    public static String getAdminGatewaysPage() {
+        return adminGatewaysPage;
+    }
 
     public static String getAdminTutorialPage() {
         return adminTutorialPage;

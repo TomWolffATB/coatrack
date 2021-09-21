@@ -28,4 +28,7 @@ public class WaiterUtils {
         }
     }
 
+    public void waitUpToAMinuteForElementWithId(String id) {
+        new WebDriverWait(driver, 60).until(ExpectedConditions.elementToBeClickable(By.id(id)));
+    }
 }

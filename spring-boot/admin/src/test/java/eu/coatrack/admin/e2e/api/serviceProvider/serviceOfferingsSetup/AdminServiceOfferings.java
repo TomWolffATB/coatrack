@@ -1,6 +1,6 @@
 package eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup;
 
-import eu.coatrack.admin.e2e.api.TableType;
+import eu.coatrack.admin.e2e.api.tools.TableType;
 import eu.coatrack.admin.e2e.api.tools.TableUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -23,6 +23,7 @@ public class AdminServiceOfferings {
 
     public String createService() {
         driver.get(getAdminServiceListUrl());
+        driver.findElement(By.linkText("Create Service Offering")).click();
 
         String serviceName = "my-service-" + (new Random().nextInt());
         String serviceId = serviceName + "-id";

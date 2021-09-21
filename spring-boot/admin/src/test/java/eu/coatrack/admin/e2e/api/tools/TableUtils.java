@@ -1,6 +1,5 @@
 package eu.coatrack.admin.e2e.api.tools;
 
-import eu.coatrack.admin.e2e.api.TableType;
 import eu.coatrack.admin.e2e.exceptions.UndefinedTableTypeException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

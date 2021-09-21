@@ -25,15 +25,11 @@ public class AdminTutorial {
 
     public ItemDto createItemsViaTutorial(){
         driver.get(getAdminTutorialUrl());
-
-        driver.findElement(By.linkText("AdminTutorial")).click();
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
         waiterUtils.waitForElementWithId("serviceName");
         driver.findElement(By.id("serviceName")).click();
-
         String serviceName = "my-service" + new Random().nextInt();
-
         driver.findElement(By.id("serviceName")).sendKeys(serviceName);
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
@@ -48,13 +44,11 @@ public class AdminTutorial {
 
         sleepMillis(1000);
         driver.findElement(By.linkText("Finish")).sendKeys(Keys.RETURN);
-
         WebElement gatewayDownloadLinkElement = new WebDriverWait(driver, 60)
                 .until(ExpectedConditions.presenceOfElementLocated(By.linkText("Click here to download your CoatRack Gateway")));
 
         String gatewayDownloadLink = gatewayDownloadLinkElement.getAttribute("href");
         String apiKeyValue = driver.findElement(By.cssSelector(".row:nth-child(3) p:nth-child(2)")).getText();
-
         return new ItemDto(serviceName, gatewayDownloadLink, apiKeyValue);
     }
 }

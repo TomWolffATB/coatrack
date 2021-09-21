@@ -1,5 +1,6 @@
 package eu.coatrack.admin.e2e.tests;
 
+import eu.coatrack.admin.e2e.api.serviceProvider.ItemDto;
 import eu.coatrack.admin.e2e.api.serviceProvider.Tutorial;
 import org.junit.jupiter.api.Test;
 
@@ -13,11 +14,11 @@ public class AdminTests extends AbstractTestSetup {
     public void tutorialTest() {
         //TODO A DTO should be returned instead of a tutorial instance.
         //TODO A 'goTo' or 'visit' method shall be implemented for every page.
-        Tutorial tutorial = pageFactory.getTutorial().createItemsViaTutorial();
+        ItemDto itemDto = pageFactory.getTutorial().createItemsViaTutorial();
 
-        System.out.println("Gateway Download Link: " + tutorial.getGatewayDownloadLink());
-        System.out.println("API Key Value: " + tutorial.getApiKeyValue());
-        System.out.println("Service Name: " + tutorial.getServiceName());
+        System.out.println("Gateway Download Link: " + itemDto.getGatewayDownloadLink());
+        System.out.println("API Key Value: " + itemDto.getApiKeyValue());
+        System.out.println("Service Name: " + itemDto.getServiceName());
 
         /*
         //Download file
@@ -33,7 +34,7 @@ public class AdminTests extends AbstractTestSetup {
          3) rt.exec("java -jar ./test.jar");
 
 
-        Thread.sleep(30000);
+        sleepMillis(30000);
 
         //This is somehow not sufficient. This could help: https://stackoverflow.com/questions/19726804/how-to-kill-a-process-in-java-process-destroy
         pr2.destroyForcibly();

@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
+import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.waitForElementWithId;
 import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminServicesPage;
 import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getDashboard;
 
@@ -47,16 +49,10 @@ public class ServiceOfferings {
         driver.findElement(By.id("freeButton")).click();
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
-        try {
-            Thread.sleep(1000);
-        } catch (Exception ignored){}
-
+        sleepMillis(1000);
         driver.findElement(By.linkText("Finish")).sendKeys(Keys.RETURN);
 
-        try {
-            Thread.sleep(1000);
-        } catch (Exception ignored){}
-
+        sleepMillis(1000);
         return serviceName;
     }
 
@@ -69,13 +65,8 @@ public class ServiceOfferings {
         return listOfServiceNames.contains(serviceName);
     }
 
-    private void waitForElementWithId(String id) {
-        new WebDriverWait(driver, 3).until(ExpectedConditions.presenceOfElementLocated(By.id(id)));
-    }
-
     //TODO This could maybe be abstracted when Gateways and API keys shall be deleted. It is always the same scheme: Get table, find rows, get a row, press delete button.
     public void deleteAllServices(){
-        //TODO I would like to have a directory for paths to abstract them.
         driver.get(getAdminServicesPage());
 
         List<WebElement> rows = getServiceRows();
@@ -94,10 +85,7 @@ public class ServiceOfferings {
         WebElement trashButton = cellWithTrashButton.findElements(By.cssSelector("i")).get(3);
         trashButton.click();
 
-        //TODO I would like to have a static sleeping function with the duration of waiting as argument in seconds.
-        try {
-            Thread.sleep(2000);
-        } catch (Exception ignored) {}
+        sleepMillis(1000);
         WebElement infoDialog = driver.findElement(By.className("ui-dialog"));
         List<WebElement> listOfButtons = infoDialog.findElements(By.cssSelector("button"));
         WebElement yesButton = listOfButtons.stream().filter(button -> button.getText().contains("Yes")).findFirst().get();
@@ -112,7 +100,7 @@ public class ServiceOfferings {
     }
 
     private List<WebElement> getServiceRows() {
-        waitForElementWithId("servicesTable"); //TODO Make it a static function as it is most probably use in other classes.
+        waitForElementWithId("servicesTable", driver);
         WebElement servicesTable = driver.findElement(By.id("servicesTable"));
         List<WebElement> rows = servicesTable.findElements(By.cssSelector("tr"));
         rows.remove(0); //Removes the table header.

@@ -20,6 +20,9 @@ public class TableUtils {
         this.tableId = tableId;
     }
 
+    //TODO When I command the application to delete something and the wring page is opened, the test will fail.
+    //TODO This could be prevented by a simple check: If current page is correct, then continue. Else: Go to correct page and then continue.
+
     public void deleteServiceInRow(WebElement row) {
         List<WebElement> listOfRowElements = row.findElements(By.cssSelector("td"));
         WebElement cellWithTrashButton = listOfRowElements.get(6);
@@ -33,10 +36,10 @@ public class TableUtils {
         yesButton.click();
     }
 
-    public void deleteService(String serviceName) {
+    public void deleteItem(String itemName) {
         driver.get(getAdminServicesPage());
         WebElement rowOfDesiredService = getServiceRows().stream()
-                .filter(row -> row.findElement(By.cssSelector("td")).getText().equals(serviceName)).findFirst().get();
+                .filter(row -> row.findElement(By.cssSelector("td")).getText().equals(itemName)).findFirst().get();
         deleteServiceInRow(rowOfDesiredService);
     }
 

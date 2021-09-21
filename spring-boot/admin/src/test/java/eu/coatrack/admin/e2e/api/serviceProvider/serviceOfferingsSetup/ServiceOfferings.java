@@ -65,7 +65,7 @@ public class ServiceOfferings {
     }
 
     public void deleteService(String serviceName){
-        tableUtils.deleteService(serviceName);
+        tableUtils.deleteItem(serviceName);
     }
 
     //TODO This could maybe be abstracted when Gateways and API keys shall be deleted. It is always the same scheme: Get table, find rows, get a row, press delete button.

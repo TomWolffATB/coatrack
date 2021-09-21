@@ -7,17 +7,18 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
-import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.waitForElementWithId;
 import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminServicesPage;
 
 public class TableUtils {
 
     private final WebDriver driver;
     private final String tableId;
+    private final WaiterUtils waiterUtils;
 
     public TableUtils(WebDriver driver, String tableId) {
         this.driver = driver;
         this.tableId = tableId;
+        waiterUtils = new WaiterUtils(driver);
     }
 
     //TODO When I command the application to delete something and the wring page is opened, the test will fail.
@@ -44,7 +45,7 @@ public class TableUtils {
     }
 
     public List<WebElement> getServiceRows() {
-        waitForElementWithId(tableId, driver);
+        waiterUtils.waitForElementWithId(tableId);
         WebElement servicesTable = driver.findElement(By.id(tableId));
         List<WebElement> rows = servicesTable.findElements(By.cssSelector("tr"));
         rows.remove(0); //Removes the table header.

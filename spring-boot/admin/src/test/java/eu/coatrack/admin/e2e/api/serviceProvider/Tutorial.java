@@ -1,5 +1,6 @@
 package eu.coatrack.admin.e2e.api.serviceProvider;
 
+import eu.coatrack.admin.e2e.api.tools.WaiterUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -10,15 +11,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.Random;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
-import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.waitForElementWithId;
 import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminTutorialPage;
 
 public class Tutorial {
 
     private final WebDriver driver;
+    private final WaiterUtils waiterUtils;
 
     public Tutorial(WebDriver driver) {
         this.driver = driver;
+        waiterUtils = new WaiterUtils(driver);
     }
 
     public ItemDto createItemsViaTutorial(){
@@ -27,7 +29,7 @@ public class Tutorial {
         driver.findElement(By.linkText("Tutorial")).click();
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
-        waitForElementWithId("serviceName", driver);
+        waiterUtils.waitForElementWithId("serviceName");
         driver.findElement(By.id("serviceName")).click();
 
         String serviceName = "my-service" + new Random().nextInt();
@@ -35,12 +37,12 @@ public class Tutorial {
         driver.findElement(By.id("serviceName")).sendKeys(serviceName);
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
-        waitForElementWithId("serviceUrl", driver);
+        waiterUtils.waitForElementWithId("serviceUrl");
         driver.findElement(By.id("serviceUrl")).click();
         driver.findElement(By.id("serviceUrl")).sendKeys("https://www.bing.com");
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
-        waitForElementWithId("serviceForFreeYes", driver);
+        waiterUtils.waitForElementWithId("serviceForFreeYes");
         driver.findElement(By.id("serviceForFreeYes")).click();
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 

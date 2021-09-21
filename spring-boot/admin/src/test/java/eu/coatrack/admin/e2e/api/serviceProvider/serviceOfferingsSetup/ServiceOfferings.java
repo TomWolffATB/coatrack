@@ -1,27 +1,26 @@
 package eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup;
 
+import eu.coatrack.admin.e2e.api.tools.TableUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
-import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.waitForElementWithId;
 import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminServicesPage;
 import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getDashboard;
 
 public class ServiceOfferings {
 
     private final WebDriver driver;
+    private final TableUtils tableUtils;
 
     public ServiceOfferings(WebDriver driver) {
         this.driver = driver;
+        tableUtils = new TableUtils(driver, "servicesTable");
     }
 
     public String createService() {
@@ -58,52 +57,30 @@ public class ServiceOfferings {
 
     public boolean isServiceWithinList(String serviceName) {
         driver.get(getAdminServicesPage());
-        List<WebElement> rows = getServiceRows();
+        List<WebElement> rows = tableUtils.getServiceRows();
         List<String> listOfServiceNames = rows.stream().map(row -> row.findElement(By.cssSelector("td"))
                 .getText()).collect(Collectors.toList());
         driver.navigate().refresh();
         return listOfServiceNames.contains(serviceName);
     }
 
+    public void deleteService(String serviceName){
+        tableUtils.deleteService(serviceName);
+    }
+
     //TODO This could maybe be abstracted when Gateways and API keys shall be deleted. It is always the same scheme: Get table, find rows, get a row, press delete button.
     public void deleteAllServices(){
         driver.get(getAdminServicesPage());
 
-        List<WebElement> rows = getServiceRows();
+        List<WebElement> rows = tableUtils.getServiceRows();
         while (!rows.isEmpty()){
             WebElement row = rows.stream().findFirst().get();
-            deleteServiceInRow(row);
+            tableUtils.deleteServiceInRow(row);
 
             driver.navigate().refresh();
-            rows = getServiceRows();
+            rows = tableUtils.getServiceRows();
         }
     }
 
-    private void deleteServiceInRow(WebElement row) {
-        List<WebElement> listOfRowElements = row.findElements(By.cssSelector("td"));
-        WebElement cellWithTrashButton = listOfRowElements.get(6);
-        WebElement trashButton = cellWithTrashButton.findElements(By.cssSelector("i")).get(3);
-        trashButton.click();
 
-        sleepMillis(1000);
-        WebElement infoDialog = driver.findElement(By.className("ui-dialog"));
-        List<WebElement> listOfButtons = infoDialog.findElements(By.cssSelector("button"));
-        WebElement yesButton = listOfButtons.stream().filter(button -> button.getText().contains("Yes")).findFirst().get();
-        yesButton.click();
-    }
-
-    public void deleteService(String serviceName) {
-        driver.get(getAdminServicesPage());
-        WebElement rowOfDesiredService = getServiceRows().stream()
-                .filter(row -> row.findElement(By.cssSelector("td")).getText().equals(serviceName)).findFirst().get();
-        deleteServiceInRow(rowOfDesiredService);
-    }
-
-    private List<WebElement> getServiceRows() {
-        waitForElementWithId("servicesTable", driver);
-        WebElement servicesTable = driver.findElement(By.id("servicesTable"));
-        List<WebElement> rows = servicesTable.findElements(By.cssSelector("tr"));
-        rows.remove(0); //Removes the table header.
-        return rows;
-    }
 }

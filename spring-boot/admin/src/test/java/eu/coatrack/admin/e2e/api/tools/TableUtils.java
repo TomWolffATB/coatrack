@@ -1,6 +1,7 @@
 package eu.coatrack.admin.e2e.api.tools;
 
 import eu.coatrack.admin.e2e.api.TableType;
+import eu.coatrack.admin.e2e.exceptions.UndefinedTableTypeException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -43,7 +44,16 @@ public class TableUtils {
             tableUrl = getAdminApiKeysPage();
             trashButtonColumn = 6;
             itemIdentificationColumnIndex = 2;
+        } else {
+            throw new UndefinedTableTypeException("Please implement the table type details here.");
         }
+    }
+
+    public void deleteItem(String itemName) {
+        driver.get(tableUrl);
+        WebElement rowOfItemToBeDeleted = getItemRows().stream()
+                .filter(row -> row.findElements(By.cssSelector("td")).get(itemIdentificationColumnIndex).getText().equals(itemName)).collect(Collectors.toList()).get(0);
+        deleteRow(rowOfItemToBeDeleted);
     }
 
     private void deleteRow(WebElement row) {
@@ -58,19 +68,8 @@ public class TableUtils {
         yesButton.click();
     }
 
-    public void deleteItem(String itemName) {
-        driver.get(tableUrl);
-        WebElement rowOfItemToBeDeleted = getItemRows().stream()
-                .filter(row -> row.findElements(By.cssSelector("td")).get(itemIdentificationColumnIndex).getText().equals(itemName)).collect(Collectors.toList()).get(0);
-        deleteRow(rowOfItemToBeDeleted);
-    }
-
-    private List<WebElement> getItemRows() {
-        waiterUtils.waitForElementWithId(tableId);
-        WebElement itemTable = driver.findElement(By.id(tableId));
-        List<WebElement> rows = itemTable.findElements(By.cssSelector("tr"));
-        rows.remove(0); //Removes the table header.
-        return rows;
+    private WebElement getCellInColumn(WebElement row, int column){
+        return row.findElements(By.cssSelector("td")).get(column);
     }
 
     public List<String> getListOfColumnValues(int column){
@@ -79,8 +78,12 @@ public class TableUtils {
                 .map(row -> getCellInColumn(row, column).getText()).collect(Collectors.toList());
     }
 
-    private WebElement getCellInColumn(WebElement row, int column){
-        return row.findElements(By.cssSelector("td")).get(column);
+    private List<WebElement> getItemRows() {
+        waiterUtils.waitForElementWithId(tableId);
+        WebElement itemTable = driver.findElement(By.id(tableId));
+        List<WebElement> rows = itemTable.findElements(By.cssSelector("tr"));
+        rows.remove(0); //Removes the table header.
+        return rows;
     }
 
     public boolean isItemWithinList(String itemName) {

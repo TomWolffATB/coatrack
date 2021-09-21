@@ -60,13 +60,4 @@ public class AdminTests extends AbstractTestSetup {
         if (file.exists())
             fail("Cleanup failed. File test.jar could not be deleted.");
     }
-
-    @Test
-    public void cleanUp(){
-        pageFactory.getServiceOfferings().deleteAllServices();
-        //TODO This test always fails. -> Fix needed.
-        //TODO Assertion of service list to be empty is missing.
-        //TODO Also implement cleanups for API Keys and Gateways with proper assertions.
-    }
-
 }

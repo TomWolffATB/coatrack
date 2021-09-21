@@ -40,8 +40,6 @@ public class ServiceGateways {
         driver.findElement(By.id("proxyPublicUrlInputField")).sendKeys("https://mysite.com:8080");
         driver.findElement(By.id("port")).click();
         driver.findElement(By.id("port")).sendKeys("8080");
-        driver.findElement(By.name("selectedServices")).click();
-        driver.findElement(By.cssSelector(".checkbox:nth-child(2) .flat")).click();
         driver.findElement(By.id("description")).click();
         driver.findElement(By.id("description")).sendKeys("some Description");
         driver.findElement(By.id("save")).click();
@@ -58,5 +56,9 @@ public class ServiceGateways {
 
     public void deleteGateway(String gatewayName) {
         gatewayTableUtils.deleteItem(gatewayName);
+    }
+
+    public void deleteAllGateways() {
+        gatewayTableUtils.deleteAllItem();
     }
 }

@@ -16,6 +16,7 @@ public class TableUtils {
 
     private final WebDriver driver;
     private final WaiterUtils waiterUtils;
+
     private String tableId;
     private String tableUrl;
     private int trashButtonColumnIndex;
@@ -41,9 +42,9 @@ public class TableUtils {
     //TODO When I command the application to delete something and the wring page is opened, the test will fail.
     //TODO This could be prevented by a simple check: If current page is correct, then continue. Else: Go to correct page and then continue.
 
-    public void deleteServiceInRow(WebElement row) {
-        List<WebElement> listOfRowElements = row.findElements(By.cssSelector("td"));
-        WebElement cellWithTrashButton = listOfRowElements.get(trashButtonColumnIndex);
+    private void deleteRow(WebElement row) {
+        List<WebElement> listOfCellsInTheRow = row.findElements(By.cssSelector("td"));
+        WebElement cellWithTrashButton = listOfCellsInTheRow.get(trashButtonColumnIndex);
         WebElement trashButton = cellWithTrashButton.findElement(By.className("fa-trash"));
         trashButton.click();
 
@@ -56,15 +57,15 @@ public class TableUtils {
 
     public void deleteItem(String itemName) {
         driver.get(tableUrl);
-        WebElement rowOfDesiredService = getItemRows().stream()
+        WebElement rowOfItemToBeDeleted = getItemRows().stream()
                 .filter(row -> row.findElement(By.cssSelector("td")).getText().equals(itemName)).findFirst().get();
-        deleteServiceInRow(rowOfDesiredService);
+        deleteRow(rowOfItemToBeDeleted);
     }
 
-    public List<WebElement> getItemRows() {
+    private List<WebElement> getItemRows() {
         waiterUtils.waitForElementWithId(tableId);
-        WebElement servicesTable = driver.findElement(By.id(tableId));
-        List<WebElement> rows = servicesTable.findElements(By.cssSelector("tr"));
+        WebElement itemTable = driver.findElement(By.id(tableId));
+        List<WebElement> rows = itemTable.findElements(By.cssSelector("tr"));
         rows.remove(0); //Removes the table header.
         return rows;
     }
@@ -76,6 +77,24 @@ public class TableUtils {
                 .getText()).collect(Collectors.toList());
         driver.navigate().refresh();
         return listOfItemNames.contains(itemName);
+    }
+
+    public void deleteAllItem(){
+        driver.get(tableUrl);
+
+        List<WebElement> rows = getItemRows();
+        while (true){
+            WebElement firstTableBodyRow = rows.get(0);
+            String contentOfFirstCell = firstTableBodyRow.findElement(By.cssSelector("td")).getText();
+
+            if (contentOfFirstCell.contains("No items yet"))
+                break;
+            else {
+                deleteRow(firstTableBodyRow);
+                driver.navigate().refresh();
+                rows = getItemRows();
+            }
+        }
     }
 
 }

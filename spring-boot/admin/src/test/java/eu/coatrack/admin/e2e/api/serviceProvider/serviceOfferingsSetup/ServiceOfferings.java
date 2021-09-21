@@ -8,7 +8,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminServicesPage;
@@ -17,11 +16,11 @@ import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getDashboard
 public class ServiceOfferings {
 
     private final WebDriver driver;
-    private final TableUtils tableUtils;
+    private final TableUtils serviceTableUtils;
 
     public ServiceOfferings(WebDriver driver) {
         this.driver = driver;
-        tableUtils = new TableUtils(driver, TableType.SERVICE_TABLE);
+        serviceTableUtils = new TableUtils(driver, TableType.SERVICE_TABLE);
     }
 
     public String createService() {
@@ -58,24 +57,14 @@ public class ServiceOfferings {
     }
 
     public boolean isServiceWithinList(String serviceName) {
-        return tableUtils.isItemWithinList(serviceName);
+        return serviceTableUtils.isItemWithinList(serviceName);
     }
 
     public void deleteService(String serviceName){
-        tableUtils.deleteItem(serviceName);
+        serviceTableUtils.deleteItem(serviceName);
     }
 
-    //TODO This could maybe be abstracted when Gateways and API keys shall be deleted. It is always the same scheme: Get table, find rows, get a row, press delete button.
-    public void deleteAllServices(){
-        driver.get(getAdminServicesPage());
-
-        List<WebElement> rows = tableUtils.getItemRows();
-        while (!rows.isEmpty()){
-            WebElement row = rows.stream().findFirst().get();
-            tableUtils.deleteServiceInRow(row);
-
-            driver.navigate().refresh();
-            rows = tableUtils.getItemRows();
-        }
+    public void deleteAllServices() {
+        serviceTableUtils.deleteAllItem();
     }
 }

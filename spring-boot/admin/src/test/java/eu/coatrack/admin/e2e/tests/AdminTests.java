@@ -11,6 +11,8 @@ public class AdminTests extends AbstractTestSetup {
 
     @Test
     public void tutorialTest() {
+        //TODO A DTO should be returned instead of a tutorial instance.
+        //TODO A 'goTo' or 'visit' method shall be implemented for every page.
         Tutorial tutorial = pageFactory.getTutorial().createItemsViaTutorial();
 
         System.out.println("Gateway Download Link: " + tutorial.getGatewayDownloadLink());

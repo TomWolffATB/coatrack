@@ -1,5 +1,6 @@
 package eu.coatrack.admin.e2e.api.serviceProvider;
 
+import eu.coatrack.admin.e2e.api.TableType;
 import eu.coatrack.admin.e2e.api.tools.TableUtils;
 import eu.coatrack.admin.e2e.api.tools.WaiterUtils;
 import org.openqa.selenium.By;
@@ -23,7 +24,7 @@ public class ServiceGateways {
     public ServiceGateways(WebDriver driver) {
         this.driver = driver;
         waiterUtils = new WaiterUtils(driver);
-        gatewayTableUtils = new TableUtils(driver, "proxiesTable", getAdminGatewaysPage());
+        gatewayTableUtils = new TableUtils(driver, TableType.GATEWAY_TABLE);
     }
 
     public String createGateway() {

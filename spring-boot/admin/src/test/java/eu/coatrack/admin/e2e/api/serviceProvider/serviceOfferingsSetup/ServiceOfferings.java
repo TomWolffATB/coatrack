@@ -1,5 +1,6 @@
 package eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup;
 
+import eu.coatrack.admin.e2e.api.TableType;
 import eu.coatrack.admin.e2e.api.tools.TableUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -20,7 +21,7 @@ public class ServiceOfferings {
 
     public ServiceOfferings(WebDriver driver) {
         this.driver = driver;
-        tableUtils = new TableUtils(driver, "servicesTable", getAdminServicesPage());
+        tableUtils = new TableUtils(driver, TableType.SERVICE_TABLE);
     }
 
     public String createService() {

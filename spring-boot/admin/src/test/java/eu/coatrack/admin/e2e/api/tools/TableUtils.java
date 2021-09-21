@@ -1,5 +1,6 @@
 package eu.coatrack.admin.e2e.api.tools;
 
+import eu.coatrack.admin.e2e.api.TableType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,15 +14,24 @@ import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminServ
 public class TableUtils {
 
     private final WebDriver driver;
-    private final String tableId;
     private final WaiterUtils waiterUtils;
-    private final String tableUrl;
+    private String tableId;
+    private String tableUrl;
 
-    public TableUtils(WebDriver driver, String tableId, String tableUrl) {
+    public TableUtils(WebDriver driver, TableType tableType) {
         this.driver = driver;
-        this.tableId = tableId;
         waiterUtils = new WaiterUtils(driver);
-        this.tableUrl = tableUrl;
+        initTableFieldsAccordingToTableType(tableType);
+    }
+
+    private void initTableFieldsAccordingToTableType(TableType tableType) {
+        if (tableType == TableType.SERVICE_TABLE){
+            tableId = "servicesTable";
+            tableUrl = getAdminServicesPage();
+        } else if (tableType == TableType.GATEWAY_TABLE) {
+            tableId = "proxiesTable";
+            tableUrl = getAdminGatewaysPage();
+        }
     }
 
     //TODO When I command the application to delete something and the wring page is opened, the test will fail.

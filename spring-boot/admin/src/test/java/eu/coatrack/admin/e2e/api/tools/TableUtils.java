@@ -5,7 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +18,7 @@ public class TableUtils {
 
     private String tableId;
     private String tableUrl;
-    private int trashButtonColumnIndex;
+    private int trashButtonColumn;
     private int itemIdentificationColumnIndex;
 
     public TableUtils(WebDriver driver, TableType tableType) {
@@ -32,17 +31,17 @@ public class TableUtils {
         if (tableType == TableType.SERVICE_TABLE){
             tableId = "servicesTable";
             tableUrl = getAdminServicesPage();
-            trashButtonColumnIndex = 6;
+            trashButtonColumn = 6;
             itemIdentificationColumnIndex = 0;
         } else if (tableType == TableType.GATEWAY_TABLE) {
             tableId = "proxiesTable";
             tableUrl = getAdminGatewaysPage();
-            trashButtonColumnIndex = 8;
+            trashButtonColumn = 8;
             itemIdentificationColumnIndex = 0;
         } else if (tableType == TableType.APIKEY_TABLE) {
             tableId = "apiKeyTable";
             tableUrl = getAdminApiKeysPage();
-            trashButtonColumnIndex = 6;
+            trashButtonColumn = 6;
             itemIdentificationColumnIndex = 2;
         }
     }
@@ -51,8 +50,7 @@ public class TableUtils {
     //TODO This could be prevented by a simple check: If current page is correct, then continue. Else: Go to correct page and then continue.
 
     private void deleteRow(WebElement row) {
-        List<WebElement> listOfCellsInTheRow = row.findElements(By.cssSelector("td"));
-        WebElement cellWithTrashButton = listOfCellsInTheRow.get(trashButtonColumnIndex);
+        WebElement cellWithTrashButton = getCellInColumn(row, trashButtonColumn);
         WebElement trashButton = cellWithTrashButton.findElement(By.className("fa-trash"));
         trashButton.click();
 
@@ -80,14 +78,18 @@ public class TableUtils {
 
     public List<String> getListOfColumnValues(int column){
         return getItemRows().stream()
-                .filter(row -> !row.findElements(By.cssSelector("td")).get(0).getText().contains("No items yet"))
-                .map(row -> row.findElements(By.cssSelector("td")).get(column).getText()).collect(Collectors.toList());
+                .filter(row -> !getCellInColumn(row, 0).getText().contains("No items yet"))
+                .map(row -> getCellInColumn(row, column).getText()).collect(Collectors.toList());
+    }
+
+    private WebElement getCellInColumn(WebElement row, int column){
+        return row.findElements(By.cssSelector("td")).get(column);
     }
 
     public boolean isItemWithinList(String itemName) {
         driver.get(tableUrl);
         List<WebElement> rows = getItemRows();
-        List<String> listOfItemNames = rows.stream().map(row -> row.findElements(By.cssSelector("td")).get(itemIdentificationColumnIndex)
+        List<String> listOfItemNames = rows.stream().map(row -> getCellInColumn(row, itemIdentificationColumnIndex)
                 .getText()).collect(Collectors.toList());
         driver.navigate().refresh();
         return listOfItemNames.contains(itemName);

@@ -32,7 +32,6 @@ public class CreationTests extends AbstractTestSetup {
 
     @Test
     public void createAndDeleteApiKeyTest() {
-        //TODO I think the Api key is just choosing the first available service from the list. It should created to gain access to this specific service.
         ApiKeys apiKeys = pageFactory.getApiKeys();
         String serviceName = pageFactory.getServiceOfferings().createService();
         String apiKeyValue = apiKeys.createApiKey(serviceName);
@@ -42,6 +41,6 @@ public class CreationTests extends AbstractTestSetup {
         assertFalse(apiKeys.isApiKeyWithinList(apiKeyValue));
     }
 
-    //TODO Analog tests for proxies and API keys. Also test the consumer features.
+    //TODO Also test the consumer features.
 
 }

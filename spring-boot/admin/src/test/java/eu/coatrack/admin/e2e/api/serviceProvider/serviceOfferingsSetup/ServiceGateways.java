@@ -44,9 +44,7 @@ public class ServiceGateways {
         driver.findElement(By.id("description")).sendKeys("some Description");
         driver.findElement(By.id("save")).click();
 
-        //TODO To be abstracted.
         waiterUtils.waitUpToAMinuteForElementWithId("proxiesTable");
-
         return gatewayName;
     }
 

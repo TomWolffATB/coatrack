@@ -46,9 +46,6 @@ public class TableUtils {
         }
     }
 
-    //TODO When I command the application to delete something and the wring page is opened, the test will fail.
-    //TODO This could be prevented by a simple check: If current page is correct, then continue. Else: Go to correct page and then continue.
-
     private void deleteRow(WebElement row) {
         WebElement cellWithTrashButton = getCellInColumn(row, trashButtonColumn);
         WebElement trashButton = cellWithTrashButton.findElement(By.className("fa-trash"));

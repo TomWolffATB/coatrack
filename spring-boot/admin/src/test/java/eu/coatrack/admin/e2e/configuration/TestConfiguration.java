@@ -15,6 +15,11 @@ public class TestConfiguration {
     private static String adminServicesPage = defaultPage + "/admin/services";
     private static String adminTutorialPage = defaultPage + "/admin/gettingstarted";
     private static String adminGatewaysPage = defaultPage + "/admin/proxies";
+    private static String adminApiKeysPage = defaultPage + "/admin/api-keys";
+
+    public static String getAdminApiKeysPage() {
+        return adminApiKeysPage;
+    }
 
     public static String getAdminGatewaysPage() {
         return adminGatewaysPage;

@@ -1,4 +1,4 @@
-package eu.coatrack.admin.e2e.api.serviceProvider;
+package eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup;
 
 import eu.coatrack.admin.e2e.api.TableType;
 import eu.coatrack.admin.e2e.api.tools.TableUtils;

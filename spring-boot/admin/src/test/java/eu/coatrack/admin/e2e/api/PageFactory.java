@@ -1,6 +1,7 @@
 package eu.coatrack.admin.e2e.api;
 
-import eu.coatrack.admin.e2e.api.serviceProvider.ServiceGateways;
+import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.ApiKeys;
+import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.ServiceGateways;
 import eu.coatrack.admin.e2e.api.serviceProvider.Tutorial;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.ServiceOfferings;
 import org.openqa.selenium.WebDriver;
@@ -26,6 +27,10 @@ public class PageFactory {
 
     public ServiceGateways getServiceGateways() {
         return new ServiceGateways(driver);
+    }
+
+    public ApiKeys getApiKeys() {
+        return new ApiKeys(driver);
     }
 
     public void close(){

@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
-import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminGatewaysPage;
-import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminServicesPage;
+import static eu.coatrack.admin.e2e.configuration.TestConfiguration.*;
 
 public class TableUtils {
 
@@ -36,6 +35,10 @@ public class TableUtils {
             tableId = "proxiesTable";
             tableUrl = getAdminGatewaysPage();
             trashButtonColumnIndex = 8;
+        } else if (tableType == TableType.APIKEY_TABLE) {
+            tableId = "apiKeyTable";
+            tableUrl = getAdminApiKeysPage();
+            trashButtonColumnIndex = 6;
         }
     }
 

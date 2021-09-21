@@ -1,6 +1,6 @@
 package eu.coatrack.admin.e2e.tests;
 
-import eu.coatrack.admin.e2e.api.serviceProvider.ServiceGateways;
+import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.ServiceGateways;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.ServiceOfferings;
 import org.junit.jupiter.api.Test;
 

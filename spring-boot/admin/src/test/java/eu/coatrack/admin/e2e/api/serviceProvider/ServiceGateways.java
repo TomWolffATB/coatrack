@@ -57,6 +57,6 @@ public class ServiceGateways {
     }
 
     public void deleteGateway(String gatewayName) {
-        gatewayTableUtils.deleteItem(gatewayName, 8);
+        gatewayTableUtils.deleteItem(gatewayName);
     }
 }

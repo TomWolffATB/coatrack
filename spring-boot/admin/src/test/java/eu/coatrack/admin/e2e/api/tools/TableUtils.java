@@ -18,6 +18,7 @@ public class TableUtils {
     private final WaiterUtils waiterUtils;
     private String tableId;
     private String tableUrl;
+    private int trashButtonColumnIndex;
 
     public TableUtils(WebDriver driver, TableType tableType) {
         this.driver = driver;
@@ -29,18 +30,20 @@ public class TableUtils {
         if (tableType == TableType.SERVICE_TABLE){
             tableId = "servicesTable";
             tableUrl = getAdminServicesPage();
+            trashButtonColumnIndex = 6;
         } else if (tableType == TableType.GATEWAY_TABLE) {
             tableId = "proxiesTable";
             tableUrl = getAdminGatewaysPage();
+            trashButtonColumnIndex = 8;
         }
     }
 
     //TODO When I command the application to delete something and the wring page is opened, the test will fail.
     //TODO This could be prevented by a simple check: If current page is correct, then continue. Else: Go to correct page and then continue.
 
-    public void deleteServiceInRow(WebElement row, int columnOfTrashButton) {
+    public void deleteServiceInRow(WebElement row) {
         List<WebElement> listOfRowElements = row.findElements(By.cssSelector("td"));
-        WebElement cellWithTrashButton = listOfRowElements.get(columnOfTrashButton);
+        WebElement cellWithTrashButton = listOfRowElements.get(trashButtonColumnIndex);
         WebElement trashButton = cellWithTrashButton.findElement(By.className("fa-trash"));
         trashButton.click();
 
@@ -51,11 +54,11 @@ public class TableUtils {
         yesButton.click();
     }
 
-    public void deleteItem(String itemName, int columnOfTrashButton) {
+    public void deleteItem(String itemName) {
         driver.get(tableUrl);
         WebElement rowOfDesiredService = getItemRows().stream()
                 .filter(row -> row.findElement(By.cssSelector("td")).getText().equals(itemName)).findFirst().get();
-        deleteServiceInRow(rowOfDesiredService, columnOfTrashButton);
+        deleteServiceInRow(rowOfDesiredService);
     }
 
     public List<WebElement> getItemRows() {

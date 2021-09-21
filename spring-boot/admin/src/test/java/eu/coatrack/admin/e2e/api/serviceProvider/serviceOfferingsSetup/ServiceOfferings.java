@@ -62,7 +62,7 @@ public class ServiceOfferings {
     }
 
     public void deleteService(String serviceName){
-        tableUtils.deleteItem(serviceName, 6);
+        tableUtils.deleteItem(serviceName);
     }
 
     //TODO This could maybe be abstracted when Gateways and API keys shall be deleted. It is always the same scheme: Get table, find rows, get a row, press delete button.
@@ -72,7 +72,7 @@ public class ServiceOfferings {
         List<WebElement> rows = tableUtils.getItemRows();
         while (!rows.isEmpty()){
             WebElement row = rows.stream().findFirst().get();
-            tableUtils.deleteServiceInRow(row, 6);
+            tableUtils.deleteServiceInRow(row);
 
             driver.navigate().refresh();
             rows = tableUtils.getItemRows();

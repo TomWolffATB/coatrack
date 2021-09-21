@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,7 @@ public class TableUtils {
     private String tableId;
     private String tableUrl;
     private int trashButtonColumnIndex;
+    private int itemIdentificationColumnIndex;
 
     public TableUtils(WebDriver driver, TableType tableType) {
         this.driver = driver;
@@ -31,14 +33,17 @@ public class TableUtils {
             tableId = "servicesTable";
             tableUrl = getAdminServicesPage();
             trashButtonColumnIndex = 6;
+            itemIdentificationColumnIndex = 0;
         } else if (tableType == TableType.GATEWAY_TABLE) {
             tableId = "proxiesTable";
             tableUrl = getAdminGatewaysPage();
             trashButtonColumnIndex = 8;
+            itemIdentificationColumnIndex = 0;
         } else if (tableType == TableType.APIKEY_TABLE) {
             tableId = "apiKeyTable";
             tableUrl = getAdminApiKeysPage();
             trashButtonColumnIndex = 6;
+            itemIdentificationColumnIndex = 2;
         }
     }
 
@@ -51,7 +56,7 @@ public class TableUtils {
         WebElement trashButton = cellWithTrashButton.findElement(By.className("fa-trash"));
         trashButton.click();
 
-        sleepMillis(1000);
+        sleepMillis(2000);
         WebElement infoDialog = driver.findElement(By.className("ui-dialog"));
         List<WebElement> listOfButtons = infoDialog.findElements(By.cssSelector("button"));
         WebElement yesButton = listOfButtons.stream().filter(button -> button.getText().contains("Yes")).findFirst().get();
@@ -61,7 +66,7 @@ public class TableUtils {
     public void deleteItem(String itemName) {
         driver.get(tableUrl);
         WebElement rowOfItemToBeDeleted = getItemRows().stream()
-                .filter(row -> row.findElement(By.cssSelector("td")).getText().equals(itemName)).findFirst().get();
+                .filter(row -> row.findElements(By.cssSelector("td")).get(itemIdentificationColumnIndex).getText().equals(itemName)).collect(Collectors.toList()).get(0);
         deleteRow(rowOfItemToBeDeleted);
     }
 
@@ -73,10 +78,16 @@ public class TableUtils {
         return rows;
     }
 
+    public List<String> getListOfColumnValues(int column){
+        return getItemRows().stream()
+                .filter(row -> !row.findElements(By.cssSelector("td")).get(0).getText().contains("No items yet"))
+                .map(row -> row.findElements(By.cssSelector("td")).get(column).getText()).collect(Collectors.toList());
+    }
+
     public boolean isItemWithinList(String itemName) {
         driver.get(tableUrl);
         List<WebElement> rows = getItemRows();
-        List<String> listOfItemNames = rows.stream().map(row -> row.findElement(By.cssSelector("td"))
+        List<String> listOfItemNames = rows.stream().map(row -> row.findElements(By.cssSelector("td")).get(itemIdentificationColumnIndex)
                 .getText()).collect(Collectors.toList());
         driver.navigate().refresh();
         return listOfItemNames.contains(itemName);

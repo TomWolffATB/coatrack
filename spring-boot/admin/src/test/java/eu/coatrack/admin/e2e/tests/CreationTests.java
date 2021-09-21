@@ -1,5 +1,6 @@
 package eu.coatrack.admin.e2e.tests;
 
+import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.ApiKeys;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.ServiceGateways;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.ServiceOfferings;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,20 @@ public class CreationTests extends AbstractTestSetup {
 
         serviceGateways.deleteGateway(gatewayName);
         assertFalse(serviceGateways.isGatewayWithinList(gatewayName));
+    }
+
+    @Test
+    public void createAndDeleteApiKeyTest() {
+        //TODO I think the Api key is just choosing the first available service from the list. It should created to gain access to this specific service.
+        String serviceName = pageFactory.getServiceOfferings().createService();
+
+        ApiKeys apiKeys = pageFactory.getApiKeys();
+        String apiKeyValue = apiKeys.createApiKey();
+        System.out.println("Api Key name: " + apiKeyValue);
+        assertTrue(apiKeys.isApiKeyWithinList(apiKeyValue));
+
+        apiKeys.deleteApiKey(apiKeyValue);
+        assertFalse(apiKeys.isApiKeyWithinList(apiKeyValue));
     }
 
     //TODO Analog tests for proxies and API keys. Also test the consumer features.

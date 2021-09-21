@@ -1,12 +1,13 @@
 package eu.coatrack.admin.e2e.api;
 
-import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.ApiKeys;
-import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.ServiceGateways;
-import eu.coatrack.admin.e2e.api.serviceProvider.Tutorial;
-import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.ServiceOfferings;
+import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminApiKeys;
+import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
+import eu.coatrack.admin.e2e.api.serviceProvider.AdminTutorial;
+import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
 import org.openqa.selenium.WebDriver;
-
 import static eu.coatrack.admin.e2e.configuration.CookieInjector.injectAuthenticationCookieToDriver;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class PageFactory {
 
@@ -17,20 +18,27 @@ public class PageFactory {
         injectAuthenticationCookieToDriver(driver);
     }
 
-    public Tutorial getTutorial(){
-        return new Tutorial(driver);
+    public AdminTutorial getTutorial(){
+        return new AdminTutorial(driver);
     }
 
-    public ServiceOfferings getServiceOfferings(){
-        return new ServiceOfferings(driver);
+    public AdminServiceOfferings getServiceOfferings(){
+        return new AdminServiceOfferings(driver);
     }
 
-    public ServiceGateways getServiceGateways() {
-        return new ServiceGateways(driver);
+    public AdminServiceGateways getServiceGateways() {
+        return new AdminServiceGateways(driver);
     }
 
-    public ApiKeys getApiKeys() {
-        return new ApiKeys(driver);
+    public AdminApiKeys getApiKeys() {
+        return new AdminApiKeys(driver);
+    }
+
+    public void checkIfUrlIsReachable(String url){
+        driver.get(url);
+        if (driver.getPageSource().contains("Sorry, an error occurred."))
+            fail();
+        assertEquals(url, driver.getCurrentUrl());
     }
 
     public void close(){

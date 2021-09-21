@@ -11,22 +11,22 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.Random;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
-import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminTutorialPage;
+import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminTutorialUrl;
 
-public class Tutorial {
+public class AdminTutorial {
 
     private final WebDriver driver;
     private final WaiterUtils waiterUtils;
 
-    public Tutorial(WebDriver driver) {
+    public AdminTutorial(WebDriver driver) {
         this.driver = driver;
         waiterUtils = new WaiterUtils(driver);
     }
 
     public ItemDto createItemsViaTutorial(){
-        driver.get(getAdminTutorialPage());
+        driver.get(getAdminTutorialUrl());
 
-        driver.findElement(By.linkText("Tutorial")).click();
+        driver.findElement(By.linkText("AdminTutorial")).click();
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
         waiterUtils.waitForElementWithId("serviceName");
@@ -57,5 +57,4 @@ public class Tutorial {
 
         return new ItemDto(serviceName, gatewayDownloadLink, apiKeyValue);
     }
-
 }

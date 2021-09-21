@@ -5,30 +5,25 @@ import eu.coatrack.admin.e2e.api.tools.TableUtils;
 import eu.coatrack.admin.e2e.api.tools.WaiterUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
-import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
-import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminGatewaysPage;
-import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminServicesPage;
+import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminGatewayListUrl;
 
-public class ServiceGateways {
+public class AdminServiceGateways {
 
     private final WebDriver driver;
     private final WaiterUtils waiterUtils;
     private final TableUtils gatewayTableUtils;
 
-    public ServiceGateways(WebDriver driver) {
+    public AdminServiceGateways(WebDriver driver) {
         this.driver = driver;
         waiterUtils = new WaiterUtils(driver);
         gatewayTableUtils = new TableUtils(driver, TableType.GATEWAY_TABLE);
     }
 
     public String createGateway() {
-        driver.get(getAdminGatewaysPage());
+        driver.get(getAdminGatewayListUrl());
 
         driver.findElement(By.linkText("Create Service Gateway")).click();
         driver.findElement(By.id("name")).click();

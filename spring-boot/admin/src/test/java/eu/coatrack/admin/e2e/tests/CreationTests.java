@@ -1,8 +1,8 @@
 package eu.coatrack.admin.e2e.tests;
 
-import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.ApiKeys;
-import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.ServiceGateways;
-import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.ServiceOfferings;
+import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminApiKeys;
+import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
+import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -12,7 +12,7 @@ public class CreationTests extends AbstractTestSetup {
 
     @Test
     public void createAndDeleteServiceTest() {
-        ServiceOfferings serviceOfferings = pageFactory.getServiceOfferings();
+        AdminServiceOfferings serviceOfferings = pageFactory.getServiceOfferings();
         String serviceName = serviceOfferings.createService();
         assertTrue(serviceOfferings.isServiceWithinList(serviceName));
 
@@ -22,7 +22,7 @@ public class CreationTests extends AbstractTestSetup {
 
     @Test
     public void createAndDeleteGatewayTest() {
-        ServiceGateways serviceGateways = pageFactory.getServiceGateways();
+        AdminServiceGateways serviceGateways = pageFactory.getServiceGateways();
         String gatewayName = serviceGateways.createGateway();
         assertTrue(serviceGateways.isGatewayWithinList(gatewayName));
 
@@ -32,7 +32,7 @@ public class CreationTests extends AbstractTestSetup {
 
     @Test
     public void createAndDeleteApiKeyTest() {
-        ApiKeys apiKeys = pageFactory.getApiKeys();
+        AdminApiKeys apiKeys = pageFactory.getApiKeys();
         String serviceName = pageFactory.getServiceOfferings().createService();
         String apiKeyValue = apiKeys.createApiKey(serviceName);
         assertTrue(apiKeys.isApiKeyWithinList(apiKeyValue));

@@ -27,7 +27,7 @@ public class CookieInjector {
     private static void injectNewlyCreatedCookie(WebDriver driver) {
         File cookieSaveFile = new File("./sessionCookieSaveFile.txt");
 
-        if (cookieSaveFile.exists() && wasCookieCreatedMoreThanTwoHoursAgo(cookieSaveFile))
+        if (cookieSaveFile.exists() && wasCookieCreatedMoreThanTwelveHoursAgo(cookieSaveFile))
             cookieSaveFile.delete();
 
         if (cookieSaveFile.exists()){
@@ -39,11 +39,11 @@ public class CookieInjector {
         }
     }
 
-    private static boolean wasCookieCreatedMoreThanTwoHoursAgo(File cookieSaveFile) {
+    private static boolean wasCookieCreatedMoreThanTwelveHoursAgo(File cookieSaveFile) {
         try {
             BasicFileAttributes attr = Files.readAttributes(cookieSaveFile.toPath(), BasicFileAttributes.class);
             long oneHourInMillis = 1000 * 60 * 60;
-            return System.currentTimeMillis() - attr.creationTime().toMillis() > oneHourInMillis * 2;
+            return System.currentTimeMillis() - attr.creationTime().toMillis() > oneHourInMillis * 12;
         } catch (IOException e){
             throw new RuntimeException("An error happened during reading the cookie save file.", e);
         }
@@ -61,7 +61,7 @@ public class CookieInjector {
     }
 
     private static void safelyInjectAuthenticationCookie(WebDriver driver) {
-        driver.get(getDefaultPage());
+        driver.get(getStartpageUrl());
         driver.manage().deleteAllCookies();
         driver.manage().addCookie(sessionCookie);
     }

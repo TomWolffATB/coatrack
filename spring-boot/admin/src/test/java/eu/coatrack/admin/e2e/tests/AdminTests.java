@@ -1,7 +1,6 @@
 package eu.coatrack.admin.e2e.tests;
 
 import eu.coatrack.admin.e2e.api.serviceProvider.ItemDto;
-import eu.coatrack.admin.e2e.api.serviceProvider.Tutorial;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;

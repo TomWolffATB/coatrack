@@ -10,35 +10,67 @@ public class TestConfiguration {
     private static String port = "8080";
 
     //Page URLs
-    private static String defaultPage = protocol + "://" + host + ":" + port;
-    private static String dashboard = defaultPage + "/admin";
-    private static String adminServicesPage = defaultPage + "/admin/services";
-    private static String adminTutorialPage = defaultPage + "/admin/gettingstarted";
-    private static String adminGatewaysPage = defaultPage + "/admin/proxies";
-    private static String adminApiKeysPage = defaultPage + "/admin/api-keys";
+    private static String startpageUrl          = protocol + "://" + host + ":" + port;
 
-    public static String getAdminApiKeysPage() {
-        return adminApiKeysPage;
+    private static String adminDashboardUrl     = startpageUrl + "/admin";
+    private static String adminTutorialUrl      = startpageUrl + "/admin/gettingstarted";
+    private static String adminServiceListUrl   = startpageUrl + "/admin/services";
+    private static String adminGatewayListUrl   = startpageUrl + "/admin/proxies";
+    private static String adminApiKeyListUrl    = startpageUrl + "/admin/api-keys";
+    private static String adminReportsUrl       = startpageUrl + "/admin/reports";
+
+    private static String consumerDashboardUrl  = startpageUrl + "/admin/consumer";
+    private static String consumerTutorialUrl   = startpageUrl + "/admin/consumer/gettingstarted";
+    private static String consumerApiKeyListUrl = startpageUrl + "/admin/api-keys/consumer/list";
+    private static String consumerServiceListUrl= startpageUrl + "/admin/services/consumer/list";
+    private static String consumerReportsUrl    = startpageUrl + "/admin/reports/consumer";
+
+    public static String getConsumerDashboardUrl() {
+        return consumerDashboardUrl;
     }
 
-    public static String getAdminGatewaysPage() {
-        return adminGatewaysPage;
+    public static String getConsumerTutorialUrl() {
+        return consumerTutorialUrl;
     }
 
-    public static String getAdminTutorialPage() {
-        return adminTutorialPage;
+    public static String getConsumerApiKeyListUrl() {
+        return consumerApiKeyListUrl;
     }
 
-    public static String getAdminServicesPage() {
-        return adminServicesPage;
+    public static String getConsumerServiceListUrl() {
+        return consumerServiceListUrl;
     }
 
-    public static String getDefaultPage() {
-        return defaultPage;
+    public static String getConsumerReportsUrl() {
+        return consumerReportsUrl;
     }
 
-    public static String getDashboard() {
-        return dashboard;
+    public static String getAdminReportsUrl() {
+        return adminReportsUrl;
+    }
+
+    public static String getAdminApiKeyListUrl() {
+        return adminApiKeyListUrl;
+    }
+
+    public static String getAdminGatewayListUrl() {
+        return adminGatewayListUrl;
+    }
+
+    public static String getAdminTutorialUrl() {
+        return adminTutorialUrl;
+    }
+
+    public static String getAdminServiceListUrl() {
+        return adminServiceListUrl;
+    }
+
+    public static String getStartpageUrl() {
+        return startpageUrl;
+    }
+
+    public static String getAdminDashboardUrl() {
+        return adminDashboardUrl;
     }
 
     public static String getUsername() {

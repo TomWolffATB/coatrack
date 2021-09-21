@@ -9,14 +9,14 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
-import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminApiKeysPage;
+import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminApiKeyListUrl;
 
-public class ApiKeys {
+public class AdminApiKeys {
 
     private WebDriver driver;
     private TableUtils apiKeyTableUtils;
 
-    public ApiKeys(WebDriver driver) {
+    public AdminApiKeys(WebDriver driver) {
         this.driver = driver;
         apiKeyTableUtils = new TableUtils(driver, TableType.APIKEY_TABLE);
     }
@@ -26,7 +26,7 @@ public class ApiKeys {
     }
 
     public String createApiKey(String serviceName) {
-        driver.get(getAdminApiKeysPage());
+        driver.get(getAdminApiKeyListUrl());
 
         List<String> listOfApiKeyValuesBeforeCreation = apiKeyTableUtils.getListOfColumnValues(2);
 

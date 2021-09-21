@@ -31,17 +31,17 @@ public class TableUtils {
     private void initTableFieldsAccordingToTableType(TableType tableType) {
         if (tableType == TableType.SERVICE_TABLE){
             tableId = "servicesTable";
-            tableUrl = getAdminServicesPage();
+            tableUrl = getAdminServiceListUrl();
             trashButtonColumn = 6;
             itemIdentificationColumnIndex = 0;
         } else if (tableType == TableType.GATEWAY_TABLE) {
             tableId = "proxiesTable";
-            tableUrl = getAdminGatewaysPage();
+            tableUrl = getAdminGatewayListUrl();
             trashButtonColumn = 8;
             itemIdentificationColumnIndex = 0;
         } else if (tableType == TableType.APIKEY_TABLE) {
             tableId = "apiKeyTable";
-            tableUrl = getAdminApiKeysPage();
+            tableUrl = getAdminApiKeyListUrl();
             trashButtonColumn = 6;
             itemIdentificationColumnIndex = 2;
         } else {

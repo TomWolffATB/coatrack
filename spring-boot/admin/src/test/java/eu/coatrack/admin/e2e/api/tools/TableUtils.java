@@ -43,6 +43,16 @@ public class TableUtils {
             tableUrl = getAdminApiKeyListUrl();
             trashButtonColumn = 6;
             itemIdentificationColumnIndex = 2;
+        } else if (tableType == TableType.CONSUMER_SERVICE_TABLE) {
+            tableId = "servicesTable";
+            tableUrl = getConsumerServiceListUrl();
+            trashButtonColumn = 0; //Not present
+            itemIdentificationColumnIndex = 0;
+        } else if (tableType == TableType.CONSUMER_APIKEY_TABLE) {
+            tableId = "apiKeyTable";
+            tableUrl = getConsumerApiKeyListUrl();
+            trashButtonColumn = 0; //Not present
+            itemIdentificationColumnIndex = 3;
         } else {
             throw new UndefinedTableTypeException("Please implement the table type details here.");
         }
@@ -77,7 +87,8 @@ public class TableUtils {
                 .map(row -> getCellInColumn(row, column).getText()).collect(Collectors.toList());
     }
 
-    private List<WebElement> getItemRows() {
+    public List<WebElement> getItemRows() {
+        driver.get(tableUrl);
         waiterUtils.waitForElementWithId(tableId);
         WebElement itemTable = driver.findElement(By.id(tableId));
         List<WebElement> rows = itemTable.findElements(By.cssSelector("tr"));
@@ -112,4 +123,10 @@ public class TableUtils {
         }
     }
 
+    //TODO There is a general, confusing problem about who is responsible to call the targetUrl. Maybe implement a visit() method for every public method. When current URL is okay, then do nothing. Otherwise go to targetUrl.
+    public void createApiKeyFromPublicService(String serviceName) {
+        driver.get(tableUrl);
+        WebElement rowOfService = getItemRows().stream().filter(row -> getCellInColumn(row, 0).getText().contains(serviceName)).findFirst().get();
+        getCellInColumn(rowOfService, 4).findElement(By.cssSelector("button")).click();
+    }
 }

@@ -21,7 +21,7 @@ public class AdminServiceOfferings {
         serviceTableUtils = new TableUtils(driver, TableType.SERVICE_TABLE);
     }
 
-    public String createService() {
+    public String createPublicService() {
         driver.get(getAdminServiceListUrl());
         driver.findElement(By.linkText("Create Service Offering")).click();
 

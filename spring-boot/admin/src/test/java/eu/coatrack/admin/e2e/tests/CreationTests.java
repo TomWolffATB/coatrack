@@ -13,7 +13,7 @@ public class CreationTests extends AbstractTestSetup {
     @Test
     public void createAndDeleteServiceTest() {
         AdminServiceOfferings serviceOfferings = pageFactory.getServiceOfferings();
-        String serviceName = serviceOfferings.createService();
+        String serviceName = serviceOfferings.createPublicService();
         assertTrue(serviceOfferings.isServiceWithinList(serviceName));
 
         serviceOfferings.deleteService(serviceName);
@@ -33,7 +33,7 @@ public class CreationTests extends AbstractTestSetup {
     @Test
     public void createAndDeleteApiKeyTest() {
         AdminApiKeys apiKeys = pageFactory.getApiKeys();
-        String serviceName = pageFactory.getServiceOfferings().createService();
+        String serviceName = pageFactory.getServiceOfferings().createPublicService();
         String apiKeyValue = apiKeys.createApiKey(serviceName);
         assertTrue(apiKeys.isApiKeyWithinList(apiKeyValue));
 
@@ -41,6 +41,17 @@ public class CreationTests extends AbstractTestSetup {
         assertFalse(apiKeys.isApiKeyWithinList(apiKeyValue));
     }
 
-    //TODO Also test the consumer features.
+    //TODO Implement the same test procedure for consumers API keys.
+    @Test
+    public void createAndDeleteConsumerApiKeyForPublicServiceTest() {
+        String serviceName = pageFactory.getServiceOfferings().createPublicService();
+        String apiKeyValue = pageFactory.getConsumerServiceOfferings().createApiKeyFromPublicService(serviceName);
 
+        System.out.println("Api key value: " + apiKeyValue);
+        //Add assertion via isApiKeyWithinList
+        //Delete Api key
+        //Add assertion via !isApiKeyWithinList
+    }
+
+    //TODO After every test, all setup item shall be deleted. Check this.
 }

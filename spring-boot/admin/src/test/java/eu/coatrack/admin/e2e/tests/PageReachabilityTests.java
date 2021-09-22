@@ -61,4 +61,6 @@ public class PageReachabilityTests extends AbstractTestSetup{
         pageFactory.checkIfUrlIsReachable(getConsumerReportsUrl());
     }
 
+    //TODO Also implement reachability test for all the residual pages like API key details etc.
+
 }

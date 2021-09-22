@@ -1,5 +1,6 @@
 package eu.coatrack.admin.e2e.api;
 
+import eu.coatrack.admin.e2e.api.serviceConsumer.PublicServicesForConsumer;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminApiKeys;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
 import eu.coatrack.admin.e2e.api.serviceProvider.AdminTutorial;
@@ -43,5 +44,9 @@ public class PageFactory {
 
     public void close(){
         driver.close();
+    }
+
+    public PublicServicesForConsumer getConsumerServiceOfferings() {
+        return new PublicServicesForConsumer(driver);
     }
 }

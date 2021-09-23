@@ -59,10 +59,15 @@ public class TableUtils {
     }
 
     public void deleteItem(String itemName) {
-        driver.get(tableUrl);
+        ensureDriverToBeAtCorrectTargetUrl();
         WebElement rowOfItemToBeDeleted = getItemRows().stream()
                 .filter(row -> row.findElements(By.cssSelector("td")).get(itemIdentificationColumnIndex).getText().equals(itemName)).collect(Collectors.toList()).get(0);
         deleteRow(rowOfItemToBeDeleted);
+    }
+
+    private void ensureDriverToBeAtCorrectTargetUrl(){
+        if (!driver.getCurrentUrl().equals(tableUrl))
+            driver.get(tableUrl);
     }
 
     private void deleteRow(WebElement row) {
@@ -82,13 +87,14 @@ public class TableUtils {
     }
 
     public List<String> getListOfColumnValues(int column){
+        ensureDriverToBeAtCorrectTargetUrl();
         return getItemRows().stream()
                 .filter(row -> !getCellInColumn(row, 0).getText().contains("No items yet"))
                 .map(row -> getCellInColumn(row, column).getText()).collect(Collectors.toList());
     }
 
     public List<WebElement> getItemRows() {
-        driver.get(tableUrl);
+        ensureDriverToBeAtCorrectTargetUrl();
         waiterUtils.waitForElementWithId(tableId);
         WebElement itemTable = driver.findElement(By.id(tableId));
         List<WebElement> rows = itemTable.findElements(By.cssSelector("tr"));
@@ -97,7 +103,7 @@ public class TableUtils {
     }
 
     public boolean isItemWithinList(String itemName) {
-        driver.get(tableUrl);
+        ensureDriverToBeAtCorrectTargetUrl();
         List<WebElement> rows = getItemRows();
         List<String> listOfItemNames = rows.stream().map(row -> getCellInColumn(row, itemIdentificationColumnIndex)
                 .getText()).collect(Collectors.toList());
@@ -106,7 +112,7 @@ public class TableUtils {
     }
 
     public void deleteAllItem(){
-        driver.get(tableUrl);
+        ensureDriverToBeAtCorrectTargetUrl();
 
         List<WebElement> rows = getItemRows();
         while (true){
@@ -123,9 +129,8 @@ public class TableUtils {
         }
     }
 
-    //TODO There is a general, confusing problem about who is responsible to call the targetUrl. Maybe implement a visit() method for every public method. When current URL is okay, then do nothing. Otherwise go to targetUrl.
     public void createApiKeyFromPublicService(String serviceName) {
-        driver.get(tableUrl);
+        ensureDriverToBeAtCorrectTargetUrl();
         WebElement rowOfService = getItemRows().stream().filter(row -> getCellInColumn(row, 0).getText().contains(serviceName)).findFirst().get();
         getCellInColumn(rowOfService, 4).findElement(By.cssSelector("button")).click();
     }

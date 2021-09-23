@@ -18,7 +18,7 @@ public class CookieInjector {
 
     public static void injectAuthenticationCookieToDriver(WebDriver driver){
         if (sessionCookie != null){
-            safelyInjectAuthenticationCookie(driver);
+            replaceDriversCurrentSessionCookieByAuthorizedOne(driver);
         } else {
             injectNewlyCreatedCookie(driver);
         }
@@ -32,7 +32,7 @@ public class CookieInjector {
 
         if (cookieSaveFile.exists()){
             sessionCookie = readCookieFromFile(cookieSaveFile);
-            safelyInjectAuthenticationCookie(driver);
+            replaceDriversCurrentSessionCookieByAuthorizedOne(driver);
         } else {
             sessionCookie = createCookieViaGitHubLogin(driver);
             storeCookieToLocalFile(cookieSaveFile);
@@ -60,7 +60,7 @@ public class CookieInjector {
         }
     }
 
-    private static void safelyInjectAuthenticationCookie(WebDriver driver) {
+    private static void replaceDriversCurrentSessionCookieByAuthorizedOne(WebDriver driver) {
         driver.get(getStartpageUrl());
         driver.manage().deleteAllCookies();
         driver.manage().addCookie(sessionCookie);

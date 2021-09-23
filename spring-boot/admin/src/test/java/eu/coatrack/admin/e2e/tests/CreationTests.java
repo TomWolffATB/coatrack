@@ -1,5 +1,6 @@
 package eu.coatrack.admin.e2e.tests;
 
+import eu.coatrack.admin.e2e.api.serviceConsumer.ConsumerApiKeyList;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminApiKeys;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
@@ -41,17 +42,16 @@ public class CreationTests extends AbstractTestSetup {
         assertFalse(apiKeys.isApiKeyWithinList(apiKeyValue));
     }
 
-    //TODO Implement the same test procedure for consumers API keys.
     @Test
     public void createAndDeleteConsumerApiKeyForPublicServiceTest() {
         String serviceName = pageFactory.getServiceOfferings().createPublicService();
         String apiKeyValue = pageFactory.getConsumerServiceOfferings().createApiKeyFromPublicService(serviceName);
 
-        System.out.println("Api key value: " + apiKeyValue);
-        //Add assertion via isApiKeyWithinList
-        //Delete Api key
-        //Add assertion via !isApiKeyWithinList
-    }
+        ConsumerApiKeyList consumerApiKeyList = pageFactory.getConsumersApiKeyList();
+        assertTrue(consumerApiKeyList.isApiKeyWithinList(apiKeyValue));
 
-    //TODO After every test, all setup item shall be deleted. Check this.
+        //TODO Uncomment these lines when #56 is solved and merged into this branch.
+        //consumerApiKeyList.deletePublicApiKey(apiKeyValue);
+        //assertFalse(consumerApiKeyList.isApiKeyWithinList(apiKeyValue));
+    }
 }

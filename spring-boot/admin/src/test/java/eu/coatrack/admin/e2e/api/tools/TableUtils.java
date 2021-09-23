@@ -51,7 +51,7 @@ public class TableUtils {
         } else if (tableType == TableType.CONSUMER_APIKEY_TABLE) {
             tableId = "apiKeyTable";
             tableUrl = getConsumerApiKeyListUrl();
-            trashButtonColumn = 0; //Not present
+            trashButtonColumn = 6;
             itemIdentificationColumnIndex = 3;
         } else {
             throw new UndefinedTableTypeException("Please implement the table type details here.");

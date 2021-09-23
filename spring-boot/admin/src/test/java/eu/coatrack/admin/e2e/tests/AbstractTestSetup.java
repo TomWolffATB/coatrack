@@ -21,7 +21,7 @@ public abstract class AbstractTestSetup {
     //TODO should be executed even when an error is thrown during the test.
     @AfterEach
     private void tearDown(){
-        pageFactory.close();
+        pageFactory.closeDriver();
     }
 
 }

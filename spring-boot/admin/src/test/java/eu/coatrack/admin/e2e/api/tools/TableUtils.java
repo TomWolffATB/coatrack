@@ -60,8 +60,7 @@ public class TableUtils {
 
     public void deleteItem(String itemName) {
         ensureDriverToBeAtCorrectTargetUrl();
-        WebElement rowOfItemToBeDeleted = getItemRows().stream()
-                .filter(row -> row.findElements(By.cssSelector("td")).get(itemIdentificationColumnIndex).getText().equals(itemName)).collect(Collectors.toList()).get(0);
+        WebElement rowOfItemToBeDeleted = getRowByIdentifier(itemName);
         deleteRow(rowOfItemToBeDeleted);
     }
 
@@ -93,6 +92,8 @@ public class TableUtils {
                 .map(row -> getCellInColumn(row, column).getText()).collect(Collectors.toList());
     }
 
+
+    //TODO Isn't that to low-level? This might better be private instead.
     public List<WebElement> getItemRows() {
         ensureDriverToBeAtCorrectTargetUrl();
         waiterUtils.waitForElementWithId(tableId);
@@ -129,9 +130,20 @@ public class TableUtils {
         }
     }
 
+    //TODO All further configuration like column indices should be retrieved from one central config location.
+    //TODO The whole configuration should be soft-coded.
     public void createApiKeyFromPublicService(String serviceName) {
         ensureDriverToBeAtCorrectTargetUrl();
         WebElement rowOfService = getItemRows().stream().filter(row -> getCellInColumn(row, 0).getText().contains(serviceName)).findFirst().get();
         getCellInColumn(rowOfService, 4).findElement(By.cssSelector("button")).click();
+    }
+
+    public void clickOnButton(String serviceName, int columnContainingButton, String buttonClassName) {
+        WebElement row = getRowByIdentifier(serviceName);
+        getCellInColumn(row, columnContainingButton).findElements(By.cssSelector("button")).stream().filter(button -> button.findElements(By.className(buttonClassName)).size() > 0).findFirst().get().click();
+    }
+
+    private WebElement getRowByIdentifier(String identifier) {
+        return getItemRows().stream().filter(row -> row.findElements(By.cssSelector("td")).get(itemIdentificationColumnIndex).getText().contains(identifier)).findFirst().get();
     }
 }

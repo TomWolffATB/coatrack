@@ -59,4 +59,17 @@ public class AdminServiceOfferings {
     public void deleteAllServices() {
         serviceTableUtils.deleteAllItem();
     }
+
+    public void clickOnFirstEditButtonOfService(String serviceName) {
+        serviceTableUtils.clickOnButton(serviceName, 6, "fa-image");
+    }
+
+    public void clickDetailsButtonOfService(String serviceName) {
+        serviceTableUtils.clickOnButton(serviceName, 6, "fa-search-plus");
+    }
+
+    //TODO column indices and the buttons class are to be abstracted and store in central configuration.
+    public void clickOnSecondEditButtonOfService(String serviceName) {
+        serviceTableUtils.clickOnButton(serviceName, 6, "fa-pencil-square-o");
+    }
 }

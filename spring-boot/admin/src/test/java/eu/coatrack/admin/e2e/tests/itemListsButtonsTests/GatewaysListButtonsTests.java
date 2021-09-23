@@ -12,7 +12,7 @@ public class GatewaysListButtonsTests extends AbstractTestSetup {
     private String gatewayName;
 
     @BeforeEach
-    public void setupService() {
+    public void setupGateway() {
         adminServiceGateways = pageFactory.getServiceGateways();
         gatewayName = adminServiceGateways.createGateway();
     }

@@ -59,4 +59,19 @@ public class AdminApiKeys {
     public void deleteApiKey(String apiKeyValue) {
         apiKeyTableUtils.deleteItem(apiKeyValue);
     }
+
+    public void clickOnCalenderButtonOfApiKey(String apiKeyValue) {
+        apiKeyTableUtils.clickOnButton(apiKeyValue, 5, "glyphicon-calendar");
+        sleepMillis(2000);
+        driver.get(getAdminApiKeyListUrl());
+    }
+
+    public void clickOnDetailsButtonOfApiKey(String apiKeyValue) {
+        apiKeyTableUtils.clickOnButton(apiKeyValue, 6, "fa-search-plus");
+    }
+
+    public void clickOnEditButtonOfApiKey(String apiKeyValue) {
+        apiKeyTableUtils.clickOnButton(apiKeyValue, 6, "fa-pencil-square-o");
+
+    }
 }

@@ -19,7 +19,7 @@ public class TableUtils {
     private String tableId;
     private String tableUrl;
     private int trashButtonColumn;
-    private int itemIdentificationColumnIndex;
+    private int defaultIdentifierColumn;
 
     public TableUtils(WebDriver driver, TableType tableType) {
         this.driver = driver;
@@ -32,27 +32,27 @@ public class TableUtils {
             tableId = "servicesTable";
             tableUrl = getAdminServiceListUrl();
             trashButtonColumn = 6;
-            itemIdentificationColumnIndex = 0;
+            defaultIdentifierColumn = 0;
         } else if (tableType == TableType.GATEWAY_TABLE) {
             tableId = "proxiesTable";
             tableUrl = getAdminGatewayListUrl();
             trashButtonColumn = 8;
-            itemIdentificationColumnIndex = 0;
+            defaultIdentifierColumn = 0;
         } else if (tableType == TableType.APIKEY_TABLE) {
             tableId = "apiKeyTable";
             tableUrl = getAdminApiKeyListUrl();
             trashButtonColumn = 6;
-            itemIdentificationColumnIndex = 2;
+            defaultIdentifierColumn = 2;
         } else if (tableType == TableType.CONSUMER_SERVICE_TABLE) {
             tableId = "servicesTable";
             tableUrl = getConsumerServiceListUrl();
             trashButtonColumn = 0; //Not present
-            itemIdentificationColumnIndex = 0;
+            defaultIdentifierColumn = 0;
         } else if (tableType == TableType.CONSUMER_APIKEY_TABLE) {
             tableId = "apiKeyTable";
             tableUrl = getConsumerApiKeyListUrl();
             trashButtonColumn = 6;
-            itemIdentificationColumnIndex = 3;
+            defaultIdentifierColumn = 3;
         } else {
             throw new UndefinedTableTypeException("Please implement the table type details here.");
         }
@@ -60,7 +60,7 @@ public class TableUtils {
 
     public void deleteItem(String itemName) {
         ensureDriverToBeAtCorrectTargetUrl();
-        WebElement rowOfItemToBeDeleted = getRowByIdentifier(itemName);
+        WebElement rowOfItemToBeDeleted = getRowByDefaultIdentifier(itemName);
         deleteRow(rowOfItemToBeDeleted);
     }
 
@@ -92,9 +92,7 @@ public class TableUtils {
                 .map(row -> getCellInColumn(row, column).getText()).collect(Collectors.toList());
     }
 
-
-    //TODO Isn't that to low-level? This might better be private instead.
-    public List<WebElement> getItemRows() {
+    private List<WebElement> getItemRows() {
         ensureDriverToBeAtCorrectTargetUrl();
         waiterUtils.waitForElementWithId(tableId);
         WebElement itemTable = driver.findElement(By.id(tableId));
@@ -106,7 +104,7 @@ public class TableUtils {
     public boolean isItemWithinList(String itemName) {
         ensureDriverToBeAtCorrectTargetUrl();
         List<WebElement> rows = getItemRows();
-        List<String> listOfItemNames = rows.stream().map(row -> getCellInColumn(row, itemIdentificationColumnIndex)
+        List<String> listOfItemNames = rows.stream().map(row -> getCellInColumn(row, defaultIdentifierColumn)
                 .getText()).collect(Collectors.toList());
         driver.navigate().refresh();
         return listOfItemNames.contains(itemName);
@@ -139,11 +137,12 @@ public class TableUtils {
     }
 
     public void clickOnButton(String serviceName, int columnContainingButton, String buttonClassName) {
-        WebElement row = getRowByIdentifier(serviceName);
+        WebElement row = getRowByDefaultIdentifier(serviceName);
         getCellInColumn(row, columnContainingButton).findElements(By.cssSelector("button")).stream().filter(button -> button.findElements(By.className(buttonClassName)).size() > 0).findFirst().get().click();
     }
 
-    private WebElement getRowByIdentifier(String identifier) {
-        return getItemRows().stream().filter(row -> row.findElements(By.cssSelector("td")).get(itemIdentificationColumnIndex).getText().contains(identifier)).findFirst().get();
+    private WebElement getRowByDefaultIdentifier(String identifier) {
+        return getItemRows().stream().filter(row -> row.findElements(By.cssSelector("td")).get(defaultIdentifierColumn).getText().contains(identifier)).findFirst().get();
     }
+
 }

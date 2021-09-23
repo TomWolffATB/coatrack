@@ -7,7 +7,7 @@ import java.io.*;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class AdminTests extends AbstractTestSetup {
+public class TutorialTests extends AbstractTestSetup {
 
     @Test
     public void tutorialTest() {

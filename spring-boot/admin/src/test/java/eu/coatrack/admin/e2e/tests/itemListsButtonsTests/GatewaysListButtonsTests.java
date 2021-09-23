@@ -1,11 +1,12 @@
-package eu.coatrack.admin.e2e.tests;
+package eu.coatrack.admin.e2e.tests.itemListsButtonsTests;
 
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
+import eu.coatrack.admin.e2e.tests.AbstractTestSetup;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class AdminServiceGatewaysButtonsTests extends AbstractTestSetup {
+public class GatewaysListButtonsTests extends AbstractTestSetup {
 
     private AdminServiceGateways adminServiceGateways;
     private String gatewayName;

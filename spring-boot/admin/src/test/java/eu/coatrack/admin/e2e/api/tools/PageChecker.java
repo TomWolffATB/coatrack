@@ -1,4 +1,4 @@
-package eu.coatrack.admin.e2e.api;
+package eu.coatrack.admin.e2e.api.tools;
 
 import org.openqa.selenium.WebDriver;
 

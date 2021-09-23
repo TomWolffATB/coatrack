@@ -1,11 +1,12 @@
-package eu.coatrack.admin.e2e.tests;
+package eu.coatrack.admin.e2e.tests.itemListsButtonsTests;
 
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
+import eu.coatrack.admin.e2e.tests.AbstractTestSetup;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class AdminServiceOfferingsButtonTests extends AbstractTestSetup {
+public class ServiceListButtonsTests extends AbstractTestSetup {
 
     private AdminServiceOfferings adminServiceOfferings;
     private String serviceName;

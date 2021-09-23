@@ -6,6 +6,7 @@ import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminApiK
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
 import eu.coatrack.admin.e2e.api.serviceProvider.AdminTutorial;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
+import eu.coatrack.admin.e2e.api.tools.PageChecker;
 import org.openqa.selenium.WebDriver;
 import static eu.coatrack.admin.e2e.configuration.CookieInjector.injectAuthenticationCookieToDriver;
 import static org.junit.jupiter.api.Assertions.assertEquals;

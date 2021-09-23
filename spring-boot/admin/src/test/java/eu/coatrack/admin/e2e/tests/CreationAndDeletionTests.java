@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CreationTests extends AbstractTestSetup {
+public class CreationAndDeletionTests extends AbstractTestSetup {
 
     @Test
     public void createAndDeleteServiceTest() {

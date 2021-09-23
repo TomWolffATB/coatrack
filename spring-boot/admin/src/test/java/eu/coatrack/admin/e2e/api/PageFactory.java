@@ -36,16 +36,8 @@ public class PageFactory {
         return new AdminApiKeys(driver);
     }
 
-    //TODO This does not belong to a factory. A new class like e.g. 'PageChecker' should be used instead.
-    public void assertThatUrlIsReachable(String url){
-        driver.get(url);
-        assertThatCurrentPageHasNoError();
-        assertEquals(url, driver.getCurrentUrl());
-    }
-
-    public void assertThatCurrentPageHasNoError(){
-        if (driver.getPageSource().contains("Sorry, an error occurred."))
-            fail();
+    public PageChecker getPageChecker(){
+        return new PageChecker(driver);
     }
 
     public void closeDriver(){

@@ -33,7 +33,7 @@ public class AdminServiceOfferingsButtonTests extends AbstractTestSetup {
 
     @AfterEach
     public void assertHavingNoErrorAndCleanup(){
-        pageFactory.assertThatCurrentPageHasNoError();
+        pageFactory.getPageChecker().assertThatCurrentPageHasNoError();
         adminServiceOfferings.deleteService(serviceName);
     }
 

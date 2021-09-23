@@ -54,4 +54,12 @@ public class AdminServiceGateways {
     public void deleteAllGateways() {
         gatewayTableUtils.deleteAllItem();
     }
+
+    public void clickOnDetailsButtonOfGateway(String gatewayName) {
+        gatewayTableUtils.clickOnButton(gatewayName, 7, "fa-bar-chart");
+    }
+
+    public void clickOnEditButtonOfGateway(String gatewayName) {
+        gatewayTableUtils.clickOnButton(gatewayName, 8, "fa-pencil-square-o");
+    }
 }

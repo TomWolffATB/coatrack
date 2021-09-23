@@ -136,8 +136,8 @@ public class TableUtils {
         getCellInColumn(rowOfService, 4).findElement(By.cssSelector("button")).click();
     }
 
-    public void clickOnButton(String serviceName, int columnContainingButton, String buttonClassName) {
-        WebElement row = getRowByDefaultIdentifier(serviceName);
+    public void clickOnButton(String itemName, int columnContainingButton, String buttonClassName) {
+        WebElement row = getRowByDefaultIdentifier(itemName);
         getCellInColumn(row, columnContainingButton).findElements(By.cssSelector("button")).stream().filter(button -> button.findElements(By.className(buttonClassName)).size() > 0).findFirst().get().click();
     }
 

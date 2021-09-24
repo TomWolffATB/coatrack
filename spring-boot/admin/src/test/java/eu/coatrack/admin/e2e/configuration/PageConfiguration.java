@@ -55,7 +55,7 @@ public class PageConfiguration {
 
             reader.close();
         } catch (Exception e) {
-            throw new RuntimeException("Config went wrong.", e);
+            throw new RuntimeException("The reading of the page configuration failed.", e);
         }
     }
 

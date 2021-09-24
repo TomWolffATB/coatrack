@@ -1,6 +1,7 @@
 package eu.coatrack.admin.e2e.tests;
 
 import eu.coatrack.admin.e2e.api.serviceConsumer.ConsumerApiKeyList;
+import eu.coatrack.admin.e2e.api.serviceConsumer.ConsumerServiceOfferings;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminApiKeys;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
@@ -44,14 +45,20 @@ public class CreationAndDeletionTests extends AbstractTestSetup {
 
     @Test
     public void createAndDeleteConsumerApiKeyForPublicServiceTest() {
-        String serviceName = pageFactory.getServiceOfferings().createPublicService();
-        String apiKeyValue = pageFactory.getConsumerServiceOfferings().createApiKeyFromPublicService(serviceName);
+        AdminServiceOfferings adminServiceOfferings = pageFactory.getServiceOfferings();
+        String serviceName = adminServiceOfferings.createPublicService();
+
+        ConsumerServiceOfferings consumerServiceOfferings = pageFactory.getConsumerServiceOfferings();
+        String apiKeyValue = consumerServiceOfferings.createApiKeyFromPublicService(serviceName);
 
         ConsumerApiKeyList consumerApiKeyList = pageFactory.getConsumersApiKeyList();
         assertTrue(consumerApiKeyList.isApiKeyWithinList(apiKeyValue));
 
-        //TODO Uncomment these lines when #56 is solved and merged into this branch.
+        //TODO Uncomment this line when #56 is solved and merged into this branch.
         //consumerApiKeyList.deletePublicApiKey(apiKeyValue);
-        //assertFalse(consumerApiKeyList.isApiKeyWithinList(apiKeyValue));
+        pageFactory.getApiKeys().deleteApiKey(apiKeyValue); //To deleted when #56 PR is merged to test the deletion feature.
+        assertFalse(consumerApiKeyList.isApiKeyWithinList(apiKeyValue));
+
+        adminServiceOfferings.deleteService(serviceName);
     }
 }

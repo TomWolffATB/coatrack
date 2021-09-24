@@ -104,6 +104,8 @@ public class TableUtils {
     public boolean isItemWithinList(String itemName) {
         ensureDriverToBeAtCorrectTargetUrl();
         List<WebElement> rows = getItemRows();
+        if (getCellInColumn(rows.get(0), 0).getText().contains("No items yet"))
+            return false;
         List<String> listOfItemNames = rows.stream().map(row -> getCellInColumn(row, defaultNameColumn)
                 .getText()).collect(Collectors.toList());
         driver.navigate().refresh();
@@ -150,6 +152,7 @@ public class TableUtils {
         return getItemRows().stream().filter(row -> row.findElements(By.cssSelector("td")).get(identifierColumn).getText().contains(identifier)).findFirst().get();
     }
 
+    //TODO Better name?
     public String getInfo(String identifier, int identifierColumn, int targetColumn){
         WebElement row = getRowByCustomIdentifier(identifier, identifierColumn);
         return getCellInColumn(row, targetColumn).getText();

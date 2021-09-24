@@ -6,12 +6,12 @@ import java.util.List;
 
 import static eu.coatrack.admin.e2e.api.tools.TableType.*;
 
-public class PublicServicesForConsumer {
+public class ConsumerServiceOfferings {
 
     private final TableUtils consumerServiceTableUtils;
     private final TableUtils consumerApiKeyTableUtils;
 
-    public PublicServicesForConsumer(WebDriver driver) {
+    public ConsumerServiceOfferings(WebDriver driver) {
         consumerServiceTableUtils = new TableUtils(driver, CONSUMER_SERVICE_TABLE);
         consumerApiKeyTableUtils = new TableUtils(driver, CONSUMER_APIKEY_TABLE);
     }

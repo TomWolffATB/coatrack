@@ -83,7 +83,7 @@ public class TableUtils {
         yesButton.click();
     }
 
-    private WebElement getCellInColumn(WebElement row, int column){
+    public WebElement getCellInColumn(WebElement row, int column){
         return row.findElements(By.cssSelector("td")).get(column);
     }
 
@@ -94,7 +94,7 @@ public class TableUtils {
                 .map(row -> getCellInColumn(row, column).getText()).collect(Collectors.toList());
     }
 
-    private List<WebElement> getItemRows() {
+    public List<WebElement> getItemRows() {
         ensureDriverToBeAtCorrectTargetUrl();
         waiterUtils.waitForElementWithId(tableId);
         WebElement itemTable = driver.findElement(By.id(tableId));
@@ -130,12 +130,6 @@ public class TableUtils {
                 rows = getItemRows();
             }
         }
-    }
-
-    public void createApiKeyFromPublicService(String serviceName) {
-        ensureDriverToBeAtCorrectTargetUrl();
-        WebElement rowOfService = getItemRows().stream().filter(row -> getCellInColumn(row, 0).getText().contains(serviceName)).findFirst().get();
-        getCellInColumn(rowOfService, 4).findElement(By.cssSelector("button")).click();
     }
 
     public void clickOnButton(String itemName, int columnContainingButton, String buttonClassName) {

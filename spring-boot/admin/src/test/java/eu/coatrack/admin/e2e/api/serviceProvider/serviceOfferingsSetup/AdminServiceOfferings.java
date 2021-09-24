@@ -9,6 +9,7 @@ import java.util.Random;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.getAdminServiceListUrl;
+import static eu.coatrack.admin.e2e.configuration.TableConfiguration.*;
 
 
 public class AdminServiceOfferings {
@@ -63,15 +64,14 @@ public class AdminServiceOfferings {
     }
 
     public void clickOnFirstEditButtonOfService(String serviceName) {
-        serviceTableUtils.clickOnButton(serviceName, 6, "fa-image");
+        serviceTableUtils.clickOnButton(serviceName, adminServicesFirstEditButtonColumn, adminServicesFirstEditButtonClassName);
     }
 
     public void clickDetailsButtonOfService(String serviceName) {
-        serviceTableUtils.clickOnButton(serviceName, 6, "fa-search-plus");
+        serviceTableUtils.clickOnButton(serviceName, adminServicesDetailsButtonColumn, adminServicesDetailsButtonClassName);
     }
 
-    //TODO column indices and the buttons class are to be abstracted and store in central configuration.
     public void clickOnSecondEditButtonOfService(String serviceName) {
-        serviceTableUtils.clickOnButton(serviceName, 6, "fa-pencil-square-o");
+        serviceTableUtils.clickOnButton(serviceName, adminServicesSecondEditButtonColumn, adminServicesSecondEditButtonClassName);
     }
 }

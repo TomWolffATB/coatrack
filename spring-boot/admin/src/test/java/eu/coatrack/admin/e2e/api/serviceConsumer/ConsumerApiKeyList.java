@@ -6,11 +6,9 @@ import org.openqa.selenium.WebDriver;
 
 public class ConsumerApiKeyList {
 
-    private final WebDriver driver;
     private final TableUtils consumerApiKeyTableUtils;
 
     public ConsumerApiKeyList(WebDriver driver) {
-        this.driver = driver;
         consumerApiKeyTableUtils = new TableUtils(driver, TableType.CONSUMER_APIKEY_TABLE);
     }
 

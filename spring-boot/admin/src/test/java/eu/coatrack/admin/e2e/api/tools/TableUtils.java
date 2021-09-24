@@ -17,6 +17,7 @@ public class TableUtils {
     private final WebDriver driver;
     private final WaiterUtils waiterUtils;
 
+    //TODO Should be extracted in a object, e.g. 'TableDetails'. The initMethodLogic should be outsourced as well.
     private String tableId;
     private String tableUrl;
     private int trashButtonColumn;
@@ -30,10 +31,10 @@ public class TableUtils {
 
     private void initTableFieldsAccordingToTableType(TableType tableType) {
         if (tableType == TableType.SERVICE_TABLE){
-            tableId = "servicesTable";
+            tableId = adminServicesTableId;
             tableUrl = getAdminServiceListUrl();
-            trashButtonColumn = 6;
-            defaultNameColumn = 0;
+            trashButtonColumn = adminServicesTrashButtonColumn;
+            defaultNameColumn = adminServicesDefaultNameColumn;
         } else if (tableType == TableType.GATEWAY_TABLE) {
             tableId = adminGatewaysTableId;
             tableUrl = getAdminGatewayListUrl();
@@ -45,15 +46,15 @@ public class TableUtils {
             trashButtonColumn = adminApiKeysTrashButtonColumn;
             defaultNameColumn = adminApiKeysDefaultNameColumn;
         } else if (tableType == TableType.CONSUMER_SERVICE_TABLE) {
-            tableId = "servicesTable";
+            tableId = adminConsumerServicesTableId;
             tableUrl = getConsumerServiceListUrl();
-            trashButtonColumn = 0; //Not present
-            defaultNameColumn = 0;
+            trashButtonColumn = adminConsumerServicesTrashButtonColumn; //Not present
+            defaultNameColumn = adminConsumerServicesDefaultNameColumn;
         } else if (tableType == TableType.CONSUMER_APIKEY_TABLE) {
-            tableId = "apiKeyTable";
+            tableId = adminConsumerApiKeysTableId;
             tableUrl = getConsumerApiKeyListUrl();
-            trashButtonColumn = 6;
-            defaultNameColumn = 3;
+            trashButtonColumn = adminConsumerApiKeysTrashButtonColumn;
+            defaultNameColumn = adminConsumerApiKeysDefaultNameColumn;
         } else {
             throw new UndefinedTableTypeException("Please implement the table type details here.");
         }

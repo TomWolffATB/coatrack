@@ -1,11 +1,13 @@
 package eu.coatrack.admin.e2e.api.serviceProvider;
 
+//TODO Remove getters and make fields public.
+
 public class ItemDto {
 
     private final String serviceName;
     private final String gatewayDownloadLink;
     private final String apiKeyValue;
-    private String gatewayIdentifier;
+    private final String gatewayIdentifier;
 
     public ItemDto(String serviceName, String gatewayDownloadLink, String gatewayIdentifier, String apiKeyValue) {
         this.serviceName = serviceName;

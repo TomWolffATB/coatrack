@@ -12,7 +12,6 @@ public class ApiKeyListButtonsTests extends AbstractTestSetup {
     private AdminServiceOfferings adminServiceOfferings;
     private String serviceName;
 
-    //TODO This kind of creation/deletion should also be applied to the public service API key creation because the service created is not deleted at the end.
     @BeforeAll
     public void setupApiKey() {
         adminAPiKeys = pageFactory.getApiKeys();

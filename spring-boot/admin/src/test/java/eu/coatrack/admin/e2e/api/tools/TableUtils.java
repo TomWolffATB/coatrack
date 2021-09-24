@@ -130,9 +130,6 @@ public class TableUtils {
         }
     }
 
-    //TODO All further configuration like column indices should be retrieved from one central config location.
-    //TODO The whole configuration should be soft-coded.
-    //TODO This methods name seems not to be abstract enough. Eventually put it in ServiceOffering class.
     public void createApiKeyFromPublicService(String serviceName) {
         ensureDriverToBeAtCorrectTargetUrl();
         WebElement rowOfService = getItemRows().stream().filter(row -> getCellInColumn(row, 0).getText().contains(serviceName)).findFirst().get();

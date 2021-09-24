@@ -1,5 +1,7 @@
 package eu.coatrack.admin.e2e.api.serviceProvider;
 
+import eu.coatrack.admin.e2e.api.tools.TableType;
+import eu.coatrack.admin.e2e.api.tools.TableUtils;
 import eu.coatrack.admin.e2e.api.tools.WaiterUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -23,6 +25,7 @@ public class AdminTutorial {
         waiterUtils = new WaiterUtils(driver);
     }
 
+    //TODO Split up long creation logic for to small methods to make it easier to read. Also check other classes for demand of that.
     public ItemDto createItemsViaTutorial(){
         driver.get(getAdminTutorialUrl());
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
@@ -49,6 +52,9 @@ public class AdminTutorial {
 
         String gatewayDownloadLink = gatewayDownloadLinkElement.getAttribute("href");
         String apiKeyValue = driver.findElement(By.cssSelector(".row:nth-child(3) p:nth-child(2)")).getText();
-        return new ItemDto(serviceName, gatewayDownloadLink, apiKeyValue);
+        String[] urlParts = gatewayDownloadLink.split("/");
+        String gatewayIdentifier = urlParts[urlParts.length-2];
+
+        return new ItemDto(serviceName, gatewayDownloadLink, gatewayIdentifier, apiKeyValue);
     }
 }

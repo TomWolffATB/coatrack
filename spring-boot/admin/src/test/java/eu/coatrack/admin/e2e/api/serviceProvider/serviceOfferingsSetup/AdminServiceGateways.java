@@ -62,4 +62,8 @@ public class AdminServiceGateways {
     public void clickOnEditButtonOfGateway(String gatewayName) {
         gatewayTableUtils.clickOnButton(gatewayName, 8, "fa-pencil-square-o");
     }
+
+    public String getGatewayNameByIdentifier(String identifier){
+        return gatewayTableUtils.getInfo(identifier, 1, 0);
+    }
 }

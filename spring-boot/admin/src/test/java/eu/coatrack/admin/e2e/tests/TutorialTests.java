@@ -1,6 +1,7 @@
 package eu.coatrack.admin.e2e.tests;
 
 import eu.coatrack.admin.e2e.api.serviceProvider.ItemDto;
+import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -16,6 +17,7 @@ public class TutorialTests extends AbstractTestSetup {
         System.out.println("Gateway Download Link: " + itemDto.getGatewayDownloadLink());
         System.out.println("API Key Value: " + itemDto.getApiKeyValue());
         System.out.println("Service Name: " + itemDto.getServiceName());
+        System.out.println("Gateway Name: " + itemDto.getGatewayIdentifier());
 
         /*
         //Download file
@@ -56,5 +58,13 @@ public class TutorialTests extends AbstractTestSetup {
 
         if (file.exists())
             fail("Cleanup failed. File test.jar could not be deleted.");
+
+        AdminServiceGateways adminServiceGateways = pageFactory.getServiceGateways();
+        String gatewayName = adminServiceGateways.getGatewayNameByIdentifier(itemDto.getGatewayIdentifier());
+        adminServiceGateways.deleteGateway(gatewayName);
+
+        pageFactory.getApiKeys().deleteApiKey(itemDto.getApiKeyValue());
+        pageFactory.getServiceOfferings().deleteService(itemDto.getServiceName());
     }
+
 }

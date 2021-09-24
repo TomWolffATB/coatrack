@@ -19,7 +19,7 @@ public class TableUtils {
     private String tableId;
     private String tableUrl;
     private int trashButtonColumn;
-    private int defaultIdentifierColumn;
+    private int defaultNameColumn;
 
     public TableUtils(WebDriver driver, TableType tableType) {
         this.driver = driver;
@@ -32,27 +32,27 @@ public class TableUtils {
             tableId = "servicesTable";
             tableUrl = getAdminServiceListUrl();
             trashButtonColumn = 6;
-            defaultIdentifierColumn = 0;
+            defaultNameColumn = 0;
         } else if (tableType == TableType.GATEWAY_TABLE) {
             tableId = "proxiesTable";
             tableUrl = getAdminGatewayListUrl();
             trashButtonColumn = 8;
-            defaultIdentifierColumn = 0;
+            defaultNameColumn = 0;
         } else if (tableType == TableType.APIKEY_TABLE) {
             tableId = "apiKeyTable";
             tableUrl = getAdminApiKeyListUrl();
             trashButtonColumn = 6;
-            defaultIdentifierColumn = 2;
+            defaultNameColumn = 2;
         } else if (tableType == TableType.CONSUMER_SERVICE_TABLE) {
             tableId = "servicesTable";
             tableUrl = getConsumerServiceListUrl();
             trashButtonColumn = 0; //Not present
-            defaultIdentifierColumn = 0;
+            defaultNameColumn = 0;
         } else if (tableType == TableType.CONSUMER_APIKEY_TABLE) {
             tableId = "apiKeyTable";
             tableUrl = getConsumerApiKeyListUrl();
             trashButtonColumn = 6;
-            defaultIdentifierColumn = 3;
+            defaultNameColumn = 3;
         } else {
             throw new UndefinedTableTypeException("Please implement the table type details here.");
         }
@@ -60,7 +60,7 @@ public class TableUtils {
 
     public void deleteItem(String itemName) {
         ensureDriverToBeAtCorrectTargetUrl();
-        WebElement rowOfItemToBeDeleted = getRowByDefaultIdentifier(itemName);
+        WebElement rowOfItemToBeDeleted = getRowByItemName(itemName);
         deleteRow(rowOfItemToBeDeleted);
     }
 
@@ -104,7 +104,7 @@ public class TableUtils {
     public boolean isItemWithinList(String itemName) {
         ensureDriverToBeAtCorrectTargetUrl();
         List<WebElement> rows = getItemRows();
-        List<String> listOfItemNames = rows.stream().map(row -> getCellInColumn(row, defaultIdentifierColumn)
+        List<String> listOfItemNames = rows.stream().map(row -> getCellInColumn(row, defaultNameColumn)
                 .getText()).collect(Collectors.toList());
         driver.navigate().refresh();
         return listOfItemNames.contains(itemName);
@@ -130,6 +130,7 @@ public class TableUtils {
 
     //TODO All further configuration like column indices should be retrieved from one central config location.
     //TODO The whole configuration should be soft-coded.
+    //TODO This methods name seems not to be abstract enough. Eventually put it in ServiceOffering class.
     public void createApiKeyFromPublicService(String serviceName) {
         ensureDriverToBeAtCorrectTargetUrl();
         WebElement rowOfService = getItemRows().stream().filter(row -> getCellInColumn(row, 0).getText().contains(serviceName)).findFirst().get();
@@ -137,12 +138,21 @@ public class TableUtils {
     }
 
     public void clickOnButton(String itemName, int columnContainingButton, String buttonClassName) {
-        WebElement row = getRowByDefaultIdentifier(itemName);
+        WebElement row = getRowByItemName(itemName);
         getCellInColumn(row, columnContainingButton).findElements(By.cssSelector("button")).stream().filter(button -> button.findElements(By.className(buttonClassName)).size() > 0).findFirst().get().click();
     }
 
-    private WebElement getRowByDefaultIdentifier(String identifier) {
-        return getItemRows().stream().filter(row -> row.findElements(By.cssSelector("td")).get(defaultIdentifierColumn).getText().contains(identifier)).findFirst().get();
+    private WebElement getRowByItemName(String itemName) {
+        return getRowByCustomIdentifier(itemName, defaultNameColumn);
+    }
+
+    private WebElement getRowByCustomIdentifier(String identifier, int identifierColumn) {
+        return getItemRows().stream().filter(row -> row.findElements(By.cssSelector("td")).get(identifierColumn).getText().contains(identifier)).findFirst().get();
+    }
+
+    public String getInfo(String identifier, int identifierColumn, int targetColumn){
+        WebElement row = getRowByCustomIdentifier(identifier, identifierColumn);
+        return getCellInColumn(row, targetColumn).getText();
     }
 
 }

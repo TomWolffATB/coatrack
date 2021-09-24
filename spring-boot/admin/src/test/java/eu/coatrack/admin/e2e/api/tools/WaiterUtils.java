@@ -20,6 +20,10 @@ public class WaiterUtils {
         new WebDriverWait(driver, 3).until(ExpectedConditions.elementToBeClickable(By.id(id)));
     }
 
+    public void waitForElementWithCssSelector(String cssSelector) {
+        new WebDriverWait(driver, 3).until(ExpectedConditions.elementToBeClickable(By.id(cssSelector)));
+    }
+
     public static void sleepMillis(int millis) {
         try {
             Thread.sleep(millis);

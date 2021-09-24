@@ -2,6 +2,7 @@ package eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup;
 
 import eu.coatrack.admin.e2e.api.tools.TableType;
 import eu.coatrack.admin.e2e.api.tools.TableUtils;
+import eu.coatrack.admin.e2e.api.tools.WaiterUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,10 +17,12 @@ public class AdminApiKeys {
 
     private final WebDriver driver;
     private final TableUtils apiKeyTableUtils;
+    private final WaiterUtils waiterUtils;
 
     public AdminApiKeys(WebDriver driver) {
         this.driver = driver;
         apiKeyTableUtils = new TableUtils(driver, TableType.APIKEY_TABLE);
+        waiterUtils = new WaiterUtils(driver);
     }
 
     public void deleteAllApiKeys() {
@@ -48,9 +51,7 @@ public class AdminApiKeys {
         driver.findElement(By.id("githubUserSearchCriteria")).sendKeys(getUsername());
         driver.findElement(By.id("githubUserSearchButton")).click();
 
-        //TODO Sleep methods should be replaced by explicit waits.
-        sleepMillis(1000);
-
+        waiterUtils.waitForElementWithCssSelector("td:nth-child(2)");
         driver.findElement(By.cssSelector("td:nth-child(2)")).click();
         driver.findElement(By.id("saveApiKeyButton")).click();
     }

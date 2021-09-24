@@ -35,12 +35,14 @@ public class TableConfiguration {
     public static final String adminServicesDetailsButtonClassName = "fa-search-plus";
     public static final String adminServicesSecondEditButtonClassName = "fa-pencil-square-o";
 
-    public static final String adminConsumerApiKeysTableId = "apiKeyTable";
-    public static final int adminConsumerApiKeysTrashButtonColumn = 6; //Will be usable when #56 PR is merged.
-    public static final int adminConsumerApiKeysDefaultNameColumn = 3;
+    public static final String consumerApiKeysTableId = "apiKeyTable";
+    public static final int consumerApiKeysTrashButtonColumn = 6; //Will be usable when #56 PR is merged.
+    public static final int consumerApiKeysDefaultNameColumn = 3;
 
-    public static final String adminConsumerServicesTableId = "servicesTable";
-    public static final int adminConsumerServicesTrashButtonColumn = 0; //Not present
-    public static final int adminConsumerServicesDefaultNameColumn = 0;
+    public static final String consumerServicesTableId = "servicesTable";
+    //There is no deletion button for service in consumer services table, yet. However, this parameter is required by TableUtils.
+    public static final int consumerServicesTrashButtonColumn = 0;
+    public static final int consumerServicesDefaultNameColumn = 0;
+    public static final int consumerServicesApiKeyGenerationColumn = 4;
 
 }

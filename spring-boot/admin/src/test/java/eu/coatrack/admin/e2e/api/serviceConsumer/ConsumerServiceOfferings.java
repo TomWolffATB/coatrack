@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 import static eu.coatrack.admin.e2e.api.tools.TableType.*;
+import static eu.coatrack.admin.e2e.configuration.TableConfiguration.*;
 
 public class ConsumerServiceOfferings {
 
@@ -20,19 +21,20 @@ public class ConsumerServiceOfferings {
     }
 
     public String createApiKeyFromPublicService(String serviceName) {
-        List<String> apiKeyListBeforeApiKeyCreation = consumerApiKeyTableUtils.getListOfColumnValues(3);
-        clickOnCreationButtonInServiceRow(serviceName);
-        List<String> apiKeyListAfterApiKeyCreation = consumerApiKeyTableUtils.getListOfColumnValues(3);
+        List<String> apiKeyListBeforeApiKeyCreation = consumerApiKeyTableUtils.getListOfColumnValues(consumerApiKeysDefaultNameColumn);
+        clickOnApiKeyGenerationButtonInServiceRow(serviceName);
+        List<String> apiKeyListAfterApiKeyCreation = consumerApiKeyTableUtils.getListOfColumnValues(consumerApiKeysDefaultNameColumn);
 
         apiKeyListAfterApiKeyCreation.removeAll(apiKeyListBeforeApiKeyCreation);
         String apiKeyValue = apiKeyListAfterApiKeyCreation.get(0);
         return apiKeyValue;
     }
 
-    private void clickOnCreationButtonInServiceRow(String serviceName) {
+    private void clickOnApiKeyGenerationButtonInServiceRow(String serviceName) {
         WebElement rowOfService = consumerServiceTableUtils.getItemRows().stream()
-                .filter(row -> consumerServiceTableUtils.getCellInColumn(row, 0).getText().contains(serviceName))
+                .filter(row -> consumerServiceTableUtils.getCellInColumn(row, consumerServicesDefaultNameColumn).getText().contains(serviceName))
                 .findFirst().get();
-        consumerApiKeyTableUtils.getCellInColumn(rowOfService, 4).findElement(By.cssSelector("button")).click();
+        consumerApiKeyTableUtils.getCellInColumn(rowOfService, consumerServicesApiKeyGenerationColumn)
+                .findElement(By.cssSelector("button")).click();
     }
 }

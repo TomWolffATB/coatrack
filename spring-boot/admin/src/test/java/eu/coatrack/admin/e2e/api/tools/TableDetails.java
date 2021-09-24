@@ -41,15 +41,15 @@ public class TableDetails {
             trashButtonColumn = adminApiKeysTrashButtonColumn;
             defaultNameColumn = adminApiKeysDefaultNameColumn;
         } else if (tableType == TableType.CONSUMER_SERVICE_TABLE) {
-            tableId = adminConsumerServicesTableId;
+            tableId = consumerServicesTableId;
             tableUrl = consumerServiceListUrl;
-            trashButtonColumn = adminConsumerServicesTrashButtonColumn; //Not present
-            defaultNameColumn = adminConsumerServicesDefaultNameColumn;
+            trashButtonColumn = consumerServicesTrashButtonColumn; //Not present
+            defaultNameColumn = consumerServicesDefaultNameColumn;
         } else if (tableType == TableType.CONSUMER_APIKEY_TABLE) {
-            tableId = adminConsumerApiKeysTableId;
+            tableId = consumerApiKeysTableId;
             tableUrl = consumerApiKeyListUrl;
-            trashButtonColumn = adminConsumerApiKeysTrashButtonColumn;
-            defaultNameColumn = adminConsumerApiKeysDefaultNameColumn;
+            trashButtonColumn = consumerApiKeysTrashButtonColumn;
+            defaultNameColumn = consumerApiKeysDefaultNameColumn;
         } else {
             throw new UndefinedTableTypeException("Please implement the table type details here.");
         }

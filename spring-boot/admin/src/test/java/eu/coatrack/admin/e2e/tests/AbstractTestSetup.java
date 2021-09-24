@@ -9,4 +9,10 @@ public abstract class AbstractTestSetup {
 
     protected static PageFactory pageFactory = new PageFactory(new FirefoxDriver());
 
+    static {
+        pageFactory.getServiceOfferings().deleteAllServices();
+        pageFactory.getServiceGateways().deleteAllGateways();
+        pageFactory.getApiKeys().deleteAllApiKeys();
+    }
+
 }

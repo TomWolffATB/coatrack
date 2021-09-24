@@ -106,7 +106,7 @@ public class TableUtils {
     public boolean isItemWithinList(String itemName) {
         ensureDriverToBeAtCorrectTargetUrl();
         List<WebElement> rows = getItemRows();
-        if (getCellInColumn(rows.get(0), 0).getText().contains("No items yet"))
+        if (rows.isEmpty() || getCellInColumn(rows.get(0), 0).getText().contains("No items yet"))
             return false;
         List<String> listOfItemNames = rows.stream().map(row -> getCellInColumn(row, defaultNameColumn)
                 .getText()).collect(Collectors.toList());

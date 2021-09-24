@@ -34,12 +34,14 @@ public class CreationAndDeletionTests extends AbstractTestSetup {
 
     @Test
     public void createAndDeleteApiKeyTest() {
+        AdminServiceOfferings adminServiceOfferings = pageFactory.getServiceOfferings();
+        String serviceName = adminServiceOfferings.createPublicService();
         AdminApiKeys apiKeys = pageFactory.getApiKeys();
-        String serviceName = pageFactory.getServiceOfferings().createPublicService();
         String apiKeyValue = apiKeys.createApiKey(serviceName);
         assertTrue(apiKeys.isApiKeyWithinList(apiKeyValue));
 
         apiKeys.deleteApiKey(apiKeyValue);
+        adminServiceOfferings.deleteService(serviceName);
         assertFalse(apiKeys.isApiKeyWithinList(apiKeyValue));
     }
 

@@ -1,6 +1,5 @@
 package eu.coatrack.admin.e2e.api.tools;
 
-import eu.coatrack.admin.e2e.exceptions.UndefinedTableTypeException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,56 +7,20 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static eu.coatrack.admin.e2e.api.tools.TableDetails.createTableDetailsFromTableType;
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
-import static eu.coatrack.admin.e2e.configuration.PageConfiguration.*;
 import static eu.coatrack.admin.e2e.configuration.TableConfiguration.*;
 
 public class TableUtils {
 
     private final WebDriver driver;
     private final WaiterUtils waiterUtils;
-
-    //TODO Should be extracted in a object, e.g. 'TableDetails'. The initMethodLogic should be outsourced as well.
-    private String tableId;
-    private String tableUrl;
-    private int trashButtonColumn;
-    private int defaultNameColumn;
+    private final TableDetails tableDetails;
 
     public TableUtils(WebDriver driver, TableType tableType) {
         this.driver = driver;
         waiterUtils = new WaiterUtils(driver);
-        initTableFieldsAccordingToTableType(tableType);
-    }
-
-    private void initTableFieldsAccordingToTableType(TableType tableType) {
-        if (tableType == TableType.SERVICE_TABLE){
-            tableId = adminServicesTableId;
-            tableUrl = adminServiceListUrl;
-            trashButtonColumn = adminServicesTrashButtonColumn;
-            defaultNameColumn = adminServicesDefaultNameColumn;
-        } else if (tableType == TableType.GATEWAY_TABLE) {
-            tableId = adminGatewaysTableId;
-            tableUrl = adminGatewayListUrl;
-            trashButtonColumn = adminGatewaysTrashButtonColumn;
-            defaultNameColumn = adminGatewaysDefaultNameColumn;
-        } else if (tableType == TableType.APIKEY_TABLE) {
-            tableId = adminApiKeysTableId;
-            tableUrl = adminApiKeyListUrl;
-            trashButtonColumn = adminApiKeysTrashButtonColumn;
-            defaultNameColumn = adminApiKeysDefaultNameColumn;
-        } else if (tableType == TableType.CONSUMER_SERVICE_TABLE) {
-            tableId = adminConsumerServicesTableId;
-            tableUrl = consumerServiceListUrl;
-            trashButtonColumn = adminConsumerServicesTrashButtonColumn; //Not present
-            defaultNameColumn = adminConsumerServicesDefaultNameColumn;
-        } else if (tableType == TableType.CONSUMER_APIKEY_TABLE) {
-            tableId = adminConsumerApiKeysTableId;
-            tableUrl = consumerApiKeyListUrl;
-            trashButtonColumn = adminConsumerApiKeysTrashButtonColumn;
-            defaultNameColumn = adminConsumerApiKeysDefaultNameColumn;
-        } else {
-            throw new UndefinedTableTypeException("Please implement the table type details here.");
-        }
+        tableDetails = createTableDetailsFromTableType(tableType);
     }
 
     public void deleteItem(String itemName) {
@@ -67,12 +30,12 @@ public class TableUtils {
     }
 
     private void ensureDriverToBeAtCorrectTargetUrl(){
-        if (!driver.getCurrentUrl().equals(tableUrl))
-            driver.get(tableUrl);
+        if (!driver.getCurrentUrl().equals(tableDetails.tableUrl))
+            driver.get(tableDetails.tableUrl);
     }
 
     private void deleteRow(WebElement row) {
-        WebElement cellWithTrashButton = getCellInColumn(row, trashButtonColumn);
+        WebElement cellWithTrashButton = getCellInColumn(row, tableDetails.trashButtonColumn);
         WebElement trashButton = cellWithTrashButton.findElement(By.className(trashButtonClassName));
         trashButton.click();
 
@@ -96,8 +59,8 @@ public class TableUtils {
 
     public List<WebElement> getItemRows() {
         ensureDriverToBeAtCorrectTargetUrl();
-        waiterUtils.waitForElementWithId(tableId);
-        WebElement itemTable = driver.findElement(By.id(tableId));
+        waiterUtils.waitForElementWithId(tableDetails.tableId);
+        WebElement itemTable = driver.findElement(By.id(tableDetails.tableId));
         List<WebElement> rows = itemTable.findElements(By.cssSelector("tr"));
         rows.remove(0); //Removes the table header.
         return rows;
@@ -108,7 +71,7 @@ public class TableUtils {
         List<WebElement> rows = getItemRows();
         if (rows.isEmpty() || getCellInColumn(rows.get(0), 0).getText().contains(emptyTableText))
             return false;
-        List<String> listOfItemNames = rows.stream().map(row -> getCellInColumn(row, defaultNameColumn)
+        List<String> listOfItemNames = rows.stream().map(row -> getCellInColumn(row, tableDetails.defaultNameColumn)
                 .getText()).collect(Collectors.toList());
         driver.navigate().refresh();
         return listOfItemNames.contains(itemName);
@@ -138,7 +101,7 @@ public class TableUtils {
     }
 
     private WebElement getRowByItemName(String itemName) {
-        return getRowByCustomIdentifier(itemName, defaultNameColumn);
+        return getRowByCustomIdentifier(itemName, tableDetails.defaultNameColumn);
     }
 
     private WebElement getRowByCustomIdentifier(String identifier, int identifierColumn) {

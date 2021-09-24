@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.Random;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
-import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminTutorialUrl;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.getAdminTutorialUrl;
 
 public class AdminTutorial {
 

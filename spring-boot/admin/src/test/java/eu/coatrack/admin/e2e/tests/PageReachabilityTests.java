@@ -2,7 +2,7 @@ package eu.coatrack.admin.e2e.tests;
 
 import org.junit.jupiter.api.Test;
 
-import static eu.coatrack.admin.e2e.configuration.TestConfiguration.*;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.*;
 
 public class PageReachabilityTests extends AbstractTestSetup{
 

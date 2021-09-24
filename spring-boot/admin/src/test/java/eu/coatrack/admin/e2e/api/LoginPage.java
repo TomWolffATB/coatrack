@@ -3,8 +3,8 @@ package eu.coatrack.admin.e2e.api;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminDashboardUrl;
-import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getStartpageUrl;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.getAdminDashboardUrl;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.getStartpageUrl;
 
 public class LoginPage {
 

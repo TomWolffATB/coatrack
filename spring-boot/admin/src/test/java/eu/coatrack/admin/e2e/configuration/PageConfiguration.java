@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
 
-public class TestConfiguration {
+//TODO Remove the getters and make the fields public.
+
+public class PageConfiguration {
 
     //Input Parameters
     private static final String username;

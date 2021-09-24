@@ -10,8 +10,9 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
-import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminApiKeyListUrl;
-import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getUsername;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.getAdminApiKeyListUrl;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.getUsername;
+import static eu.coatrack.admin.e2e.configuration.TableConfiguration.*;
 
 public class AdminApiKeys {
 
@@ -51,7 +52,7 @@ public class AdminApiKeys {
         driver.findElement(By.id("githubUserSearchCriteria")).sendKeys(getUsername());
         driver.findElement(By.id("githubUserSearchButton")).click();
 
-        waiterUtils.waitForElementWithCssSelector("td:nth-child(2)");
+        sleepMillis(1000);
         driver.findElement(By.cssSelector("td:nth-child(2)")).click();
         driver.findElement(By.id("saveApiKeyButton")).click();
     }
@@ -65,17 +66,16 @@ public class AdminApiKeys {
     }
 
     public void clickOnCalenderButtonOfApiKey(String apiKeyValue) {
-        apiKeyTableUtils.clickOnButton(apiKeyValue, 5, "glyphicon-calendar");
+        apiKeyTableUtils.clickOnButton(apiKeyValue, adminApiKeysCalenderButtonColumn, adminApiKeysCalenderButtonClassName);
         sleepMillis(2000);
         driver.get(getAdminApiKeyListUrl());
     }
 
     public void clickOnDetailsButtonOfApiKey(String apiKeyValue) {
-        apiKeyTableUtils.clickOnButton(apiKeyValue, 6, "fa-search-plus");
+        apiKeyTableUtils.clickOnButton(apiKeyValue, adminApiKeysDetailsButtonColumn, adminApiKeysDetailsButtonClassName);
     }
 
     public void clickOnEditButtonOfApiKey(String apiKeyValue) {
-        apiKeyTableUtils.clickOnButton(apiKeyValue, 6, "fa-pencil-square-o");
-
+        apiKeyTableUtils.clickOnButton(apiKeyValue, adminApiKeysEditButtonColumn, adminApiKeysEditButtonClassName);
     }
 }

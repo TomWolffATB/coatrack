@@ -8,7 +8,8 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.Random;
 
-import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminGatewayListUrl;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.getAdminGatewayListUrl;
+import static eu.coatrack.admin.e2e.configuration.TableConfiguration.*;
 
 public class AdminServiceGateways {
 
@@ -56,14 +57,14 @@ public class AdminServiceGateways {
     }
 
     public void clickOnDetailsButtonOfGateway(String gatewayName) {
-        gatewayTableUtils.clickOnButton(gatewayName, 7, "fa-bar-chart");
+        gatewayTableUtils.clickOnButton(gatewayName, adminGatewaysDetailsButtonColumn, adminGatewaysDetailsButtonClassName);
     }
 
     public void clickOnEditButtonOfGateway(String gatewayName) {
-        gatewayTableUtils.clickOnButton(gatewayName, 8, "fa-pencil-square-o");
+        gatewayTableUtils.clickOnButton(gatewayName, adminGatewaysEditButtonColumn, adminGatewaysEditButtonClassName);
     }
 
     public String getGatewayNameByIdentifier(String identifier){
-        return gatewayTableUtils.getColumnTextFromItemRow(identifier, 1, 0);
+        return gatewayTableUtils.getColumnTextFromItemRow(identifier, adminGatewaysIdColumn, adminGatewaysDefaultNameColumn);
     }
 }

@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.Random;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
-import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminServiceListUrl;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.getAdminServiceListUrl;
 
 
 public class AdminServiceOfferings {

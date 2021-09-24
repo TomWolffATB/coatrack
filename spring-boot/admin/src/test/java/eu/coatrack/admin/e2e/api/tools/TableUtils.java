@@ -9,9 +9,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
-import static eu.coatrack.admin.e2e.configuration.TestConfiguration.*;
-
-//TODO This class should get its own config file/class.
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.*;
+import static eu.coatrack.admin.e2e.configuration.TableConfiguration.*;
 
 public class TableUtils {
 
@@ -36,15 +35,15 @@ public class TableUtils {
             trashButtonColumn = 6;
             defaultNameColumn = 0;
         } else if (tableType == TableType.GATEWAY_TABLE) {
-            tableId = "proxiesTable";
+            tableId = adminGatewaysTableId;
             tableUrl = getAdminGatewayListUrl();
-            trashButtonColumn = 8;
-            defaultNameColumn = 0;
+            trashButtonColumn = adminGatewaysTrashButtonColumn;
+            defaultNameColumn = adminGatewaysDefaultNameColumn;
         } else if (tableType == TableType.APIKEY_TABLE) {
-            tableId = "apiKeyTable";
+            tableId = adminApiKeysTableId;
             tableUrl = getAdminApiKeyListUrl();
-            trashButtonColumn = 6;
-            defaultNameColumn = 2;
+            trashButtonColumn = adminApiKeysTrashButtonColumn;
+            defaultNameColumn = adminApiKeysDefaultNameColumn;
         } else if (tableType == TableType.CONSUMER_SERVICE_TABLE) {
             tableId = "servicesTable";
             tableUrl = getConsumerServiceListUrl();
@@ -73,11 +72,11 @@ public class TableUtils {
 
     private void deleteRow(WebElement row) {
         WebElement cellWithTrashButton = getCellInColumn(row, trashButtonColumn);
-        WebElement trashButton = cellWithTrashButton.findElement(By.className("fa-trash"));
+        WebElement trashButton = cellWithTrashButton.findElement(By.className(trashButtonClassName));
         trashButton.click();
 
         sleepMillis(2000);
-        WebElement infoDialog = driver.findElement(By.className("ui-dialog"));
+        WebElement infoDialog = driver.findElement(By.className(uiDialogClassName));
         List<WebElement> listOfButtons = infoDialog.findElements(By.cssSelector("button"));
         WebElement yesButton = listOfButtons.stream().filter(button -> button.getText().contains("Yes")).findFirst().get();
         yesButton.click();
@@ -90,7 +89,7 @@ public class TableUtils {
     public List<String> getListOfColumnValues(int column){
         ensureDriverToBeAtCorrectTargetUrl();
         return getItemRows().stream()
-                .filter(row -> !getCellInColumn(row, 0).getText().contains("No items yet"))
+                .filter(row -> !getCellInColumn(row, 0).getText().contains(emptyTableText))
                 .map(row -> getCellInColumn(row, column).getText()).collect(Collectors.toList());
     }
 
@@ -106,7 +105,7 @@ public class TableUtils {
     public boolean isItemWithinList(String itemName) {
         ensureDriverToBeAtCorrectTargetUrl();
         List<WebElement> rows = getItemRows();
-        if (rows.isEmpty() || getCellInColumn(rows.get(0), 0).getText().contains("No items yet"))
+        if (rows.isEmpty() || getCellInColumn(rows.get(0), 0).getText().contains(emptyTableText))
             return false;
         List<String> listOfItemNames = rows.stream().map(row -> getCellInColumn(row, defaultNameColumn)
                 .getText()).collect(Collectors.toList());
@@ -122,7 +121,7 @@ public class TableUtils {
             WebElement firstTableBodyRow = rows.get(0);
             String contentOfFirstCell = firstTableBodyRow.findElement(By.cssSelector("td")).getText();
 
-            if (contentOfFirstCell.contains("No items yet"))
+            if (contentOfFirstCell.contains(emptyTableText))
                 break;
             else {
                 deleteRow(firstTableBodyRow);

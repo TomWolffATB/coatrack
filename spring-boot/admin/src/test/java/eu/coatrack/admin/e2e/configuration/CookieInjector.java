@@ -10,7 +10,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import static eu.coatrack.admin.e2e.configuration.TestConfiguration.*;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.*;
 
 public class CookieInjector {
 

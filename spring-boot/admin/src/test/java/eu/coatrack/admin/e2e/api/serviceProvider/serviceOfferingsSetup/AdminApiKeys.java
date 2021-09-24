@@ -10,8 +10,8 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
-import static eu.coatrack.admin.e2e.configuration.PageConfiguration.getAdminApiKeyListUrl;
-import static eu.coatrack.admin.e2e.configuration.PageConfiguration.getUsername;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.adminApiKeyListUrl;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.username;
 import static eu.coatrack.admin.e2e.configuration.TableConfiguration.*;
 
 public class AdminApiKeys {
@@ -31,7 +31,7 @@ public class AdminApiKeys {
     }
 
     public String createApiKey(String serviceName) {
-        driver.get(getAdminApiKeyListUrl());
+        driver.get(adminApiKeyListUrl);
 
         List<String> listOfApiKeyValuesBeforeCreation = apiKeyTableUtils.getListOfColumnValues(2);
         workThroughApiKeyCreationMenuForService(serviceName);
@@ -49,7 +49,7 @@ public class AdminApiKeys {
         dropdown.findElements(By.cssSelector("option")).stream().filter(option -> option.getText().contains(serviceName)).findFirst().get().click();
 
         driver.findElement(By.id("githubUserSearchCriteria")).click();
-        driver.findElement(By.id("githubUserSearchCriteria")).sendKeys(getUsername());
+        driver.findElement(By.id("githubUserSearchCriteria")).sendKeys(username);
         driver.findElement(By.id("githubUserSearchButton")).click();
 
         sleepMillis(1000);
@@ -68,7 +68,7 @@ public class AdminApiKeys {
     public void clickOnCalenderButtonOfApiKey(String apiKeyValue) {
         apiKeyTableUtils.clickOnButton(apiKeyValue, adminApiKeysCalenderButtonColumn, adminApiKeysCalenderButtonClassName);
         sleepMillis(2000);
-        driver.get(getAdminApiKeyListUrl());
+        driver.get(adminApiKeyListUrl);
     }
 
     public void clickOnDetailsButtonOfApiKey(String apiKeyValue) {

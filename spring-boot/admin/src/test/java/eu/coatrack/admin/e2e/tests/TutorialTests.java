@@ -14,10 +14,10 @@ public class TutorialTests extends AbstractTestSetup {
     public void tutorialTest() {
         ItemDto itemDto = pageFactory.getTutorial().createItemsViaTutorial();
 
-        System.out.println("Gateway Download Link: " + itemDto.getGatewayDownloadLink());
-        System.out.println("API Key Value: " + itemDto.getApiKeyValue());
-        System.out.println("Service Name: " + itemDto.getServiceName());
-        System.out.println("Gateway Name: " + itemDto.getGatewayIdentifier());
+        System.out.println("Gateway Download Link: " + itemDto.gatewayDownloadLink);
+        System.out.println("API Key Value: " + itemDto.apiKeyValue);
+        System.out.println("Service Name: " + itemDto.serviceName);
+        System.out.println("Gateway Name: " + itemDto.gatewayIdentifier);
 
         /*
         //Download file
@@ -60,11 +60,11 @@ public class TutorialTests extends AbstractTestSetup {
             fail("Cleanup failed. File test.jar could not be deleted.");
 
         AdminServiceGateways adminServiceGateways = pageFactory.getServiceGateways();
-        String gatewayName = adminServiceGateways.getGatewayNameByIdentifier(itemDto.getGatewayIdentifier());
+        String gatewayName = adminServiceGateways.getGatewayNameByIdentifier(itemDto.gatewayIdentifier);
         adminServiceGateways.deleteGateway(gatewayName);
 
-        pageFactory.getApiKeys().deleteApiKey(itemDto.getApiKeyValue());
-        pageFactory.getServiceOfferings().deleteService(itemDto.getServiceName());
+        pageFactory.getApiKeys().deleteApiKey(itemDto.apiKeyValue);
+        pageFactory.getServiceOfferings().deleteService(itemDto.serviceName);
     }
 
 }

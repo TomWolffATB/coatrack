@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.Random;
 
-import static eu.coatrack.admin.e2e.configuration.PageConfiguration.getAdminGatewayListUrl;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.adminGatewayListUrl;
 import static eu.coatrack.admin.e2e.configuration.TableConfiguration.*;
 
 public class AdminServiceGateways {
@@ -24,7 +24,7 @@ public class AdminServiceGateways {
     }
 
     public String createGateway() {
-        driver.get(getAdminGatewayListUrl());
+        driver.get(adminGatewayListUrl);
         String gatewayName = "my-gateway-" + (new Random().nextInt());
         workThroughGatewayCreationMenu(gatewayName);
         return gatewayName;

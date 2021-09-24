@@ -8,57 +8,57 @@ public class PageReachabilityTests extends AbstractTestSetup{
 
     @Test
     public void testAdminDashboardReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(getAdminDashboardUrl());
+        pageFactory.getPageChecker().assertThatUrlIsReachable(adminDashboardUrl);
     }
 
     @Test
     public void testAdminTutorialReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(getAdminTutorialUrl());
+        pageFactory.getPageChecker().assertThatUrlIsReachable(adminTutorialUrl);
     }
 
     @Test
     public void testAdminServiceListReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(getAdminServiceListUrl());
+        pageFactory.getPageChecker().assertThatUrlIsReachable(adminServiceListUrl);
     }
 
     @Test
     public void testAdminGatewayListReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(getAdminGatewayListUrl());
+        pageFactory.getPageChecker().assertThatUrlIsReachable(adminGatewayListUrl);
     }
 
     @Test
     public void testAdminApiKeyListReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(getAdminApiKeyListUrl());
+        pageFactory.getPageChecker().assertThatUrlIsReachable(adminApiKeyListUrl);
     }
 
     @Test
     public void testAdminReportsReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(getAdminReportsUrl());
+        pageFactory.getPageChecker().assertThatUrlIsReachable(adminReportsUrl);
     }
 
     @Test
     public void testConsumerDashboardReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(getConsumerDashboardUrl());
+        pageFactory.getPageChecker().assertThatUrlIsReachable(consumerDashboardUrl);
     }
 
     @Test
     public void testConsumerTutorialReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(getConsumerTutorialUrl());
+        pageFactory.getPageChecker().assertThatUrlIsReachable(consumerTutorialUrl);
     }
 
     @Test
     public void testConsumerApiKeyListReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(getConsumerApiKeyListUrl());
+        pageFactory.getPageChecker().assertThatUrlIsReachable(consumerApiKeyListUrl);
     }
 
     @Test
     public void testConsumerServiceListReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(getConsumerServiceListUrl());
+        pageFactory.getPageChecker().assertThatUrlIsReachable(consumerServiceListUrl);
     }
 
     @Test
     public void testConsumerReportsReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(getConsumerReportsUrl());
+        pageFactory.getPageChecker().assertThatUrlIsReachable(consumerReportsUrl);
     }
 
 }

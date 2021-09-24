@@ -6,28 +6,26 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
 
-//TODO Remove the getters and make the fields public.
-
 public class PageConfiguration {
 
     //Input Parameters
-    private static final String username;
-    private static final String password;
+    public static final String username;
+    public static final String password;
 
     //Page URLs
-    private static final String startpageUrl;
-    private static final String adminDashboardUrl;
-    private static final String adminTutorialUrl;
-    private static final String adminServiceListUrl;
-    private static final String adminGatewayListUrl;
-    private static final String adminApiKeyListUrl;
-    private static final String adminReportsUrl;
+    public static final String startpageUrl;
+    public static final String adminDashboardUrl;
+    public static final String adminTutorialUrl;
+    public static final String adminServiceListUrl;
+    public static final String adminGatewayListUrl;
+    public static final String adminApiKeyListUrl;
+    public static final String adminReportsUrl;
 
-    private static final String consumerDashboardUrl;
-    private static final String consumerTutorialUrl;
-    private static final String consumerApiKeyListUrl;
-    private static final String consumerServiceListUrl;
-    private static final String consumerReportsUrl;
+    public static final String consumerDashboardUrl;
+    public static final String consumerTutorialUrl;
+    public static final String consumerApiKeyListUrl;
+    public static final String consumerServiceListUrl;
+    public static final String consumerReportsUrl;
 
     static {
         File configFile = new File("config.properties");
@@ -61,62 +59,6 @@ public class PageConfiguration {
         } catch (Exception e) {
             throw new RuntimeException("Config went wrong.", e);
         }
-    }
-
-    public static String getConsumerDashboardUrl() {
-        return consumerDashboardUrl;
-    }
-
-    public static String getConsumerTutorialUrl() {
-        return consumerTutorialUrl;
-    }
-
-    public static String getConsumerApiKeyListUrl() {
-        return consumerApiKeyListUrl;
-    }
-
-    public static String getConsumerServiceListUrl() {
-        return consumerServiceListUrl;
-    }
-
-    public static String getConsumerReportsUrl() {
-        return consumerReportsUrl;
-    }
-
-    public static String getAdminReportsUrl() {
-        return adminReportsUrl;
-    }
-
-    public static String getAdminApiKeyListUrl() {
-        return adminApiKeyListUrl;
-    }
-
-    public static String getAdminGatewayListUrl() {
-        return adminGatewayListUrl;
-    }
-
-    public static String getAdminTutorialUrl() {
-        return adminTutorialUrl;
-    }
-
-    public static String getAdminServiceListUrl() {
-        return adminServiceListUrl;
-    }
-
-    public static String getStartpageUrl() {
-        return startpageUrl;
-    }
-
-    public static String getAdminDashboardUrl() {
-        return adminDashboardUrl;
-    }
-
-    public static String getUsername() {
-        return username;
-    }
-
-    public static String getPassword() {
-        return password;
     }
 
 }

@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.Random;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
-import static eu.coatrack.admin.e2e.configuration.PageConfiguration.getAdminTutorialUrl;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.adminTutorialUrl;
 
 public class AdminTutorial {
 
@@ -39,7 +39,7 @@ public class AdminTutorial {
     }
 
     private void workThroughServiceCreationMenu(String serviceName) {
-        driver.get(getAdminTutorialUrl());
+        driver.get(adminTutorialUrl);
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
         waiterUtils.waitForElementWithId("serviceName");

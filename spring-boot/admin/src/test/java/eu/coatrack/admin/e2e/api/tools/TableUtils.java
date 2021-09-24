@@ -32,27 +32,27 @@ public class TableUtils {
     private void initTableFieldsAccordingToTableType(TableType tableType) {
         if (tableType == TableType.SERVICE_TABLE){
             tableId = adminServicesTableId;
-            tableUrl = getAdminServiceListUrl();
+            tableUrl = adminServiceListUrl;
             trashButtonColumn = adminServicesTrashButtonColumn;
             defaultNameColumn = adminServicesDefaultNameColumn;
         } else if (tableType == TableType.GATEWAY_TABLE) {
             tableId = adminGatewaysTableId;
-            tableUrl = getAdminGatewayListUrl();
+            tableUrl = adminGatewayListUrl;
             trashButtonColumn = adminGatewaysTrashButtonColumn;
             defaultNameColumn = adminGatewaysDefaultNameColumn;
         } else if (tableType == TableType.APIKEY_TABLE) {
             tableId = adminApiKeysTableId;
-            tableUrl = getAdminApiKeyListUrl();
+            tableUrl = adminApiKeyListUrl;
             trashButtonColumn = adminApiKeysTrashButtonColumn;
             defaultNameColumn = adminApiKeysDefaultNameColumn;
         } else if (tableType == TableType.CONSUMER_SERVICE_TABLE) {
             tableId = adminConsumerServicesTableId;
-            tableUrl = getConsumerServiceListUrl();
+            tableUrl = consumerServiceListUrl;
             trashButtonColumn = adminConsumerServicesTrashButtonColumn; //Not present
             defaultNameColumn = adminConsumerServicesDefaultNameColumn;
         } else if (tableType == TableType.CONSUMER_APIKEY_TABLE) {
             tableId = adminConsumerApiKeysTableId;
-            tableUrl = getConsumerApiKeyListUrl();
+            tableUrl = consumerApiKeyListUrl;
             trashButtonColumn = adminConsumerApiKeysTrashButtonColumn;
             defaultNameColumn = adminConsumerApiKeysDefaultNameColumn;
         } else {

@@ -61,13 +61,13 @@ public class CookieInjector {
     }
 
     private static void replaceDriversCurrentSessionCookieByAuthorizedOne(WebDriver driver) {
-        driver.get(getStartpageUrl());
+        driver.get(startpageUrl);
         driver.manage().deleteAllCookies();
         driver.manage().addCookie(sessionCookie);
     }
 
     private static Cookie createCookieViaGitHubLogin(WebDriver driver) {
-        new LoginPage(driver).loginToGithub(getUsername(), getPassword());
+        new LoginPage(driver).loginToGithub(username, password);
         return driver.manage().getCookies().stream().filter(cookie -> cookie.getName().equals("SESSION")).findFirst().get();
     }
 

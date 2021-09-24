@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.Random;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
-import static eu.coatrack.admin.e2e.configuration.PageConfiguration.getAdminServiceListUrl;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.adminServiceListUrl;
 import static eu.coatrack.admin.e2e.configuration.TableConfiguration.*;
 
 
@@ -23,7 +23,7 @@ public class AdminServiceOfferings {
     }
 
     public String createPublicService() {
-        driver.get(getAdminServiceListUrl());
+        driver.get(adminServiceListUrl);
         String serviceName = "my-service-" + (new Random().nextInt());
         String serviceId = serviceName + "-id";
         workThroughServiceCreationMenu(serviceName, serviceId);

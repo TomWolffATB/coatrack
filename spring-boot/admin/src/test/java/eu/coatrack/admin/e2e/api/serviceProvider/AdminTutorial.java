@@ -1,7 +1,5 @@
 package eu.coatrack.admin.e2e.api.serviceProvider;
 
-import eu.coatrack.admin.e2e.api.tools.TableType;
-import eu.coatrack.admin.e2e.api.tools.TableUtils;
 import eu.coatrack.admin.e2e.api.tools.WaiterUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -25,14 +23,28 @@ public class AdminTutorial {
         waiterUtils = new WaiterUtils(driver);
     }
 
-    //TODO Split up long creation logic for to small methods to make it easier to read. Also check other classes for demand of that.
     public ItemDto createItemsViaTutorial(){
+        String serviceName = "my-service" + new Random().nextInt();
+        workThroughServiceCreationMenu(serviceName);
+
+        WebElement gatewayDownloadLinkElement = new WebDriverWait(driver, 60)
+                .until(ExpectedConditions.presenceOfElementLocated(By.linkText("Click here to download your CoatRack Gateway")));
+
+        String gatewayDownloadLink = gatewayDownloadLinkElement.getAttribute("href");
+        String apiKeyValue = driver.findElement(By.cssSelector(".row:nth-child(3) p:nth-child(2)")).getText();
+        String[] gatewayDownloadLinkParts = gatewayDownloadLink.split("/");
+        String gatewayIdentifier = gatewayDownloadLinkParts[gatewayDownloadLinkParts.length-2];
+
+        return new ItemDto(serviceName, gatewayDownloadLink, gatewayIdentifier, apiKeyValue);
+    }
+
+    private void workThroughServiceCreationMenu(String serviceName) {
         driver.get(getAdminTutorialUrl());
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
         waiterUtils.waitForElementWithId("serviceName");
         driver.findElement(By.id("serviceName")).click();
-        String serviceName = "my-service" + new Random().nextInt();
+
         driver.findElement(By.id("serviceName")).sendKeys(serviceName);
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
@@ -47,14 +59,5 @@ public class AdminTutorial {
 
         sleepMillis(1000);
         driver.findElement(By.linkText("Finish")).sendKeys(Keys.RETURN);
-        WebElement gatewayDownloadLinkElement = new WebDriverWait(driver, 60)
-                .until(ExpectedConditions.presenceOfElementLocated(By.linkText("Click here to download your CoatRack Gateway")));
-
-        String gatewayDownloadLink = gatewayDownloadLinkElement.getAttribute("href");
-        String apiKeyValue = driver.findElement(By.cssSelector(".row:nth-child(3) p:nth-child(2)")).getText();
-        String[] urlParts = gatewayDownloadLink.split("/");
-        String gatewayIdentifier = urlParts[urlParts.length-2];
-
-        return new ItemDto(serviceName, gatewayDownloadLink, gatewayIdentifier, apiKeyValue);
     }
 }

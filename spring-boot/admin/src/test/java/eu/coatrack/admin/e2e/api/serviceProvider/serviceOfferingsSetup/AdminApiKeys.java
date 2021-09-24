@@ -10,11 +10,12 @@ import java.util.List;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getAdminApiKeyListUrl;
+import static eu.coatrack.admin.e2e.configuration.TestConfiguration.getUsername;
 
 public class AdminApiKeys {
 
-    private WebDriver driver;
-    private TableUtils apiKeyTableUtils;
+    private final WebDriver driver;
+    private final TableUtils apiKeyTableUtils;
 
     public AdminApiKeys(WebDriver driver) {
         this.driver = driver;
@@ -29,14 +30,22 @@ public class AdminApiKeys {
         driver.get(getAdminApiKeyListUrl());
 
         List<String> listOfApiKeyValuesBeforeCreation = apiKeyTableUtils.getListOfColumnValues(2);
+        workThroughApiKeyCreationMenuForService(serviceName);
+        List<String> listOfApiKeyValuesAfterCreation = apiKeyTableUtils.getListOfColumnValues(2);;
 
+        listOfApiKeyValuesAfterCreation.removeAll(listOfApiKeyValuesBeforeCreation);
+        String valueOfNewApiKey = listOfApiKeyValuesAfterCreation.get(0);
+        return valueOfNewApiKey;
+    }
+
+    private void workThroughApiKeyCreationMenuForService(String serviceName) {
         driver.findElement(By.linkText("Create API Key")).click();
 
         WebElement dropdown = driver.findElement(By.id("selectedServiceId"));
         dropdown.findElements(By.cssSelector("option")).stream().filter(option -> option.getText().contains(serviceName)).findFirst().get().click();
 
         driver.findElement(By.id("githubUserSearchCriteria")).click();
-        driver.findElement(By.id("githubUserSearchCriteria")).sendKeys("ChristophBaierATB");
+        driver.findElement(By.id("githubUserSearchCriteria")).sendKeys(getUsername());
         driver.findElement(By.id("githubUserSearchButton")).click();
 
         //TODO Sleep methods should be replaced by explicit waits.
@@ -44,12 +53,6 @@ public class AdminApiKeys {
 
         driver.findElement(By.cssSelector("td:nth-child(2)")).click();
         driver.findElement(By.id("saveApiKeyButton")).click();
-
-        List<String> listOfApiKeyValuesAfterCreation = apiKeyTableUtils.getListOfColumnValues(2);;
-        listOfApiKeyValuesAfterCreation.removeAll(listOfApiKeyValuesBeforeCreation);
-
-        String valueOfNewApiKey = listOfApiKeyValuesAfterCreation.get(0);
-        return valueOfNewApiKey;
     }
 
     public boolean isApiKeyWithinList(String apiKeyValue) {

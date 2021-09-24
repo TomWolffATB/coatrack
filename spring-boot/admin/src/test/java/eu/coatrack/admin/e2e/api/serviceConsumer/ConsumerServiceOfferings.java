@@ -18,7 +18,10 @@ public class ConsumerServiceOfferings {
 
     public String createApiKeyFromPublicService(String serviceName) {
         List<String> apiKeyListBeforeApiKeyCreation = consumerApiKeyTableUtils.getListOfColumnValues(3);
+
+        //TODO Maybe this line is too high-level and creation logic should be here in a private method.
         consumerServiceTableUtils.createApiKeyFromPublicService(serviceName);
+
         List<String> apiKeyListAfterApiKeyCreation = consumerApiKeyTableUtils.getListOfColumnValues(3);
 
         apiKeyListAfterApiKeyCreation.removeAll(apiKeyListBeforeApiKeyCreation);

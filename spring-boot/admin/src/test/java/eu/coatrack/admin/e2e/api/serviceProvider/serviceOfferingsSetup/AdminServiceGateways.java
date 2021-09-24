@@ -24,12 +24,14 @@ public class AdminServiceGateways {
 
     public String createGateway() {
         driver.get(getAdminGatewayListUrl());
+        String gatewayName = "my-gateway-" + (new Random().nextInt());
+        workThroughGatewayCreationMenu(gatewayName);
+        return gatewayName;
+    }
 
+    private void workThroughGatewayCreationMenu(String gatewayName) {
         driver.findElement(By.linkText("Create Service Gateway")).click();
         driver.findElement(By.id("name")).click();
-
-        String gatewayName = "my-gateway-" + (new Random().nextInt());
-
         driver.findElement(By.id("name")).sendKeys(gatewayName);
         driver.findElement(By.id("proxyPublicUrlInputField")).click();
         driver.findElement(By.id("proxyPublicUrlInputField")).sendKeys("https://mysite.com:8080");
@@ -38,9 +40,7 @@ public class AdminServiceGateways {
         driver.findElement(By.id("description")).click();
         driver.findElement(By.id("description")).sendKeys("some Description");
         driver.findElement(By.id("save")).click();
-
         waiterUtils.waitUpToAMinuteForElementWithId("proxiesTable");
-        return gatewayName;
     }
 
     public boolean isGatewayWithinList(String gatewayName) {

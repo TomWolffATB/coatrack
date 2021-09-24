@@ -23,10 +23,14 @@ public class AdminServiceOfferings {
 
     public String createPublicService() {
         driver.get(getAdminServiceListUrl());
-        driver.findElement(By.linkText("Create Service Offering")).click();
-
         String serviceName = "my-service-" + (new Random().nextInt());
         String serviceId = serviceName + "-id";
+        workThroughServiceCreationMenu(serviceName, serviceId);
+        return serviceName;
+    }
+
+    private void workThroughServiceCreationMenu(String serviceName, String serviceId) {
+        driver.findElement(By.linkText("Create Service Offering")).click();
         driver.findElement(By.id("name")).click();
         driver.findElement(By.id("name")).sendKeys(serviceName);
 
@@ -44,8 +48,6 @@ public class AdminServiceOfferings {
         sleepMillis(1000);
         driver.findElement(By.linkText("Finish")).sendKeys(Keys.RETURN);
         sleepMillis(1000);
-
-        return serviceName;
     }
 
     public boolean isServiceWithinList(String serviceName) {

@@ -1,7 +1,6 @@
 package eu.coatrack.admin.e2e.configuration;
 
 //TODO All further configuration like column indices should be retrieved from one central config location.
-//TODO The whole configuration should be soft-coded.
 
 import java.io.File;
 import java.io.FileReader;

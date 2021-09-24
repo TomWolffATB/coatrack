@@ -152,8 +152,7 @@ public class TableUtils {
         return getItemRows().stream().filter(row -> row.findElements(By.cssSelector("td")).get(identifierColumn).getText().contains(identifier)).findFirst().get();
     }
 
-    //TODO Better name?
-    public String getInfo(String identifier, int identifierColumn, int targetColumn){
+    public String getColumnTextFromItemRow(String identifier, int identifierColumn, int targetColumn){
         WebElement row = getRowByCustomIdentifier(identifier, identifierColumn);
         return getCellInColumn(row, targetColumn).getText();
     }

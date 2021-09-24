@@ -3,30 +3,64 @@ package eu.coatrack.admin.e2e.configuration;
 //TODO All further configuration like column indices should be retrieved from one central config location.
 //TODO The whole configuration should be soft-coded.
 
+import java.io.File;
+import java.io.FileReader;
+import java.util.Properties;
+
 public class TestConfiguration {
 
     //Input Parameters
-    private static String username = "user";
-    private static String password = "password";
-    private static String protocol = "http";
-    private static String host = "localhost";
-    private static String port = "8080";
+    private static final String username;
+    private static final String password;
 
     //Page URLs
-    private static String startpageUrl          = protocol + "://" + host + ":" + port;
+    private static final String startpageUrl;
+    private static final String adminDashboardUrl;
+    private static final String adminTutorialUrl;
+    private static final String adminServiceListUrl;
+    private static final String adminGatewayListUrl;
+    private static final String adminApiKeyListUrl;
+    private static final String adminReportsUrl;
 
-    private static String adminDashboardUrl     = startpageUrl + "/admin";
-    private static String adminTutorialUrl      = startpageUrl + "/admin/gettingstarted";
-    private static String adminServiceListUrl   = startpageUrl + "/admin/services";
-    private static String adminGatewayListUrl   = startpageUrl + "/admin/proxies";
-    private static String adminApiKeyListUrl    = startpageUrl + "/admin/api-keys";
-    private static String adminReportsUrl       = startpageUrl + "/admin/reports";
+    private static final String consumerDashboardUrl;
+    private static final String consumerTutorialUrl;
+    private static final String consumerApiKeyListUrl;
+    private static final String consumerServiceListUrl;
+    private static final String consumerReportsUrl;
 
-    private static String consumerDashboardUrl  = startpageUrl + "/admin/consumer";
-    private static String consumerTutorialUrl   = startpageUrl + "/admin/consumer/gettingstarted";
-    private static String consumerApiKeyListUrl = startpageUrl + "/admin/api-keys/consumer/list";
-    private static String consumerServiceListUrl= startpageUrl + "/admin/services/consumer/list";
-    private static String consumerReportsUrl    = startpageUrl + "/admin/reports/consumer";
+    static {
+        File configFile = new File("config.properties");
+
+        try {
+            FileReader reader = new FileReader(configFile);
+            Properties props = new Properties();
+            props.load(reader);
+
+            username = props.getProperty("username");
+            password = props.getProperty("password");
+            String protocol = props.getProperty("protocol");
+            String host = props.getProperty("host");
+            String port = props.getProperty("port");
+
+            startpageUrl = protocol + "://" + host + ":" + port;
+            adminDashboardUrl       = startpageUrl + props.getProperty("adminDashboardUrl");
+            adminTutorialUrl        = startpageUrl + props.getProperty("adminTutorialUrl");
+            adminServiceListUrl     = startpageUrl + props.getProperty("adminServiceListUrl");
+            adminGatewayListUrl     = startpageUrl + props.getProperty("adminGatewayListUrl");
+            adminApiKeyListUrl      = startpageUrl + props.getProperty("adminApiKeyListUrl");
+            adminReportsUrl         = startpageUrl + props.getProperty("adminReportsUrl");
+
+            consumerDashboardUrl    = startpageUrl + props.getProperty("consumerDashboardUrl");
+            consumerTutorialUrl     = startpageUrl + props.getProperty("consumerTutorialUrl");
+            consumerApiKeyListUrl   = startpageUrl + props.getProperty("consumerApiKeyListUrl");
+            consumerServiceListUrl  = startpageUrl + props.getProperty("consumerServiceListUrl");
+            consumerReportsUrl      = startpageUrl + props.getProperty("consumerReportsUrl");
+
+            reader.close();
+        } catch (Exception e) {
+            throw new RuntimeException("Config went wrong.", e);
+        }
+    }
 
     public static String getConsumerDashboardUrl() {
         return consumerDashboardUrl;

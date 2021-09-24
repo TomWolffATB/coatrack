@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.e2e.configuration.TestConfiguration.*;
 
+//TODO This class should get its own config file/class.
+
 public class TableUtils {
 
     private final WebDriver driver;

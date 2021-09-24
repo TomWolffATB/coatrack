@@ -2,16 +2,14 @@ package eu.coatrack.admin.e2e.tests.itemListsButtonsTests;
 
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
 import eu.coatrack.admin.e2e.tests.AbstractTestSetup;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 public class ServiceListButtonsTests extends AbstractTestSetup {
 
     private AdminServiceOfferings adminServiceOfferings;
     private String serviceName;
 
-    @BeforeEach
+    @BeforeAll
     public void setupService() {
         adminServiceOfferings = pageFactory.getServiceOfferings();
         serviceName = adminServiceOfferings.createPublicService();
@@ -32,12 +30,10 @@ public class ServiceListButtonsTests extends AbstractTestSetup {
         adminServiceOfferings.clickOnSecondEditButtonOfService(serviceName);
     }
 
-    @AfterEach
+    @AfterAll
     public void assertHavingNoErrorAndCleanup(){
         pageFactory.getPageChecker().assertThatCurrentPageHasNoError();
         adminServiceOfferings.deleteService(serviceName);
     }
-
-    //TODO These kind of tests should also be implemented for gateways and API keys.
 
 }

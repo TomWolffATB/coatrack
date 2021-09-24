@@ -3,9 +3,7 @@ package eu.coatrack.admin.e2e.tests.itemListsButtonsTests;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminApiKeys;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
 import eu.coatrack.admin.e2e.tests.AbstractTestSetup;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 public class ApiKeyListButtonsTests extends AbstractTestSetup {
 
@@ -15,7 +13,7 @@ public class ApiKeyListButtonsTests extends AbstractTestSetup {
     private String serviceName;
 
     //TODO This kind of creation/deletion should also be applied to the public service API key creation because the service created is not deleted at the end.
-    @BeforeEach
+    @BeforeAll
     public void setupApiKey() {
         adminAPiKeys = pageFactory.getApiKeys();
         adminServiceOfferings = pageFactory.getServiceOfferings();
@@ -38,13 +36,11 @@ public class ApiKeyListButtonsTests extends AbstractTestSetup {
         adminAPiKeys.clickOnEditButtonOfApiKey(apiKeyValue);
     }
 
-    @AfterEach
+    @AfterAll
     public void assertHavingNoErrorAndCleanup(){
         pageFactory.getPageChecker().assertThatCurrentPageHasNoError();
         adminAPiKeys.deleteApiKey(apiKeyValue);
         adminServiceOfferings.deleteService(serviceName);
     }
-
-    //TODO These kind of tests should also be implemented for gateways and API keys.
 
 }

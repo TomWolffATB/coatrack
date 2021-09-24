@@ -1,27 +1,12 @@
 package eu.coatrack.admin.e2e.tests;
 
 import eu.coatrack.admin.e2e.api.PageFactory;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInstance;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-//@SpringBootTest(properties = "spring.main.lazy-initialization=true", classes = YggAdminApplication.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class AbstractTestSetup {
 
-    protected PageFactory pageFactory;
-
-    @BeforeEach
-    protected void setup() {
-        //System.setProperty("webdriver.gecko.driver", "c:/Program Files/GeckoDriver/geckodriver.exe");
-        pageFactory = new PageFactory(new FirefoxDriver());
-    }
-
-    //TODO should be executed even when an error is thrown during the test.
-    @AfterEach
-    private void tearDown(){
-        pageFactory.closeDriver();
-    }
+    protected static PageFactory pageFactory = new PageFactory(new FirefoxDriver());
 
 }

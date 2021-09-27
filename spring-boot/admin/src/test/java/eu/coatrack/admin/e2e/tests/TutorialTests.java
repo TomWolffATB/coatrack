@@ -22,6 +22,8 @@ public class TutorialTests extends AbstractTestSetup {
             file.delete();
         assertFalse(file.exists());
 
+        //TODO Gateway download test should be an isolated test and therefore separated from tutorial test.
+        //TODO Gateway download should be hidden behind the API.
         Runtime rt = Runtime.getRuntime();
         String firstPartOfCommand = "cmd /c curl -v ";
         if (host.equals("localhost"))
@@ -31,6 +33,7 @@ public class TutorialTests extends AbstractTestSetup {
         pr.waitFor();
 
         assertTrue(file.exists());
+        assertTrue(file.length() > 1000);
         file.delete();
 
         /*

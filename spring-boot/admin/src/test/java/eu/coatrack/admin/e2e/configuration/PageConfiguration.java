@@ -11,6 +11,7 @@ public class PageConfiguration {
     public static final String password;
 
     //Page URLs
+    public static final String host;
     public static final String startpageUrl;
     public static final String adminDashboardUrl;
     public static final String adminTutorialUrl;
@@ -36,7 +37,7 @@ public class PageConfiguration {
             username = props.getProperty("username");
             password = props.getProperty("password");
             String protocol = props.getProperty("protocol");
-            String host = props.getProperty("host");
+            host = props.getProperty("host");
             String port = props.getProperty("port");
 
             if (host.equals("localhost"))

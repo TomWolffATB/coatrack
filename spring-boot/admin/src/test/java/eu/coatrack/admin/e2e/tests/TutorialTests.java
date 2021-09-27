@@ -6,25 +6,34 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static eu.coatrack.admin.e2e.configuration.CookieInjector.sessionCookie;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.host;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TutorialTests extends AbstractTestSetup {
 
     @Test
-    public void tutorialTest() {
+    public void tutorialTest() throws IOException, InterruptedException {
         ItemDto itemDto = pageFactory.getTutorial().createItemsViaTutorial();
 
-        System.out.println("Gateway Download Link: " + itemDto.gatewayDownloadLink);
-        System.out.println("API Key Value: " + itemDto.apiKeyValue);
-        System.out.println("Service Name: " + itemDto.serviceName);
-        System.out.println("Gateway Name: " + itemDto.gatewayIdentifier);
-
-        /*
         //Download file
+        File file = new File("test.jar");
+        if (file.exists())
+            file.delete();
+        assertFalse(file.exists());
+
         Runtime rt = Runtime.getRuntime();
-        Process pr = rt.exec("cmd /c wsl curl -v --cookie \"SESSION=" + authenticationCookie.getValue() + "\" --output ./test.jar " + tutorial.getGatewayDownloadLink());
+        String firstPartOfCommand = "cmd /c curl -v ";
+        if (host.equals("localhost"))
+            firstPartOfCommand += "-k ";
+        String command = firstPartOfCommand + "--cookie \"SESSION=" + sessionCookie.getValue() + "\" --output ./test.jar " + itemDto.gatewayDownloadLink;
+        Process pr = rt.exec(command);
         pr.waitFor();
 
+        assertTrue(file.exists());
+        file.delete();
+
+        /*
         //Run gateway jar
         Process pr2 = rt.exec("cmd /c start cmd /k java -jar ./test.jar");
         // Approaches to get this working:
@@ -49,15 +58,7 @@ public class TutorialTests extends AbstractTestSetup {
         }
         */
 
-        //Test if API key reaches bing.com
-
-        //Cleanup
-        File file = new File("./test.jar");
-        if (file.exists())
-            file.delete();
-
-        if (file.exists())
-            fail("Cleanup failed. File test.jar could not be deleted.");
+        //Test if API key reaches example website
 
         AdminServiceGateways adminServiceGateways = pageFactory.getServiceGateways();
         String gatewayName = adminServiceGateways.getGatewayNameByIdentifier(itemDto.gatewayIdentifier);

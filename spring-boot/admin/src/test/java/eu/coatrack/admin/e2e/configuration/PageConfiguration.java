@@ -39,7 +39,11 @@ public class PageConfiguration {
             String host = props.getProperty("host");
             String port = props.getProperty("port");
 
-            startpageUrl = protocol + "://" + host + ":" + port;
+            if (host.equals("localhost"))
+                startpageUrl = protocol + "://" + host + ":" + port;
+            else
+                startpageUrl = protocol + "://" + host;
+
             adminDashboardUrl       = startpageUrl + props.getProperty("adminDashboardUrl");
             adminTutorialUrl        = startpageUrl + props.getProperty("adminTutorialUrl");
             adminServiceListUrl     = startpageUrl + props.getProperty("adminServiceListUrl");

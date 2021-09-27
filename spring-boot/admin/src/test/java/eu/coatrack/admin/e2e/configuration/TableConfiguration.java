@@ -17,10 +17,10 @@ public class TableConfiguration {
     public static final String adminApiKeysEditButtonClassName = "fa-pencil-square-o";
 
     public static final String adminGatewaysTableId = "proxiesTable";
-    public static final int adminGatewaysTrashButtonColumn = 8;
+    public static final int adminGatewaysTrashButtonColumn = 9;
     public static final int adminGatewaysDefaultNameColumn = 0;
     public static final int adminGatewaysDetailsButtonColumn = 7;
-    public static final int adminGatewaysEditButtonColumn = 8;
+    public static final int adminGatewaysEditButtonColumn = 9;
     public static final int adminGatewaysIdColumn = 1;
     public static final String adminGatewaysDetailsButtonClassName = "fa-bar-chart";
     public static final String adminGatewaysEditButtonClassName = "fa-pencil-square-o";

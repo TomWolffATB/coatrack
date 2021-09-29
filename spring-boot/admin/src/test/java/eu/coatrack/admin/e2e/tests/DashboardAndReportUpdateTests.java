@@ -1,13 +1,11 @@
 package eu.coatrack.admin.e2e.tests;
 
+import eu.coatrack.admin.e2e.api.serviceConsumer.ConsumerDashboard;
 import eu.coatrack.admin.e2e.api.serviceProvider.AdminDashboard;
 import eu.coatrack.admin.e2e.api.tools.GatewayRunner;
-import io.swagger.models.auth.In;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.util.Map;
 
 public class DashboardAndReportUpdateTests extends AbstractTestSetup{
 
@@ -29,7 +27,11 @@ public class DashboardAndReportUpdateTests extends AbstractTestSetup{
     @Test
     public void dashboardTest(){
         AdminDashboard adminDashboard = pageFactory.getAdminDashboard();
-        System.out.println(adminDashboard.getCallsOfLoggedInUser());
+        ConsumerDashboard consumerDashboard = pageFactory.getConsumerDashboard();
+
+        System.out.println(consumerDashboard.getTotalApiCalls());
+        System.out.println(consumerDashboard.getErrorCount());
+        System.out.println(consumerDashboard.getNumberOfServicesCalled());
     }
 
     @AfterAll

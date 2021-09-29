@@ -20,7 +20,9 @@ package eu.coatrack.admin.e2e.api.tools;
  * #L%
  */
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.adminDashboardUrl;
 import static org.junit.jupiter.api.Assertions.assertEquals;

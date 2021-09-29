@@ -1,6 +1,6 @@
 package eu.coatrack.admin.e2e.api.serviceProvider;
 
-import eu.coatrack.admin.e2e.api.tools.UrlReachabilityTools;
+import eu.coatrack.admin.e2e.api.AbstractDashboardTemplate;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,28 +11,11 @@ import java.util.stream.Collectors;
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.adminDashboardUrl;
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.username;
 
-public class AdminDashboard {
-
-    private final WebDriver driver;
-    private final UrlReachabilityTools urlReachabilityTools;
+//TODO All the driver field and constructor logic could be simplified by using an abstract super class.
+public class AdminDashboard extends AbstractDashboardTemplate {
 
     public AdminDashboard(WebDriver driver) {
-        this.driver = driver;
-        urlReachabilityTools = new UrlReachabilityTools(driver);
-    }
-
-    public int getTotalApiCalls() {
-        return getIntegerValueOfElementWithId("callsThisPeriod");
-    }
-
-    private int getIntegerValueOfElementWithId(String elementId){
-        urlReachabilityTools.fastVisit(adminDashboardUrl);
-        WebElement callsThisPeriod = driver.findElement(By.id(elementId));
-        return Integer.parseInt(callsThisPeriod.getText());
-    }
-
-    public int getErrorCount() {
-        return getIntegerValueOfElementWithId("errorsThisPeriod");
+        super(driver, adminDashboardUrl);
     }
 
     public int getApiUsageTrend() {

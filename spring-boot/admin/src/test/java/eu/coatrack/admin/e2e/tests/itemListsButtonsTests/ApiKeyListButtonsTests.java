@@ -20,8 +20,8 @@ package eu.coatrack.admin.e2e.tests.itemListsButtonsTests;
  * #L%
  */
 
-import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminApiKeys;
-import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
+import eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup.AdminApiKeys;
+import eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
 import eu.coatrack.admin.e2e.tests.AbstractTestSetup;
 import org.junit.jupiter.api.*;
 

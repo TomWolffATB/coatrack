@@ -1,19 +1,20 @@
 package eu.coatrack.admin.e2e.api;
 
-import eu.coatrack.admin.e2e.api.serviceConsumer.ConsumerApiKeyList;
-import eu.coatrack.admin.e2e.api.serviceConsumer.ConsumerDashboard;
-import eu.coatrack.admin.e2e.api.serviceConsumer.ConsumerServiceOfferings;
-import eu.coatrack.admin.e2e.api.serviceProvider.AdminDashboard;
-import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminApiKeys;
-import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
-import eu.coatrack.admin.e2e.api.serviceProvider.AdminTutorial;
-import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
+import eu.coatrack.admin.e2e.api.pages.serviceConsumer.ConsumerApiKeyList;
+import eu.coatrack.admin.e2e.api.pages.serviceConsumer.ConsumerDashboard;
+import eu.coatrack.admin.e2e.api.pages.serviceConsumer.ConsumerServiceOfferings;
+import eu.coatrack.admin.e2e.api.pages.serviceProvider.AdminDashboard;
+import eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup.AdminApiKeys;
+import eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
+import eu.coatrack.admin.e2e.api.pages.serviceProvider.AdminTutorial;
+import eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
 import eu.coatrack.admin.e2e.api.tools.GatewayRunner;
 import eu.coatrack.admin.e2e.api.tools.UrlReachabilityTools;
 import org.openqa.selenium.WebDriver;
 import static eu.coatrack.admin.e2e.configuration.CookieInjector.injectAuthenticationCookieToDriver;
 
 //TODO Maybe it would be simpler to initialize every page at the beginning and make them public final fields.
+// But this approach could create problems as GatewayRunner is executed immediately and would consume resources even for small tests.
 public class PageFactory {
 
     private final WebDriver driver;

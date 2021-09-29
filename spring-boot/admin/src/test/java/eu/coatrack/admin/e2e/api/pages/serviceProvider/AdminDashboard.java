@@ -1,6 +1,6 @@
-package eu.coatrack.admin.e2e.api.serviceProvider;
+package eu.coatrack.admin.e2e.api.pages.serviceProvider;
 
-import eu.coatrack.admin.e2e.api.AbstractDashboardTemplate;
+import eu.coatrack.admin.e2e.api.pages.AbstractDashboardTemplate;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

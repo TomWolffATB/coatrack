@@ -1,4 +1,4 @@
-package eu.coatrack.admin.e2e.api.serviceProvider;
+package eu.coatrack.admin.e2e.api.pages.serviceProvider;
 
 /*-
  * #%L

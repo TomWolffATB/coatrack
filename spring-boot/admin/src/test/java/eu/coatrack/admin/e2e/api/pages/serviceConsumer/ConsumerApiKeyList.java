@@ -1,4 +1,4 @@
-package eu.coatrack.admin.e2e.api.serviceConsumer;
+package eu.coatrack.admin.e2e.api.pages.serviceConsumer;
 
 /*-
  * #%L
@@ -20,8 +20,8 @@ package eu.coatrack.admin.e2e.api.serviceConsumer;
  * #L%
  */
 
-import eu.coatrack.admin.e2e.api.tools.TableType;
-import eu.coatrack.admin.e2e.api.tools.TableUtils;
+import eu.coatrack.admin.e2e.api.tools.table.TableType;
+import eu.coatrack.admin.e2e.api.tools.table.TableUtils;
 import org.openqa.selenium.WebDriver;
 
 public class ConsumerApiKeyList {

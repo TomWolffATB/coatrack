@@ -20,7 +20,7 @@ package eu.coatrack.admin.e2e.configuration;
  * #L%
  */
 
-import eu.coatrack.admin.e2e.api.LoginPage;
+import eu.coatrack.admin.e2e.api.pages.LoginPage;
 import eu.coatrack.admin.e2e.exceptions.CookieSaveFileReadingError;
 import eu.coatrack.admin.e2e.exceptions.CookieSaveFileWritingError;
 import org.openqa.selenium.Cookie;

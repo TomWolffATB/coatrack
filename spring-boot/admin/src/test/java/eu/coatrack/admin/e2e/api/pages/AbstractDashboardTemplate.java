@@ -1,4 +1,4 @@
-package eu.coatrack.admin.e2e.api;
+package eu.coatrack.admin.e2e.api.pages;
 
 import eu.coatrack.admin.e2e.api.tools.UrlReachabilityTools;
 import org.openqa.selenium.By;

@@ -1,6 +1,6 @@
-package eu.coatrack.admin.e2e.api.serviceConsumer;
+package eu.coatrack.admin.e2e.api.pages.serviceConsumer;
 
-import eu.coatrack.admin.e2e.api.AbstractDashboardTemplate;
+import eu.coatrack.admin.e2e.api.pages.AbstractDashboardTemplate;
 import org.openqa.selenium.WebDriver;
 
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.consumerDashboardUrl;

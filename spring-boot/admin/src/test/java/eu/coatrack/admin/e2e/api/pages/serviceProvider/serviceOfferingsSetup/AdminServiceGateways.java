@@ -1,4 +1,4 @@
-package eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup;
+package eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup;
 
 /*-
  * #%L
@@ -20,8 +20,8 @@ package eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup;
  * #L%
  */
 
-import eu.coatrack.admin.e2e.api.tools.TableType;
-import eu.coatrack.admin.e2e.api.tools.TableUtils;
+import eu.coatrack.admin.e2e.api.tools.table.TableType;
+import eu.coatrack.admin.e2e.api.tools.table.TableUtils;
 import eu.coatrack.admin.e2e.api.tools.WaiterUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

@@ -1,4 +1,4 @@
-package eu.coatrack.admin.e2e.api.serviceConsumer;
+package eu.coatrack.admin.e2e.api.pages.serviceConsumer;
 
 /*-
  * #%L
@@ -20,14 +20,14 @@ package eu.coatrack.admin.e2e.api.serviceConsumer;
  * #L%
  */
 
-import eu.coatrack.admin.e2e.api.tools.TableUtils;
+import eu.coatrack.admin.e2e.api.tools.table.TableUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-import static eu.coatrack.admin.e2e.api.tools.TableType.*;
+import static eu.coatrack.admin.e2e.api.tools.table.TableType.*;
 import static eu.coatrack.admin.e2e.configuration.TableConfiguration.*;
 
 public class ConsumerServiceOfferings {

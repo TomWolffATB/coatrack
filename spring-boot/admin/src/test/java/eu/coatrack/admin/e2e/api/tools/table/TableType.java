@@ -1,4 +1,4 @@
-package eu.coatrack.admin.e2e.api.tools;
+package eu.coatrack.admin.e2e.api.tools.table;
 
 /*-
  * #%L

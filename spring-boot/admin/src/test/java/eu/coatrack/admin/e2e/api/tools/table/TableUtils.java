@@ -1,4 +1,4 @@
-package eu.coatrack.admin.e2e.api.tools;
+package eu.coatrack.admin.e2e.api.tools.table;
 
 /*-
  * #%L
@@ -20,6 +20,8 @@ package eu.coatrack.admin.e2e.api.tools;
  * #L%
  */
 
+import eu.coatrack.admin.e2e.api.tools.UrlReachabilityTools;
+import eu.coatrack.admin.e2e.api.tools.WaiterUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -27,7 +29,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static eu.coatrack.admin.e2e.api.tools.TableDetails.createTableDetailsFromTableType;
+import static eu.coatrack.admin.e2e.api.tools.table.TableDetails.createTableDetailsFromTableType;
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.e2e.configuration.TableConfiguration.*;
 

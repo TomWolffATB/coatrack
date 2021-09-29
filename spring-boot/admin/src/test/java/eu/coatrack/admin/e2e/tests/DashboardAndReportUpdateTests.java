@@ -1,7 +1,7 @@
 package eu.coatrack.admin.e2e.tests;
 
-import eu.coatrack.admin.e2e.api.serviceConsumer.ConsumerDashboard;
-import eu.coatrack.admin.e2e.api.serviceProvider.AdminDashboard;
+import eu.coatrack.admin.e2e.api.pages.serviceConsumer.ConsumerDashboard;
+import eu.coatrack.admin.e2e.api.pages.serviceProvider.AdminDashboard;
 import eu.coatrack.admin.e2e.api.tools.GatewayRunner;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;

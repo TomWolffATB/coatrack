@@ -2,12 +2,13 @@ package eu.coatrack.admin.e2e.api;
 
 import eu.coatrack.admin.e2e.api.serviceConsumer.ConsumerApiKeyList;
 import eu.coatrack.admin.e2e.api.serviceConsumer.ConsumerServiceOfferings;
+import eu.coatrack.admin.e2e.api.serviceProvider.AdminDashboard;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminApiKeys;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
 import eu.coatrack.admin.e2e.api.serviceProvider.AdminTutorial;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
 import eu.coatrack.admin.e2e.api.tools.GatewayRunner;
-import eu.coatrack.admin.e2e.api.tools.PageChecker;
+import eu.coatrack.admin.e2e.api.tools.UrlReachabilityTools;
 import org.openqa.selenium.WebDriver;
 import static eu.coatrack.admin.e2e.configuration.CookieInjector.injectAuthenticationCookieToDriver;
 
@@ -37,8 +38,8 @@ public class PageFactory {
         return new AdminApiKeys(driver);
     }
 
-    public PageChecker getPageChecker(){
-        return new PageChecker(driver);
+    public UrlReachabilityTools getPageChecker(){
+        return new UrlReachabilityTools(driver);
     }
 
     public void closeDriver(){
@@ -55,5 +56,9 @@ public class PageFactory {
 
     public GatewayRunner getGatewayRunner() {
         return GatewayRunner.createAndRunGateway(driver);
+    }
+
+    public AdminDashboard getAdminDashboard() {
+        return new AdminDashboard(driver);
     }
 }

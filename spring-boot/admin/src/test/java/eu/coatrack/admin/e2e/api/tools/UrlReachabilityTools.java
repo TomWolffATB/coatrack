@@ -22,15 +22,21 @@ package eu.coatrack.admin.e2e.api.tools;
 
 import org.openqa.selenium.WebDriver;
 
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.adminDashboardUrl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class PageChecker {
+public class UrlReachabilityTools {
 
     private final WebDriver driver;
 
-    public PageChecker(WebDriver driver) {
+    public UrlReachabilityTools(WebDriver driver) {
         this.driver = driver;
+    }
+
+    public void fastVisit(String urlToBeVisited){
+        if(!driver.getCurrentUrl().equals(urlToBeVisited))
+            driver.get(urlToBeVisited);
     }
 
     public void assertThatUrlIsReachable(String url){

@@ -36,22 +36,19 @@ public class TableUtils {
     private final WebDriver driver;
     private final WaiterUtils waiterUtils;
     private final TableDetails tableDetails;
+    private final UrlReachabilityTools urlReachabilityTools;
 
     public TableUtils(WebDriver driver, TableType tableType) {
         this.driver = driver;
         waiterUtils = new WaiterUtils(driver);
         tableDetails = createTableDetailsFromTableType(tableType);
+        urlReachabilityTools = new UrlReachabilityTools(driver);
     }
 
     public void deleteItem(String itemName) {
-        ensureDriverToBeAtCorrectTargetUrl();
+        urlReachabilityTools.fastVisit(tableDetails.tableUrl);
         WebElement rowOfItemToBeDeleted = getRowByItemName(itemName);
         deleteRow(rowOfItemToBeDeleted);
-    }
-
-    private void ensureDriverToBeAtCorrectTargetUrl(){
-        if (!driver.getCurrentUrl().equals(tableDetails.tableUrl))
-            driver.get(tableDetails.tableUrl);
     }
 
     private void deleteRow(WebElement row) {
@@ -71,14 +68,14 @@ public class TableUtils {
     }
 
     public List<String> getListOfColumnValues(int column){
-        ensureDriverToBeAtCorrectTargetUrl();
+        urlReachabilityTools.fastVisit(tableDetails.tableUrl);
         return getItemRows().stream()
                 .filter(row -> !getCellInColumn(row, 0).getText().contains(emptyTableText))
                 .map(row -> getCellInColumn(row, column).getText()).collect(Collectors.toList());
     }
 
     public List<WebElement> getItemRows() {
-        ensureDriverToBeAtCorrectTargetUrl();
+        urlReachabilityTools.fastVisit(tableDetails.tableUrl);
         waiterUtils.waitForElementWithId(tableDetails.tableId);
         WebElement itemTable = driver.findElement(By.id(tableDetails.tableId));
         List<WebElement> rows = itemTable.findElements(By.cssSelector("tr"));
@@ -87,7 +84,7 @@ public class TableUtils {
     }
 
     public boolean isItemWithinList(String itemName) {
-        ensureDriverToBeAtCorrectTargetUrl();
+        urlReachabilityTools.fastVisit(tableDetails.tableUrl);
         List<WebElement> rows = getItemRows();
         if (rows.isEmpty() || getCellInColumn(rows.get(0), 0).getText().contains(emptyTableText))
             return false;
@@ -98,7 +95,7 @@ public class TableUtils {
     }
 
     public void deleteAllItem(){
-        ensureDriverToBeAtCorrectTargetUrl();
+        urlReachabilityTools.fastVisit(tableDetails.tableUrl);
 
         List<WebElement> rows = getItemRows();
         while (true){

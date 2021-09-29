@@ -25,15 +25,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GatewayRunner {
 
-    private static WebDriver driver;
     private static final Logger logger = LoggerFactory.getLogger(GatewayRunner.class);
+
+    private static WebDriver driver;
+    private static GatewayRunner gatewayRunner = null;
 
     private final AdminTutorial adminTutorial;
     private final AdminApiKeys adminApiKeys;
     private final AdminServiceGateways adminServiceGateways;
     private final AdminServiceOfferings adminServiceOfferings;
-
-    private static GatewayRunner gatewayRunner = null;
 
     private Thread jarThread;
     private ItemDto itemDto;
@@ -48,12 +48,10 @@ public class GatewayRunner {
 
     public static GatewayRunner createAndRunGateway(WebDriver driver) {
         GatewayRunner.driver = driver;
-
         if (gatewayRunner != null)
             gatewayRunner.stopGatewayAndCleanup();
 
         gatewayRunner = new GatewayRunner();
-
         try {
             gatewayRunner.itemDto = gatewayRunner.adminTutorial.createItemsViaTutorial();
             gatewayRunner.file = downloadGateway(gatewayRunner.itemDto.gatewayDownloadLink);
@@ -63,7 +61,6 @@ public class GatewayRunner {
                 gatewayRunner.stopGatewayAndCleanup();
             throw new GatewayRunnerInitializationException("Something went wrong during the initialization process.", e);
         }
-
         return gatewayRunner;
     }
 
@@ -120,18 +117,31 @@ public class GatewayRunner {
 
         file.delete();
         assertFalse(file.exists());
+        GatewayRunner.gatewayRunner = null;
     }
 
-    public void makeValidCall() {
-        String servicesAccessUrl = gatewayAccessUrl + "/" + itemDto.serviceId + "?api-key=" + itemDto.apiKeyValue;
-        driver.get(servicesAccessUrl);
-
-        //TODO Add exception logic. If Example Domain is not found, something went wrong.
-        boolean result = driver.findElement(By.cssSelector("h1")).getText().equals("Example Domain");
+    public void makeValidServiceCall() {
+        boolean result = accessServiceUsingApiKey(itemDto.serviceId, itemDto.apiKeyValue);
         assertTrue(result);
     }
 
-    //Methods required: makeInvalidCall
+    private boolean accessServiceUsingApiKey(String serviceId, String apiKeyValue) {
+        String servicesAccessUrl = gatewayAccessUrl + "/" + serviceId + "?api-key=" + apiKeyValue;
+        driver.get(servicesAccessUrl);
+        return driver.findElement(By.cssSelector("h1")).getText().equals("Example Domain");
+    }
+
+    public void makeInvalidServiceCallUsingWrongServiceName() {
+        String wrongServiceId = itemDto.serviceId + "x";
+        boolean result = accessServiceUsingApiKey(wrongServiceId, itemDto.apiKeyValue);
+        assertFalse(result);
+    }
+
+    public void makeInvalidServiceCallUsingWrongApiKeyValue() {
+        String wrongApiKeyValue = itemDto.apiKeyValue + "x";
+        boolean result = accessServiceUsingApiKey(itemDto.serviceId, wrongApiKeyValue);
+        assertFalse(result);
+    }
 
     //TODO Remove assertions and creation Exception logic instead. Check other classes too.
 

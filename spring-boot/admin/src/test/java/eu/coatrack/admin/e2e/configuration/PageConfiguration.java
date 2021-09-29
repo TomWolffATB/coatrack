@@ -47,6 +47,7 @@ public class PageConfiguration {
     public static final String consumerReportsUrl;
 
     public static final String providerServiceUrl;
+    public static final String gatewayAccessUrl;
 
     static {
         File configFile = new File("config.properties");
@@ -81,6 +82,7 @@ public class PageConfiguration {
             consumerReportsUrl      = startpageUrl + props.getProperty("consumerReportsUrl");
 
             providerServiceUrl      = props.getProperty("providerServiceUrl");
+            gatewayAccessUrl      = props.getProperty("gatewayAccessUrl");
 
             reader.close();
         } catch (Exception e) {

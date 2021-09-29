@@ -20,10 +20,10 @@ package eu.coatrack.admin.e2e.api.tools;
  * #L%
  */
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import static eu.coatrack.admin.e2e.configuration.PageConfiguration.providerServiceUrl;
-import static eu.coatrack.admin.e2e.configuration.PageConfiguration.startpageUrl;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.*;
 
 public class ApiKeyTester {
 
@@ -33,9 +33,9 @@ public class ApiKeyTester {
         this.driver = driver;
     }
 
-    public boolean isServiceAccessible(String serviceId, String apiKeyValue) throws InterruptedException {
-        String callUrl = "http://localhost:8088/" + serviceId + "?api-key=" + apiKeyValue;
-        driver.get(callUrl);
-        return driver.getPageSource().contains("Example Domain");
+    public boolean isServiceAccessibleWithApiKey(String serviceId, String apiKeyValue) {
+        String servicesAccessUrl = gatewayAccessUrl + "/" + serviceId + "?api-key=" + apiKeyValue;
+        driver.get(servicesAccessUrl);
+        return driver.findElement(By.cssSelector("h1")).getText().equals("Example Domain");
     }
 }

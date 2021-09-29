@@ -51,13 +51,13 @@ public class TutorialTests extends AbstractTestSetup {
         Thread jarThread = executeJar(file);
 
         try {
-            boolean result = pageFactory.getApiKeyTester().isServiceAccessible(itemDto.serviceId, itemDto.apiKeyValue);
+            boolean result = pageFactory.getApiKeyTester().isServiceAccessibleWithApiKey(itemDto.serviceId, itemDto.apiKeyValue);
             assertTrue(result);
         } catch (Exception e){
             e.printStackTrace();
         } finally {
             jarThread.interrupt();
-            //cleanup(itemDto, file); //TODO To be uncommented.
+            cleanup(itemDto, file);
         }
         //TODO Implement service call testing logic. Wrap this in a try-catch block and execute 'interrupt()' and 'cleanup()' in a finally block.
         //TODO Add exception logic. E.g. when a download fails, then a 'GatewayDownloadFailedException' should be thrown immediately.

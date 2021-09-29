@@ -35,19 +35,20 @@ import java.util.Random;
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.adminTutorialUrl;
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.providerServiceUrl;
-import static eu.coatrack.admin.e2e.configuration.TableConfiguration.adminServicesIdColumn;
-import static eu.coatrack.admin.e2e.configuration.TableConfiguration.adminServicesNameColumn;
+import static eu.coatrack.admin.e2e.configuration.TableConfiguration.*;
 
 public class AdminTutorial {
 
     private final WebDriver driver;
     private final WaiterUtils waiterUtils;
     private final TableUtils adminServiceTableUtils;
+    private final TableUtils adminGatewayTableUtils;
 
     public AdminTutorial(WebDriver driver) {
         this.driver = driver;
         waiterUtils = new WaiterUtils(driver);
         adminServiceTableUtils = new TableUtils(driver, TableType.SERVICE_TABLE);
+        adminGatewayTableUtils = new TableUtils(driver, TableType.GATEWAY_TABLE);
     }
 
     public ItemDto createItemsViaTutorial(){
@@ -62,8 +63,9 @@ public class AdminTutorial {
         String[] gatewayDownloadLinkParts = gatewayDownloadLink.split("/");
         String gatewayIdentifier = gatewayDownloadLinkParts[gatewayDownloadLinkParts.length-2];
         String serviceId = adminServiceTableUtils.getColumnTextFromItemRow(serviceName, adminServicesNameColumn, adminServicesIdColumn);
+        String gatewayName = adminGatewayTableUtils.getColumnTextFromItemRow(gatewayIdentifier, adminGatewaysIdColumn, adminGatewaysNameColumn);
 
-        return new ItemDto(serviceName, serviceId, gatewayDownloadLink, gatewayIdentifier, apiKeyValue);
+        return new ItemDto(serviceName, serviceId, gatewayDownloadLink, gatewayName, gatewayIdentifier, apiKeyValue);
     }
 
     private void workThroughServiceCreationMenu(String serviceName) {

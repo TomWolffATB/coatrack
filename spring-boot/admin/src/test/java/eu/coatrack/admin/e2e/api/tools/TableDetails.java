@@ -54,7 +54,7 @@ public class TableDetails {
             tableId = adminGatewaysTableId;
             tableUrl = adminGatewayListUrl;
             trashButtonColumn = adminGatewaysTrashButtonColumn;
-            defaultNameColumn = adminGatewaysDefaultNameColumn;
+            defaultNameColumn = adminGatewaysNameColumn;
         } else if (tableType == TableType.APIKEY_TABLE) {
             tableId = adminApiKeysTableId;
             tableUrl = adminApiKeyListUrl;

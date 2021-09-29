@@ -38,7 +38,7 @@ public class TableConfiguration {
 
     public static final String adminGatewaysTableId = "proxiesTable";
     public static final int adminGatewaysTrashButtonColumn = 9;
-    public static final int adminGatewaysDefaultNameColumn = 0;
+    public static final int adminGatewaysNameColumn = 0;
     public static final int adminGatewaysDetailsButtonColumn = 7;
     public static final int adminGatewaysEditButtonColumn = 9;
     public static final int adminGatewaysIdColumn = 1;

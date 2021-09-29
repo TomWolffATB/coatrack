@@ -27,12 +27,14 @@ public class ItemDto {
     public final String gatewayDownloadLink;
     public final String apiKeyValue;
     public final String gatewayIdentifier;
+    public final String gatewayName;
 
-    public ItemDto(String serviceName, String serviceId, String gatewayDownloadLink, String gatewayIdentifier, String apiKeyValue) {
+    public ItemDto(String serviceName, String serviceId, String gatewayDownloadLink, String gatewayName, String gatewayIdentifier, String apiKeyValue) {
         this.serviceName = serviceName;
         this.serviceId = serviceId;
         this.gatewayDownloadLink = gatewayDownloadLink;
         this.apiKeyValue = apiKeyValue;
         this.gatewayIdentifier = gatewayIdentifier;
+        this.gatewayName = gatewayName;
     }
 }

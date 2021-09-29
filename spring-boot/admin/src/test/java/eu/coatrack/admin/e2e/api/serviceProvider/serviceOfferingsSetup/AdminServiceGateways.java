@@ -85,6 +85,6 @@ public class AdminServiceGateways {
     }
 
     public String getGatewayNameByIdentifier(String identifier){
-        return gatewayTableUtils.getColumnTextFromItemRow(identifier, adminGatewaysIdColumn, adminGatewaysDefaultNameColumn);
+        return gatewayTableUtils.getColumnTextFromItemRow(identifier, adminGatewaysIdColumn, adminGatewaysNameColumn);
     }
 }

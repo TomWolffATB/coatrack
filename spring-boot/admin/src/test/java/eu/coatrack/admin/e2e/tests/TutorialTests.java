@@ -23,37 +23,38 @@ public class TutorialTests extends AbstractTestSetup {
     public void tutorialTest() throws IOException, InterruptedException {
         ItemDto itemDto = pageFactory.getTutorial().createItemsViaTutorial();
 
-        //Download file
+        //TODO Gateway download test should be an isolated test and therefore separated from tutorial test.
+        // I want to test the download feature and only if this works, then continue to test jar execution features using other tests?
+        //TODO Gateway download should be hidden behind the API.
+        File file = downloadGateway(itemDto.gatewayDownloadLink);
+
+        Thread jarThread = executeJar(file);
+        Thread.sleep(30000); //TODO Implement service call testing logic. Wrap this in a try-catch block and execute 'interrupt()' and 'cleanup()' in a finally block.
+        jarThread.interrupt();
+        cleanup(itemDto, file);
+
+        //TODO Add exception logic. E.g. when a download fails, then a 'GatewayDownloadFailedException' should be thrown immediately.
+        //TODO Extend the API to make with a function that call a service using an API key.
+    }
+
+    private File downloadGateway(String gatewayDownloadLink) throws IOException, InterruptedException {
         File file = new File("test.jar");
         if (file.exists())
             file.delete();
         assertFalse(file.exists());
 
-        //TODO Gateway download test should be an isolated test and therefore separated from tutorial test.
-        // I want to test the download feature and only if this works, then continue to test jar execution features using other tests?
-        //TODO Gateway download should be hidden behind the API.
-        downloadGateway(itemDto);
-
-        assertTrue(file.exists());
-        assertTrue(file.length() > 1000);
-
-        Thread jarThread = executeJar();
-        Thread.sleep(30000);
-        jarThread.interrupt();
-
-        //TODO Extend the API to make calls by
-
-        cleanup(itemDto, file);
-    }
-
-    private void downloadGateway(ItemDto itemDto) throws IOException, InterruptedException {
         Runtime rt = Runtime.getRuntime();
         String firstPartOfCommand = "cmd /c curl -v ";
         if (host.equals("localhost"))
             firstPartOfCommand += "-k ";
-        String command = firstPartOfCommand + "--cookie \"SESSION=" + sessionCookie.getValue() + "\" --output ./test.jar " + itemDto.gatewayDownloadLink;
+        String command = firstPartOfCommand + "--cookie \"SESSION=" + sessionCookie.getValue() + "\" --output ./test.jar " + gatewayDownloadLink;
         Process pr = rt.exec(command);
         pr.waitFor();
+
+        assertTrue(file.exists());
+        assertTrue(file.length() > 1000);
+
+        return file;
     }
 
     private void cleanup(ItemDto itemDto, File file) {
@@ -68,12 +69,12 @@ public class TutorialTests extends AbstractTestSetup {
         assertFalse(file.exists());
     }
 
-    private Thread executeJar() {
+    private Thread executeJar(File file) {
         Thread jarExecutionThread = new Thread(() -> {
-            String line = "java -jar ./test.jar";
+            String line = "java -jar " + file.getPath();
             CommandLine cmdLine = CommandLine.parse(line);
             DefaultExecutor executor = new DefaultExecutor();
-            ExecuteWatchdog watchdog = new ExecuteWatchdog(120000);
+            ExecuteWatchdog watchdog = new ExecuteWatchdog(300000);
             executor.setWatchdog(watchdog);
             try {
                 executor.execute(cmdLine);
@@ -81,6 +82,7 @@ public class TutorialTests extends AbstractTestSetup {
                 logger.info("The execution of the jar file was interrupted.");
             }
         });
+        jarExecutionThread.setDaemon(true);
         jarExecutionThread.start();
         return jarExecutionThread;
     }

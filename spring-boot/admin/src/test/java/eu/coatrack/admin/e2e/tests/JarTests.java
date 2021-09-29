@@ -10,38 +10,36 @@ import java.time.LocalTime;
 public class JarTests {
 
     @Test
-    public void jarTest() throws IOException, InterruptedException {
+    public void jarTest() throws InterruptedException {
         Runtime rt = Runtime.getRuntime();
         final Process[] pr = {null};
-        Thread t = new Thread(){
-            @lombok.SneakyThrows
-            public void run(){
+        Thread t = new Thread(() -> {
+            try {
                 pr[0] = rt.exec("java -jar C:/Users/baier.ATB/Desktop/test.jar");
                 pr[0].waitFor();
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
             }
-        };
-        t.setDaemon(true);
+        });
         t.start();
 
         Thread.sleep(100);
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(pr[0].getInputStream()));
+        Thread t2 = new Thread(() -> {
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(pr[0].getInputStream()));
+                while (true)
+                    System.out.println(reader.readLine());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        t2.start();
 
-        int seconds1 = LocalTime.now().toSecondOfDay();
-        System.out.println("seconds1: " + seconds1);
-        int seconds2 = LocalTime.now().toSecondOfDay();
-        
-        String line2 = reader.readLine();
-        while (seconds2 - seconds1 < 30){
-            System.out.println(line2);
-            line2 = reader.readLine();
-            seconds2 = LocalTime.now().toSecondOfDay();
-            System.out.println("seconds2 - seconds1: " + (seconds2-seconds1));
-        }
+        //TODO wait until 'Started GatewayApplication' is found.
+        Thread.sleep(30000);
 
         System.out.println("Finished with the loop");
         pr[0].destroyForcibly();
     }
-
-
 }

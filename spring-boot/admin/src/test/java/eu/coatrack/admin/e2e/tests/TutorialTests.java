@@ -1,5 +1,25 @@
 package eu.coatrack.admin.e2e.tests;
 
+/*-
+ * #%L
+ * coatrack-admin
+ * %%
+ * Copyright (C) 2013 - 2021 Corizon | Institut für angewandte Systemtechnik Bremen GmbH (ATB)
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import eu.coatrack.admin.e2e.api.serviceProvider.ItemDto;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
 import org.apache.commons.exec.CommandLine;
@@ -29,10 +49,17 @@ public class TutorialTests extends AbstractTestSetup {
         File file = downloadGateway(itemDto.gatewayDownloadLink);
 
         Thread jarThread = executeJar(file);
-        Thread.sleep(30000); //TODO Implement service call testing logic. Wrap this in a try-catch block and execute 'interrupt()' and 'cleanup()' in a finally block.
-        jarThread.interrupt();
-        cleanup(itemDto, file);
 
+        try {
+            boolean result = pageFactory.getApiKeyTester().isServiceAccessible(itemDto.serviceId, itemDto.apiKeyValue);
+            assertTrue(result);
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            jarThread.interrupt();
+            //cleanup(itemDto, file); //TODO To be uncommented.
+        }
+        //TODO Implement service call testing logic. Wrap this in a try-catch block and execute 'interrupt()' and 'cleanup()' in a finally block.
         //TODO Add exception logic. E.g. when a download fails, then a 'GatewayDownloadFailedException' should be thrown immediately.
         //TODO Extend the API to make with a function that call a service using an API key.
     }
@@ -69,7 +96,7 @@ public class TutorialTests extends AbstractTestSetup {
         assertFalse(file.exists());
     }
 
-    private Thread executeJar(File file) {
+    private Thread executeJar(File file) throws InterruptedException {
         Thread jarExecutionThread = new Thread(() -> {
             String line = "java -jar " + file.getPath();
             CommandLine cmdLine = CommandLine.parse(line);
@@ -84,6 +111,10 @@ public class TutorialTests extends AbstractTestSetup {
         });
         jarExecutionThread.setDaemon(true);
         jarExecutionThread.start();
+
+        //TODO Wait until the gateway is setup and listens on port 8088. Maybe by fetching the logs?
+        Thread.sleep(30000);
+
         return jarExecutionThread;
     }
 

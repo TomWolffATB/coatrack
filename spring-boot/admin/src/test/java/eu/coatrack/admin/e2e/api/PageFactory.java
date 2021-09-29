@@ -1,17 +1,20 @@
 package eu.coatrack.admin.e2e.api;
 
+import eu.coatrack.admin.controllers.AdminControllerTest;
 import eu.coatrack.admin.e2e.api.serviceConsumer.ConsumerApiKeyList;
 import eu.coatrack.admin.e2e.api.serviceConsumer.ConsumerServiceOfferings;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminApiKeys;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
 import eu.coatrack.admin.e2e.api.serviceProvider.AdminTutorial;
 import eu.coatrack.admin.e2e.api.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
+import eu.coatrack.admin.e2e.api.tools.ApiKeyTester;
 import eu.coatrack.admin.e2e.api.tools.PageChecker;
 import org.openqa.selenium.WebDriver;
 import static eu.coatrack.admin.e2e.configuration.CookieInjector.injectAuthenticationCookieToDriver;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+//TODO Maybe it would be simpler to initialize every page at the beginning and make them public final fields.
 public class PageFactory {
 
     private final WebDriver driver;
@@ -51,5 +54,9 @@ public class PageFactory {
 
     public ConsumerApiKeyList getConsumersApiKeyList() {
         return new ConsumerApiKeyList(driver);
+    }
+
+    public ApiKeyTester getApiKeyTester() {
+        return new ApiKeyTester(driver);
     }
 }

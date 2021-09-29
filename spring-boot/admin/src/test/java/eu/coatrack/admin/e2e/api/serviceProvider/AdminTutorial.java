@@ -1,5 +1,27 @@
 package eu.coatrack.admin.e2e.api.serviceProvider;
 
+/*-
+ * #%L
+ * coatrack-admin
+ * %%
+ * Copyright (C) 2013 - 2021 Corizon | Institut für angewandte Systemtechnik Bremen GmbH (ATB)
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
+import eu.coatrack.admin.e2e.api.tools.TableType;
+import eu.coatrack.admin.e2e.api.tools.TableUtils;
 import eu.coatrack.admin.e2e.api.tools.WaiterUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -12,15 +34,20 @@ import java.util.Random;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.adminTutorialUrl;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.providerServiceUrl;
+import static eu.coatrack.admin.e2e.configuration.TableConfiguration.adminServicesIdColumn;
+import static eu.coatrack.admin.e2e.configuration.TableConfiguration.adminServicesNameColumn;
 
 public class AdminTutorial {
 
     private final WebDriver driver;
     private final WaiterUtils waiterUtils;
+    private final TableUtils adminServiceTableUtils;
 
     public AdminTutorial(WebDriver driver) {
         this.driver = driver;
         waiterUtils = new WaiterUtils(driver);
+        adminServiceTableUtils = new TableUtils(driver, TableType.SERVICE_TABLE);
     }
 
     public ItemDto createItemsViaTutorial(){
@@ -34,8 +61,9 @@ public class AdminTutorial {
         String apiKeyValue = driver.findElement(By.cssSelector(".row:nth-child(3) p:nth-child(2)")).getText();
         String[] gatewayDownloadLinkParts = gatewayDownloadLink.split("/");
         String gatewayIdentifier = gatewayDownloadLinkParts[gatewayDownloadLinkParts.length-2];
+        String serviceId = adminServiceTableUtils.getColumnTextFromItemRow(serviceName, adminServicesNameColumn, adminServicesIdColumn);
 
-        return new ItemDto(serviceName, gatewayDownloadLink, gatewayIdentifier, apiKeyValue);
+        return new ItemDto(serviceName, serviceId, gatewayDownloadLink, gatewayIdentifier, apiKeyValue);
     }
 
     private void workThroughServiceCreationMenu(String serviceName) {
@@ -50,7 +78,7 @@ public class AdminTutorial {
 
         waiterUtils.waitForElementWithId("serviceUrl");
         driver.findElement(By.id("serviceUrl")).click();
-        driver.findElement(By.id("serviceUrl")).sendKeys("https://www.bing.com");
+        driver.findElement(By.id("serviceUrl")).sendKeys(providerServiceUrl);
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
         waiterUtils.waitForElementWithId("serviceForFreeYes");

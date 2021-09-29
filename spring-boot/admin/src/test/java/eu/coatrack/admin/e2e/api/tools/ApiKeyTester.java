@@ -1,4 +1,4 @@
-package eu.coatrack.admin.e2e.exceptions;
+package eu.coatrack.admin.e2e.api.tools;
 
 /*-
  * #%L
@@ -20,8 +20,22 @@ package eu.coatrack.admin.e2e.exceptions;
  * #L%
  */
 
-public class CookieSaveFileReadingError extends RuntimeException {
-    public CookieSaveFileReadingError(String s, Exception e) {
-        super(s, e);
+import org.openqa.selenium.WebDriver;
+
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.providerServiceUrl;
+import static eu.coatrack.admin.e2e.configuration.PageConfiguration.startpageUrl;
+
+public class ApiKeyTester {
+
+    private final WebDriver driver;
+
+    public ApiKeyTester(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public boolean isServiceAccessible(String serviceId, String apiKeyValue) throws InterruptedException {
+        String callUrl = "http://localhost:8088/" + serviceId + "?api-key=" + apiKeyValue;
+        driver.get(callUrl);
+        return driver.getPageSource().contains("Example Domain");
     }
 }

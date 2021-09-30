@@ -24,6 +24,8 @@ import eu.coatrack.admin.e2e.api.PageFactory;
 import org.junit.jupiter.api.TestInstance;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+//TODO Make all tests works flawlessly for coatrack.eu and dev.coatrack.eu.
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class AbstractTestSetup {
 

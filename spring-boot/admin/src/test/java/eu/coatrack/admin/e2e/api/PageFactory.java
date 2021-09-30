@@ -2,6 +2,7 @@ package eu.coatrack.admin.e2e.api;
 
 import eu.coatrack.admin.e2e.api.pages.serviceConsumer.ConsumerApiKeyList;
 import eu.coatrack.admin.e2e.api.pages.serviceConsumer.ConsumerDashboard;
+import eu.coatrack.admin.e2e.api.pages.serviceConsumer.ConsumerReports;
 import eu.coatrack.admin.e2e.api.pages.serviceConsumer.ConsumerServiceOfferings;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.AdminDashboard;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.AdminReports;
@@ -71,5 +72,9 @@ public class PageFactory {
 
     public AdminReports getAdminReports() {
         return new AdminReports(driver);
+    }
+
+    public ConsumerReports getConsumerReports() {
+        return new ConsumerReports(driver);
     }
 }

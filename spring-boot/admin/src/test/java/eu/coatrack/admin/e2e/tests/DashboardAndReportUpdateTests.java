@@ -1,6 +1,7 @@
 package eu.coatrack.admin.e2e.tests;
 
 import eu.coatrack.admin.e2e.api.pages.serviceConsumer.ConsumerDashboard;
+import eu.coatrack.admin.e2e.api.pages.serviceConsumer.ConsumerReports;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.AdminDashboard;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.AdminReports;
 import eu.coatrack.admin.e2e.api.tools.GatewayRunner;
@@ -74,7 +75,7 @@ public class DashboardAndReportUpdateTests extends AbstractTestSetup{
     }
 
     @Test
-    public void adminReportUpdateTest() {
+    public void adminReportsUpdateTest() {
         AdminReports adminReports = pageFactory.getAdminReports();
         int calls = adminReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
 
@@ -84,6 +85,17 @@ public class DashboardAndReportUpdateTests extends AbstractTestSetup{
         gatewayRunner.makeValidServiceCall();
 
         assertEquals(calls + 2, adminReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName));
+    }
+
+    @Test
+    public void consumerReportsUpdateTest() {
+        ConsumerReports consumerReports = pageFactory.getConsumerReports();
+        int calls = consumerReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
+
+        gatewayRunner.makeValidServiceCall();
+        gatewayRunner.makeValidServiceCall();
+
+        assertEquals(calls + 2, consumerReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName));
     }
 
     @AfterAll

@@ -71,6 +71,7 @@ public class GatewayRunner {
         assertFalse(file.exists());
 
         Runtime rt = Runtime.getRuntime();
+        //TODO This is very slow when used for coatrack.eu. Maybe 'wsl curl' would be faster.
         String firstPartOfCommand = "cmd /c curl -v ";
         if (host.equals("localhost"))
             firstPartOfCommand += "-k ";

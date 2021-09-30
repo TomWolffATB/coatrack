@@ -86,7 +86,7 @@ public class TableUtils {
     }
 
     public boolean isItemWithinList(String itemName) {
-        urlReachabilityTools.fastVisit(tableDetails.tableUrl);
+        driver.get(tableDetails.tableUrl);
         List<WebElement> rows = getItemRows();
         if (rows.isEmpty() || getCellInColumn(rows.get(0), 0).getText().contains(emptyTableText))
             return false;

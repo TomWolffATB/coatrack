@@ -20,9 +20,11 @@ package eu.coatrack.admin.e2e.api.pages;
  * #L%
  */
 
+import eu.coatrack.admin.e2e.api.tools.WaiterUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.adminDashboardUrl;
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.startpageUrl;
 
@@ -30,20 +32,42 @@ import static eu.coatrack.admin.e2e.configuration.PageConfiguration.startpageUrl
 public class LoginPage {
 
     private final WebDriver driver;
+    private final WaiterUtils waiterUtils;
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
+        waiterUtils = new WaiterUtils(driver);
     }
 
     public void loginToGithub(String username, String password){
         driver.get(startpageUrl);
-        driver.findElement(By.cssSelector("ul:nth-child(1) > li:nth-child(4) > a")).click();
+        clickLoginButton();
         driver.findElement(By.id("login_field")).click();
         driver.findElement(By.id("login_field")).sendKeys(username);
         driver.findElement(By.id("password")).click();
         driver.findElement(By.id("password")).sendKeys(password);
         driver.findElement(By.name("commit")).click();
+
+        sleepMillis(2000);
+        if (driver.getPageSource().contains("Register New"))
+            createNewAccount();
+
         driver.get(adminDashboardUrl);
+    }
+
+    private void clickLoginButton() {
+        //TODO I need to find a better solution.
+        driver.findElement(By.cssSelector("ul:nth-child(1) > li:nth-child(4) > a")).click();
+    }
+
+    private void createNewAccount() {
+        driver.findElement(By.id("firstname")).sendKeys("John");
+        driver.findElement(By.name("lastname")).sendKeys("Connor");
+        driver.findElement(By.name("company")).sendKeys("Skynet");
+        driver.findElement(By.name("submit")).click();
+
+        driver.get(startpageUrl);
+        clickLoginButton();
     }
 
 }

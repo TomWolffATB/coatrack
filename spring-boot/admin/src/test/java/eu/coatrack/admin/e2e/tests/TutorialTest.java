@@ -20,7 +20,7 @@ package eu.coatrack.admin.e2e.tests;
  * #L%
  */
 
-import eu.coatrack.admin.e2e.api.pages.serviceProvider.ItemDto;
+import eu.coatrack.admin.e2e.api.pages.serviceProvider.ItemDetails;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup.AdminApiKeys;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
@@ -32,23 +32,23 @@ public class TutorialTest extends AbstractTestSetup {
 
     @Test
     public void tutorialTest() {
-        ItemDto itemDto = pageFactory.getTutorial().createItemsViaTutorial();
+        ItemDetails itemDetails = pageFactory.getTutorial().createItemsViaTutorial();
 
         AdminApiKeys adminApiKeys = pageFactory.getApiKeys();
-        boolean wasApiKeyCreated = adminApiKeys.isApiKeyWithinList(itemDto.apiKeyValue);
+        boolean wasApiKeyCreated = adminApiKeys.isApiKeyWithinList(itemDetails.apiKeyValue);
         assertTrue(wasApiKeyCreated);
 
         AdminServiceOfferings adminServiceOfferings = pageFactory.getServiceOfferings();
-        boolean wasServiceCreated = adminServiceOfferings.isServiceWithinList(itemDto.serviceName);
+        boolean wasServiceCreated = adminServiceOfferings.isServiceWithinList(itemDetails.serviceName);
         assertTrue(wasServiceCreated);
 
         AdminServiceGateways adminServiceGateways = pageFactory.getServiceGateways();
-        boolean wasGatewayCreated = adminServiceGateways.isGatewayWithinList(itemDto.gatewayName);
+        boolean wasGatewayCreated = adminServiceGateways.isGatewayWithinList(itemDetails.gatewayName);
         assertTrue(wasGatewayCreated);
 
-        adminApiKeys.deleteApiKey(itemDto.apiKeyValue);
-        adminServiceOfferings.deleteService(itemDto.serviceName);
-        adminServiceGateways.deleteGateway(itemDto.gatewayName);
+        adminApiKeys.deleteApiKey(itemDetails.apiKeyValue);
+        adminServiceOfferings.deleteService(itemDetails.serviceName);
+        adminServiceGateways.deleteGateway(itemDetails.gatewayName);
     }
 
 }

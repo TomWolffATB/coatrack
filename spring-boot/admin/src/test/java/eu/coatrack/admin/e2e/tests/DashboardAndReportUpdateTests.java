@@ -2,6 +2,7 @@ package eu.coatrack.admin.e2e.tests;
 
 import eu.coatrack.admin.e2e.api.pages.serviceConsumer.ConsumerDashboard;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.AdminDashboard;
+import eu.coatrack.admin.e2e.api.pages.serviceProvider.AdminReports;
 import eu.coatrack.admin.e2e.api.tools.GatewayRunner;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -70,6 +71,19 @@ public class DashboardAndReportUpdateTests extends AbstractTestSetup{
         gatewayRunner.makeValidServiceCall();
 
         assertEquals(numberOfServicesCalled + 1, consumerDashboard.getNumberOfServicesCalled());
+    }
+
+    @Test
+    public void adminReportUpdateTest() {
+        AdminReports adminReports = pageFactory.getAdminReports();
+        int calls = adminReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
+
+        //TODO Maybe all fields should be saved at the beginning, then two service call are performed once, and after
+        // that all the tests are run. This requires only two service call in total.
+        gatewayRunner.makeValidServiceCall();
+        gatewayRunner.makeValidServiceCall();
+
+        assertEquals(calls + 2, adminReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName));
     }
 
     @AfterAll

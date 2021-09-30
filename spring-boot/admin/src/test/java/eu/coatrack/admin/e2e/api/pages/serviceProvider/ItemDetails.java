@@ -20,7 +20,7 @@ package eu.coatrack.admin.e2e.api.pages.serviceProvider;
  * #L%
  */
 
-public class ItemDto {
+public class ItemDetails {
 
     public final String serviceName;
     public final String serviceId;
@@ -29,7 +29,7 @@ public class ItemDto {
     public final String gatewayIdentifier;
     public final String gatewayName;
 
-    public ItemDto(String serviceName, String serviceId, String gatewayDownloadLink, String gatewayName, String gatewayIdentifier, String apiKeyValue) {
+    public ItemDetails(String serviceName, String serviceId, String gatewayDownloadLink, String gatewayName, String gatewayIdentifier, String apiKeyValue) {
         this.serviceName = serviceName;
         this.serviceId = serviceId;
         this.gatewayDownloadLink = gatewayDownloadLink;

@@ -51,7 +51,7 @@ public class AdminTutorial {
         adminGatewayTableUtils = new TableUtils(driver, TableType.GATEWAY_TABLE);
     }
 
-    public ItemDto createItemsViaTutorial(){
+    public ItemDetails createItemsViaTutorial(){
         String serviceName = "my-service" + new Random().nextInt();
         workThroughServiceCreationMenu(serviceName);
 
@@ -65,7 +65,7 @@ public class AdminTutorial {
         String serviceId = adminServiceTableUtils.getColumnTextFromItemRow(serviceName, adminServicesNameColumn, adminServicesIdColumn);
         String gatewayName = adminGatewayTableUtils.getColumnTextFromItemRow(gatewayIdentifier, adminGatewaysIdColumn, adminGatewaysNameColumn);
 
-        return new ItemDto(serviceName, serviceId, gatewayDownloadLink, gatewayName, gatewayIdentifier, apiKeyValue);
+        return new ItemDetails(serviceName, serviceId, gatewayDownloadLink, gatewayName, gatewayIdentifier, apiKeyValue);
     }
 
     private void workThroughServiceCreationMenu(String serviceName) {

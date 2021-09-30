@@ -1,7 +1,7 @@
 package eu.coatrack.admin.e2e.api.tools;
 
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.AdminTutorial;
-import eu.coatrack.admin.e2e.api.pages.serviceProvider.ItemDto;
+import eu.coatrack.admin.e2e.api.pages.serviceProvider.ItemDetails;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup.AdminApiKeys;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
@@ -36,7 +36,7 @@ public class GatewayRunner {
     private final AdminServiceOfferings adminServiceOfferings;
 
     private Thread jarThread;
-    private ItemDto itemDto;
+    private ItemDetails itemDetails;
     private File file;
 
     private GatewayRunner() {
@@ -53,8 +53,8 @@ public class GatewayRunner {
 
         gatewayRunner = new GatewayRunner();
         try {
-            gatewayRunner.itemDto = gatewayRunner.adminTutorial.createItemsViaTutorial();
-            gatewayRunner.file = downloadGateway(gatewayRunner.itemDto.gatewayDownloadLink);
+            gatewayRunner.itemDetails = gatewayRunner.adminTutorial.createItemsViaTutorial();
+            gatewayRunner.file = downloadGateway(gatewayRunner.itemDetails.gatewayDownloadLink);
             gatewayRunner.jarThread = executeGatewayJar(gatewayRunner.file);
         } catch (Exception e) {
             if (gatewayRunner.jarThread != null)
@@ -109,11 +109,11 @@ public class GatewayRunner {
     public void stopGatewayAndCleanup() {
         jarThread.interrupt();
 
-        String gatewayName = adminServiceGateways.getGatewayNameByIdentifier(itemDto.gatewayIdentifier);
+        String gatewayName = adminServiceGateways.getGatewayNameByIdentifier(itemDetails.gatewayIdentifier);
         adminServiceGateways.deleteGateway(gatewayName);
 
-        adminApiKeys.deleteApiKey(itemDto.apiKeyValue);
-        adminServiceOfferings.deleteService(itemDto.serviceName);
+        adminApiKeys.deleteApiKey(itemDetails.apiKeyValue);
+        adminServiceOfferings.deleteService(itemDetails.serviceName);
 
         file.delete();
         assertFalse(file.exists());
@@ -121,7 +121,7 @@ public class GatewayRunner {
     }
 
     public void makeValidServiceCall() {
-        boolean result = accessServiceUsingApiKey(itemDto.serviceId, itemDto.apiKeyValue);
+        boolean result = accessServiceUsingApiKey(itemDetails.serviceId, itemDetails.apiKeyValue);
         assertTrue(result);
     }
 
@@ -132,15 +132,19 @@ public class GatewayRunner {
     }
 
     public void makeInvalidServiceCallUsingWrongServiceName() {
-        String wrongServiceId = itemDto.serviceId + "x";
-        boolean result = accessServiceUsingApiKey(wrongServiceId, itemDto.apiKeyValue);
+        String wrongServiceId = itemDetails.serviceId + "x";
+        boolean result = accessServiceUsingApiKey(wrongServiceId, itemDetails.apiKeyValue);
         assertFalse(result);
     }
 
     public void makeInvalidServiceCallUsingWrongApiKeyValue() {
-        String wrongApiKeyValue = itemDto.apiKeyValue + "x";
-        boolean result = accessServiceUsingApiKey(itemDto.serviceId, wrongApiKeyValue);
+        String wrongApiKeyValue = itemDetails.apiKeyValue + "x";
+        boolean result = accessServiceUsingApiKey(itemDetails.serviceId, wrongApiKeyValue);
         assertFalse(result);
+    }
+
+    public ItemDetails getItemDetails() {
+        return itemDetails;
     }
 
     //TODO Remove assertions and creation Exception logic instead. Check other classes too.

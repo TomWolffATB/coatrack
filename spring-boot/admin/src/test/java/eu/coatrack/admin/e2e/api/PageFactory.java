@@ -4,6 +4,7 @@ import eu.coatrack.admin.e2e.api.pages.serviceConsumer.ConsumerApiKeyList;
 import eu.coatrack.admin.e2e.api.pages.serviceConsumer.ConsumerDashboard;
 import eu.coatrack.admin.e2e.api.pages.serviceConsumer.ConsumerServiceOfferings;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.AdminDashboard;
+import eu.coatrack.admin.e2e.api.pages.serviceProvider.AdminReports;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup.AdminApiKeys;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.AdminTutorial;
@@ -66,5 +67,9 @@ public class PageFactory {
 
     public ConsumerDashboard getConsumerDashboard() {
         return new ConsumerDashboard(driver);
+    }
+
+    public AdminReports getAdminReports() {
+        return new AdminReports(driver);
     }
 }

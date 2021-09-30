@@ -82,7 +82,8 @@ public class PageConfiguration {
             consumerReportsUrl      = startpageUrl + props.getProperty("consumerReportsUrl");
 
             providerServiceUrl      = props.getProperty("providerServiceUrl");
-            gatewayAccessUrl      = props.getProperty("gatewayAccessUrl");
+            gatewayAccessUrl        = props.getProperty("gatewayAccessUrl");
+
 
             reader.close();
         } catch (Exception e) {

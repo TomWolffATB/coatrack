@@ -26,9 +26,10 @@ import org.openqa.selenium.WebDriver;
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.adminDashboardUrl;
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.startpageUrl;
 
+//TODO The tests should be enabled to login to dev.coatrack.eu which includes the account creation.
 public class LoginPage {
 
-    private WebDriver driver;
+    private final WebDriver driver;
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;

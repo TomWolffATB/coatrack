@@ -83,7 +83,7 @@ public class GatewayRunner {
         pr.waitFor();
 
         if (!file.exists() || file.length() < 1000)
-            throw new GatewayDownloadFailedException("Trying to download the Gateway " + gatewayRunner.itemDetails.gatewayName + " an error occurred.");
+            throw new GatewayDownloadFailedException("Trying to download the Gateway '" + gatewayRunner.itemDetails.gatewayName + "' an error occurred.");
         return file;
     }
 

@@ -13,89 +13,62 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DashboardAndReportUpdateTests extends AbstractTestSetup{
 
-    private GatewayRunner gatewayRunner;
-    private ServiceProviderDashboard serviceProviderDashboard;
-    private ServiceConsumerDashboard consumerDashboard;
-    private int numberOfServicesCalled;
+    private final GatewayRunner gatewayRunner = pageFactory.getGatewayRunner();
+    private final ServiceProviderDashboard serviceProviderDashboard = pageFactory.getServiceProviderDashboard();
+    private final ServiceConsumerDashboard consumerDashboard = pageFactory.getServiceConsumerDashboard();
+
+    private final int serviceProviderTotalApiCalls = serviceProviderDashboard.getTotalApiCalls();
+    private final int serviceProviderApiUsageTrend = serviceProviderDashboard.getApiUsageTrend();
+    private final int serviceProviderCallsOfLoggedInUser = serviceProviderDashboard.getCallsOfLoggedInUser();
+
+    private final int serviceConsumerTotalApiCalls = consumerDashboard.getTotalApiCalls();
+    private final int serviceConsumerNumberOfServicesCalled = consumerDashboard.getNumberOfServicesCalled();
+
+    private final ServiceProviderReports serviceProviderReports = pageFactory.getServiceProviderReports();
+    private final int serviceProviderReportedServiceCalls = serviceProviderReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
+
+    private final ServiceConsumerReports serviceConsumerReports = pageFactory.getServiceConsumerReports();
+    private final int serviceConsumerReportedServiceCalls = serviceConsumerReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
 
     @BeforeAll
     public void setupGatewayRunner() {
-        gatewayRunner = pageFactory.getGatewayRunner();
-        serviceProviderDashboard = pageFactory.getServiceProviderDashboard();
-        consumerDashboard = pageFactory.getServiceConsumerDashboard();
-        numberOfServicesCalled = consumerDashboard.getNumberOfServicesCalled();
+        gatewayRunner.makeValidServiceCall();
+        gatewayRunner.makeValidServiceCall();
     }
 
     @Test
     public void serviceProviderDashboardTotalApiCallsUpdateTest() {
-        int totalApiCalls = serviceProviderDashboard.getTotalApiCalls();
-
-        gatewayRunner.makeValidServiceCall();
-        gatewayRunner.makeValidServiceCall();
-
-        assertEquals(totalApiCalls + 2, serviceProviderDashboard.getTotalApiCalls());
+        assertEquals(serviceProviderTotalApiCalls + 2, serviceProviderDashboard.getTotalApiCalls());
     }
 
     @Test
     public void serviceProviderDashboardApiUsageTrendUpdateTest() {
-        int apiUsageTrend = serviceProviderDashboard.getApiUsageTrend();
-
-        gatewayRunner.makeValidServiceCall();
-        gatewayRunner.makeValidServiceCall();
-
-        assertEquals(apiUsageTrend + 2, serviceProviderDashboard.getApiUsageTrend());
+        assertEquals(serviceProviderApiUsageTrend + 2, serviceProviderDashboard.getApiUsageTrend());
     }
 
     @Test
     public void serviceProviderDashboardCallsOfLoggedInUserUpdateTest() {
-        int callsOfLoggedInUser = serviceProviderDashboard.getCallsOfLoggedInUser();
-
-        gatewayRunner.makeValidServiceCall();
-        gatewayRunner.makeValidServiceCall();
-
-        assertEquals(callsOfLoggedInUser + 2, serviceProviderDashboard.getCallsOfLoggedInUser());
+        assertEquals(serviceProviderCallsOfLoggedInUser + 2, serviceProviderDashboard.getCallsOfLoggedInUser());
     }
 
     @Test
     public void consumerDashboardTotalApiCallsUpdateTest() {
-        int totalApiCalls = consumerDashboard.getTotalApiCalls();
-
-        gatewayRunner.makeValidServiceCall();
-        gatewayRunner.makeValidServiceCall();
-
-        assertEquals(totalApiCalls + 2, consumerDashboard.getTotalApiCalls());
+        assertEquals(serviceConsumerTotalApiCalls + 2, consumerDashboard.getTotalApiCalls());
     }
 
     @Test
     public void consumerDashboardNumberOfServicesCalledUpdateTest() {
-        gatewayRunner.makeValidServiceCall();
-        gatewayRunner.makeValidServiceCall();
-
-        assertEquals(numberOfServicesCalled + 1, consumerDashboard.getNumberOfServicesCalled());
+        assertEquals(serviceConsumerNumberOfServicesCalled + 1, consumerDashboard.getNumberOfServicesCalled());
     }
 
     @Test
     public void serviceProviderReportsUpdateTest() {
-        ServiceProviderReports serviceProviderReports = pageFactory.getServiceProviderReports();
-        int calls = serviceProviderReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
-
-        //TODO Maybe all fields should be saved at the beginning, then two service call are performed once, and after
-        // that all the tests are run. This requires only two service call in total.
-        gatewayRunner.makeValidServiceCall();
-        gatewayRunner.makeValidServiceCall();
-
-        assertEquals(calls + 2, serviceProviderReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName));
+        assertEquals(serviceProviderReportedServiceCalls + 2, serviceProviderReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName));
     }
 
     @Test
     public void consumerReportsUpdateTest() {
-        ServiceConsumerReports consumerReports = pageFactory.getServiceConsumerReports();
-        int calls = consumerReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
-
-        gatewayRunner.makeValidServiceCall();
-        gatewayRunner.makeValidServiceCall();
-
-        assertEquals(calls + 2, consumerReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName));
+        assertEquals(serviceConsumerReportedServiceCalls + 2, serviceConsumerReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName));
     }
 
     @AfterAll

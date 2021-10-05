@@ -21,9 +21,9 @@ package eu.coatrack.admin.selenium.api.tools.table;
  */
 
 public enum TableType {
-    GATEWAY_TABLE,
-    SERVICE_TABLE,
-    APIKEY_TABLE,
+    PROVIDER_GATEWAY_TABLE,
+    PROVIDER_SERVICE_TABLE,
+    PROVIDER_APIKEY_TABLE,
     CONSUMER_APIKEY_TABLE,
     CONSUMER_SERVICE_TABLE
 }

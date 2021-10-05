@@ -29,6 +29,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.io.*;
 
+import static eu.coatrack.admin.selenium.api.PageFactory.loginPage;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.*;
 
 public class CookieInjector {
@@ -86,7 +87,7 @@ public class CookieInjector {
     }
 
     private static Cookie createCookieViaGitHubLogin(WebDriver driver) {
-        new LoginPage(driver).loginToGithub(username, password);
+        loginPage.loginToGithub(username, password);
         return driver.manage().getCookies().stream().filter(cookie -> cookie.getName().equals("SESSION")).findFirst().get();
     }
 

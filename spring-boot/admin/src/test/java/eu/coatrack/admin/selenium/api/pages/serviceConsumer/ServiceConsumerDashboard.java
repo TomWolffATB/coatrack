@@ -7,8 +7,8 @@ import static eu.coatrack.admin.selenium.configuration.PageConfiguration.service
 
 public class ServiceConsumerDashboard extends AbstractDashboardTemplate {
 
-    public ServiceConsumerDashboard(WebDriver driver) {
-        super(driver, serviceConsumerDashboardUrl);
+    public ServiceConsumerDashboard() {
+        super(serviceConsumerDashboardUrl);
     }
 
     public int getNumberOfServicesCalled(){

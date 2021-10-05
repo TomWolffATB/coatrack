@@ -32,24 +32,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Random;
 
+import static eu.coatrack.admin.selenium.api.UtilFactory.*;
 import static eu.coatrack.admin.selenium.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.serviceProviderTutorialUrl;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.exampleServiceUrl;
 import static eu.coatrack.admin.selenium.configuration.TableConfiguration.*;
 
 public class ServiceProviderTutorial {
-
-    private final WebDriver driver;
-    private final WaiterUtils waiterUtils;
-    private final TableUtils serviceProviderServiceTableUtils;
-    private final TableUtils serviceProviderGatewayTableUtils;
-
-    public ServiceProviderTutorial(WebDriver driver) {
-        this.driver = driver;
-        waiterUtils = new WaiterUtils(driver);
-        serviceProviderServiceTableUtils = new TableUtils(driver, TableType.SERVICE_TABLE);
-        serviceProviderGatewayTableUtils = new TableUtils(driver, TableType.GATEWAY_TABLE);
-    }
 
     public ItemDetails createItemsViaTutorial(){
         String serviceName = "my-service" + new Random().nextInt();

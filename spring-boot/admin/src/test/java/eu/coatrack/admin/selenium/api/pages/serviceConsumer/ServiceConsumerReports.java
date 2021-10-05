@@ -7,7 +7,7 @@ import static eu.coatrack.admin.selenium.configuration.PageConfiguration.service
 
 public class ServiceConsumerReports extends AbstractReportsTemplate {
 
-    public ServiceConsumerReports(WebDriver driver) {
-        super(driver, serviceConsumerReportsUrl);
+    public ServiceConsumerReports() {
+        super(serviceConsumerReportsUrl);
     }
 }

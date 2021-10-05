@@ -45,17 +45,17 @@ public class TableDetails {
         int trashButtonColumn;
         int defaultNameColumn;
 
-        if (tableType == TableType.SERVICE_TABLE){
+        if (tableType == TableType.PROVIDER_SERVICE_TABLE){
             tableId = serviceProviderServicesTableId;
             tableUrl = serviceProviderServicesUrl;
             trashButtonColumn = serviceProviderServicesTrashButtonColumn;
             defaultNameColumn = serviceProviderServicesDefaultNameColumn;
-        } else if (tableType == TableType.GATEWAY_TABLE) {
+        } else if (tableType == TableType.PROVIDER_GATEWAY_TABLE) {
             tableId = serviceProviderGatewaysTableId;
             tableUrl = serviceProviderGatewaysUrl;
             trashButtonColumn = serviceProviderGatewaysTrashButtonColumn;
             defaultNameColumn = serviceProviderGatewaysNameColumn;
-        } else if (tableType == TableType.APIKEY_TABLE) {
+        } else if (tableType == TableType.PROVIDER_APIKEY_TABLE) {
             tableId = serviceProviderApiKeysTableId;
             tableUrl = serviceProviderApiKeysUrl;
             trashButtonColumn = serviceProviderApiKeysTrashButtonColumn;

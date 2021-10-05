@@ -27,6 +27,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import java.util.Random;
 
+import static eu.coatrack.admin.selenium.api.UtilFactory.driver;
+import static eu.coatrack.admin.selenium.api.UtilFactory.serviceProviderServiceTableUtils;
 import static eu.coatrack.admin.selenium.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.serviceProviderServicesUrl;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.exampleServiceUrl;
@@ -34,14 +36,6 @@ import static eu.coatrack.admin.selenium.configuration.TableConfiguration.*;
 
 
 public class ServiceProviderServices {
-
-    private final WebDriver driver;
-    private final TableUtils serviceTableUtils;
-
-    public ServiceProviderServices(WebDriver driver) {
-        this.driver = driver;
-        serviceTableUtils = new TableUtils(driver, TableType.SERVICE_TABLE);
-    }
 
     public String createPublicService() {
         driver.get(serviceProviderServicesUrl);
@@ -73,26 +67,26 @@ public class ServiceProviderServices {
     }
 
     public boolean isServiceWithinList(String serviceName) {
-        return serviceTableUtils.isItemWithinList(serviceName);
+        return serviceProviderServiceTableUtils.isItemWithinList(serviceName);
     }
 
     public void deleteService(String serviceName){
-        serviceTableUtils.deleteItem(serviceName);
+        serviceProviderServiceTableUtils.deleteItem(serviceName);
     }
 
     public void deleteAllServices() {
-        serviceTableUtils.deleteAllItem();
+        serviceProviderServiceTableUtils.deleteAllItem();
     }
 
     public void clickOnFirstEditButtonOfService(String serviceName) {
-        serviceTableUtils.clickOnButton(serviceName, serviceProviderServicesFirstEditButtonColumn, serviceProviderServicesFirstEditButtonClassName);
+        serviceProviderServiceTableUtils.clickOnButton(serviceName, serviceProviderServicesFirstEditButtonColumn, serviceProviderServicesFirstEditButtonClassName);
     }
 
     public void clickDetailsButtonOfService(String serviceName) {
-        serviceTableUtils.clickOnButton(serviceName, serviceProviderServicesDetailsButtonColumn, serviceProviderServicesDetailsButtonClassName);
+        serviceProviderServiceTableUtils.clickOnButton(serviceName, serviceProviderServicesDetailsButtonColumn, serviceProviderServicesDetailsButtonClassName);
     }
 
     public void clickOnSecondEditButtonOfService(String serviceName) {
-        serviceTableUtils.clickOnButton(serviceName, serviceProviderServicesSecondEditButtonColumn, serviceProviderServicesSecondEditButtonClassName);
+        serviceProviderServiceTableUtils.clickOnButton(serviceName, serviceProviderServicesSecondEditButtonColumn, serviceProviderServicesSecondEditButtonClassName);
     }
 }

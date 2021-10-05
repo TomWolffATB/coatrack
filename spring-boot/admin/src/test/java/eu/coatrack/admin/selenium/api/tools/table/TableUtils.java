@@ -29,22 +29,19 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static eu.coatrack.admin.selenium.api.PageFactory.urlReachabilityTools;
+import static eu.coatrack.admin.selenium.api.UtilFactory.driver;
+import static eu.coatrack.admin.selenium.api.UtilFactory.waiterUtils;
 import static eu.coatrack.admin.selenium.api.tools.table.TableDetails.createTableDetailsFromTableType;
 import static eu.coatrack.admin.selenium.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.selenium.configuration.TableConfiguration.*;
 
 public class TableUtils {
 
-    private final WebDriver driver;
-    private final WaiterUtils waiterUtils;
     private final TableDetails tableDetails;
-    private final UrlReachabilityTools urlReachabilityTools;
 
-    public TableUtils(WebDriver driver, TableType tableType) {
-        this.driver = driver;
-        waiterUtils = new WaiterUtils(driver);
+    public TableUtils(TableType tableType) {
         tableDetails = createTableDetailsFromTableType(tableType);
-        urlReachabilityTools = new UrlReachabilityTools(driver);
     }
 
     public void deleteItem(String itemName) {

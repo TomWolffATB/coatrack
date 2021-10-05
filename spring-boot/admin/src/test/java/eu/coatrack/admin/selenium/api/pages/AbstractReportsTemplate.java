@@ -6,16 +6,15 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static eu.coatrack.admin.selenium.api.UtilFactory.driver;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.serviceProviderReportsUrl;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.username;
 
 public abstract class AbstractReportsTemplate {
 
-    private final WebDriver driver;
     private final String reportsPageUrl;
 
-    public AbstractReportsTemplate(WebDriver driver, String reportsPageUrl) {
-        this.driver = driver;
+    public AbstractReportsTemplate(String reportsPageUrl) {
         this.reportsPageUrl = reportsPageUrl;
     }
 

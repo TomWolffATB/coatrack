@@ -23,16 +23,11 @@ package eu.coatrack.admin.selenium.api.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import static eu.coatrack.admin.selenium.api.UtilFactory.driver;
 import static eu.coatrack.admin.selenium.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.serviceProviderDashboardUrl;
 
 public class LoginPage {
-
-    private final WebDriver driver;
-
-    public LoginPage(WebDriver driver) {
-        this.driver = driver;
-    }
 
     public void loginToGithub(String username, String password){
         driver.get(serviceProviderDashboardUrl);

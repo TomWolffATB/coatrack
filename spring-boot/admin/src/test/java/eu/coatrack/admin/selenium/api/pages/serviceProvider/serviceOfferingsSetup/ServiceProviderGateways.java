@@ -20,28 +20,15 @@ package eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSet
  * #L%
  */
 
-import eu.coatrack.admin.selenium.api.tools.table.TableType;
-import eu.coatrack.admin.selenium.api.tools.table.TableUtils;
-import eu.coatrack.admin.selenium.api.tools.WaiterUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 
 import java.util.Random;
 
+import static eu.coatrack.admin.selenium.api.UtilFactory.*;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.serviceProviderGatewaysUrl;
 import static eu.coatrack.admin.selenium.configuration.TableConfiguration.*;
 
 public class ServiceProviderGateways {
-
-    private final WebDriver driver;
-    private final WaiterUtils waiterUtils;
-    private final TableUtils gatewayTableUtils;
-
-    public ServiceProviderGateways(WebDriver driver) {
-        this.driver = driver;
-        waiterUtils = new WaiterUtils(driver);
-        gatewayTableUtils = new TableUtils(driver, TableType.GATEWAY_TABLE);
-    }
 
     public String createGateway() {
         driver.get(serviceProviderGatewaysUrl);
@@ -65,26 +52,26 @@ public class ServiceProviderGateways {
     }
 
     public boolean isGatewayWithinList(String gatewayName) {
-        return gatewayTableUtils.isItemWithinList(gatewayName);
+        return serviceProviderGatewayTableUtils.isItemWithinList(gatewayName);
     }
 
     public void deleteGateway(String gatewayName) {
-        gatewayTableUtils.deleteItem(gatewayName);
+        serviceProviderGatewayTableUtils.deleteItem(gatewayName);
     }
 
     public void deleteAllGateways() {
-        gatewayTableUtils.deleteAllItem();
+        serviceProviderGatewayTableUtils.deleteAllItem();
     }
 
     public void clickOnDetailsButtonOfGateway(String gatewayName) {
-        gatewayTableUtils.clickOnButton(gatewayName, serviceProviderGatewaysDetailsButtonColumn, serviceProviderGatewaysDetailsButtonClassName);
+        serviceProviderGatewayTableUtils.clickOnButton(gatewayName, serviceProviderGatewaysDetailsButtonColumn, serviceProviderGatewaysDetailsButtonClassName);
     }
 
     public void clickOnEditButtonOfGateway(String gatewayName) {
-        gatewayTableUtils.clickOnButton(gatewayName, serviceProviderGatewaysEditButtonColumn, serviceProviderGatewaysEditButtonClassName);
+        serviceProviderGatewayTableUtils.clickOnButton(gatewayName, serviceProviderGatewaysEditButtonColumn, serviceProviderGatewaysEditButtonClassName);
     }
 
     public String getGatewayNameByIdentifier(String identifier){
-        return gatewayTableUtils.getColumnTextFromItemRow(identifier, serviceProviderGatewaysIdColumn, serviceProviderGatewaysNameColumn);
+        return serviceProviderGatewayTableUtils.getColumnTextFromItemRow(identifier, serviceProviderGatewaysIdColumn, serviceProviderGatewaysNameColumn);
     }
 }

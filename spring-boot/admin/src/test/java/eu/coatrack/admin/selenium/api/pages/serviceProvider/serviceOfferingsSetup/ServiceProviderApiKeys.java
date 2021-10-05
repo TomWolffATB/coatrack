@@ -20,15 +20,13 @@ package eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSet
  * #L%
  */
 
-import eu.coatrack.admin.selenium.api.tools.table.TableType;
-import eu.coatrack.admin.selenium.api.tools.table.TableUtils;
-import eu.coatrack.admin.selenium.api.tools.WaiterUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static eu.coatrack.admin.selenium.api.UtilFactory.driver;
+import static eu.coatrack.admin.selenium.api.UtilFactory.serviceProviderApiKeyTableUtils;
 import static eu.coatrack.admin.selenium.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.serviceProviderApiKeysUrl;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.username;
@@ -36,26 +34,16 @@ import static eu.coatrack.admin.selenium.configuration.TableConfiguration.*;
 
 public class ServiceProviderApiKeys {
 
-    private final WebDriver driver;
-    private final TableUtils apiKeyTableUtils;
-    private final WaiterUtils waiterUtils;
-
-    public ServiceProviderApiKeys(WebDriver driver) {
-        this.driver = driver;
-        apiKeyTableUtils = new TableUtils(driver, TableType.APIKEY_TABLE);
-        waiterUtils = new WaiterUtils(driver);
-    }
-
     public void deleteAllApiKeys() {
-        apiKeyTableUtils.deleteAllItem();
+        serviceProviderApiKeyTableUtils.deleteAllItem();
     }
 
     public String createApiKey(String serviceName) {
         driver.get(serviceProviderApiKeysUrl);
 
-        List<String> listOfApiKeyValuesBeforeCreation = apiKeyTableUtils.getListOfColumnValues(2);
+        List<String> listOfApiKeyValuesBeforeCreation = serviceProviderApiKeyTableUtils.getListOfColumnValues(2);
         workThroughApiKeyCreationMenuForService(serviceName);
-        List<String> listOfApiKeyValuesAfterCreation = apiKeyTableUtils.getListOfColumnValues(2);;
+        List<String> listOfApiKeyValuesAfterCreation = serviceProviderApiKeyTableUtils.getListOfColumnValues(2);;
 
         listOfApiKeyValuesAfterCreation.removeAll(listOfApiKeyValuesBeforeCreation);
         String valueOfNewApiKey = listOfApiKeyValuesAfterCreation.get(0);
@@ -78,24 +66,24 @@ public class ServiceProviderApiKeys {
     }
 
     public boolean isApiKeyWithinList(String apiKeyValue) {
-        return apiKeyTableUtils.isItemWithinList(apiKeyValue);
+        return serviceProviderApiKeyTableUtils.isItemWithinList(apiKeyValue);
     }
 
     public void deleteApiKey(String apiKeyValue) {
-        apiKeyTableUtils.deleteItem(apiKeyValue);
+        serviceProviderApiKeyTableUtils.deleteItem(apiKeyValue);
     }
 
     public void clickOnCalenderButtonOfApiKey(String apiKeyValue) {
-        apiKeyTableUtils.clickOnButton(apiKeyValue, serviceProviderApiKeysCalenderButtonColumn, serviceProviderApiKeysCalenderButtonClassName);
+        serviceProviderApiKeyTableUtils.clickOnButton(apiKeyValue, serviceProviderApiKeysCalenderButtonColumn, serviceProviderApiKeysCalenderButtonClassName);
         sleepMillis(2000);
         driver.get(serviceProviderApiKeysUrl);
     }
 
     public void clickOnDetailsButtonOfApiKey(String apiKeyValue) {
-        apiKeyTableUtils.clickOnButton(apiKeyValue, serviceProviderApiKeysDetailsButtonColumn, serviceProviderApiKeysDetailsButtonClassName);
+        serviceProviderApiKeyTableUtils.clickOnButton(apiKeyValue, serviceProviderApiKeysDetailsButtonColumn, serviceProviderApiKeysDetailsButtonClassName);
     }
 
     public void clickOnEditButtonOfApiKey(String apiKeyValue) {
-        apiKeyTableUtils.clickOnButton(apiKeyValue, serviceProviderApiKeysEditButtonColumn, serviceProviderApiKeysEditButtonClassName);
+        serviceProviderApiKeyTableUtils.clickOnButton(apiKeyValue, serviceProviderApiKeysEditButtonColumn, serviceProviderApiKeysEditButtonClassName);
     }
 }

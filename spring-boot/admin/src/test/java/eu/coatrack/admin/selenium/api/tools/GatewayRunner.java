@@ -1,10 +1,6 @@
 package eu.coatrack.admin.selenium.api.tools;
 
-import eu.coatrack.admin.selenium.api.pages.serviceProvider.ServiceProviderTutorial;
 import eu.coatrack.admin.selenium.api.pages.serviceProvider.ItemDetails;
-import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetup.ServiceProviderApiKeys;
-import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetup.ServiceProviderGateways;
-import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetup.ServiceProviderServices;
 import eu.coatrack.admin.selenium.exceptions.FileCouldNotBeDeletedException;
 import eu.coatrack.admin.selenium.exceptions.GatewayDownloadFailedException;
 import eu.coatrack.admin.selenium.exceptions.GatewayRunnerInitializationException;
@@ -13,12 +9,13 @@ import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 
+import static eu.coatrack.admin.selenium.api.PageFactory.*;
+import static eu.coatrack.admin.selenium.api.UtilFactory.driver;
 import static eu.coatrack.admin.selenium.configuration.CookieInjector.sessionCookie;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.localGatewayAccessUrl;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.host;
@@ -28,25 +25,9 @@ public class GatewayRunner {
     private static final Logger logger = LoggerFactory.getLogger(GatewayRunner.class);
     private final String gatewayJarFileName = "gateway.jar";
 
-    private final WebDriver driver;
-
-    //TODO Such fields can be removed as the pages can be received from PageFactory. Check other classes out as well.
-    private final ServiceProviderTutorial serviceProviderTutorial;
-    private final ServiceProviderApiKeys serviceProviderApiKeys;
-    private final ServiceProviderGateways serviceProviderGateways;
-    private final ServiceProviderServices serviceProviderServices;
-
     private Thread jarThread;
     private ItemDetails itemDetails;
     private File file;
-
-    public GatewayRunner (WebDriver driver) {
-        this.driver = driver;
-        serviceProviderTutorial = new ServiceProviderTutorial(driver);
-        serviceProviderApiKeys = new ServiceProviderApiKeys(driver);
-        serviceProviderGateways = new ServiceProviderGateways(driver);
-        serviceProviderServices = new ServiceProviderServices(driver);
-    }
 
     public void executeRunner(){
         try {

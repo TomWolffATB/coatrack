@@ -24,16 +24,11 @@ import eu.coatrack.admin.selenium.exceptions.UnexpectedErrorPageReceivedExceptio
 import eu.coatrack.admin.selenium.exceptions.UrlCouldNotBeReachedException;
 import org.openqa.selenium.WebDriver;
 
+import static eu.coatrack.admin.selenium.api.UtilFactory.driver;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class UrlReachabilityTools {
-
-    private final WebDriver driver;
-
-    public UrlReachabilityTools(WebDriver driver) {
-        this.driver = driver;
-    }
 
     public void fastVisit(String urlToBeVisited){
         if(!driver.getCurrentUrl().equals(urlToBeVisited))

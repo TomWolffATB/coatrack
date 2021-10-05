@@ -20,23 +20,15 @@ package eu.coatrack.admin.selenium.api.pages.serviceConsumer;
  * #L%
  */
 
-import eu.coatrack.admin.selenium.api.tools.table.TableType;
-import eu.coatrack.admin.selenium.api.tools.table.TableUtils;
-import org.openqa.selenium.WebDriver;
+import static eu.coatrack.admin.selenium.api.UtilFactory.serviceConsumerApiKeyTableUtils;
 
 public class ServiceConsumerApiKeys {
 
-    private final TableUtils consumerApiKeyTableUtils;
-
-    public ServiceConsumerApiKeys(WebDriver driver) {
-        consumerApiKeyTableUtils = new TableUtils(driver, TableType.CONSUMER_APIKEY_TABLE);
-    }
-
     public boolean isApiKeyWithinList(String apiKeyValue){
-        return consumerApiKeyTableUtils.isItemWithinList(apiKeyValue);
+        return serviceConsumerApiKeyTableUtils.isItemWithinList(apiKeyValue);
     }
 
     public void deletePublicApiKey(String apiKeyValue) {
-        consumerApiKeyTableUtils.deleteItem(apiKeyValue);
+        serviceConsumerApiKeyTableUtils.deleteItem(apiKeyValue);
     }
 }

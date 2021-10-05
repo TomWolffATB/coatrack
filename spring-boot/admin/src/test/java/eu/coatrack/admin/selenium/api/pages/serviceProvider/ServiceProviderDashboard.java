@@ -8,13 +8,15 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static eu.coatrack.admin.selenium.api.PageFactory.urlReachabilityTools;
+import static eu.coatrack.admin.selenium.api.UtilFactory.driver;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.serviceProviderDashboardUrl;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.username;
 
 public class ServiceProviderDashboard extends AbstractDashboardTemplate {
 
-    public ServiceProviderDashboard(WebDriver driver) {
-        super(driver, serviceProviderDashboardUrl);
+    public ServiceProviderDashboard() {
+        super(serviceProviderDashboardUrl);
     }
 
     public int getApiUsageTrend() {

@@ -29,27 +29,23 @@ import org.openqa.selenium.WebDriver;
 
 import java.io.*;
 
-import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.*;
 
 public class CookieInjector {
 
     public static Cookie sessionCookie;
+    private static final File cookieSaveFile = new File("./sessionCookieSaveFile.txt");
 
     public static void injectAuthenticationCookieToDriver(WebDriver driver){
+        injectCookieFromStorage(driver);
+        ifCurrentCookieIsDeprecatedReplaceWithNewCookieFromGitHubLogin(driver);
+    }
+
+    private static void injectCookieFromStorage(WebDriver driver) {
         if (sessionCookie != null){
             replaceDriversCurrentSessionCookieByAuthorizedOne(driver);
         } else {
             injectNewlyCreatedCookie(driver);
-        }
-
-        driver.get(adminDashboardUrl);
-        if (driver.getCurrentUrl().contains("github")){
-            sessionCookie = createCookieViaGitHubLogin(driver);
-            File cookieSaveFile = new File("./sessionCookieSaveFile.txt");
-            if (cookieSaveFile.exists())
-                cookieSaveFile.delete();
-            storeCookieToLocalFile(cookieSaveFile);
         }
     }
 
@@ -60,18 +56,41 @@ public class CookieInjector {
     }
 
     private static void injectNewlyCreatedCookie(WebDriver driver) {
-        File cookieSaveFile = new File("./sessionCookieSaveFile.txt");
-
         if (cookieSaveFile.exists()){
-            sessionCookie = readCookieFromFile(cookieSaveFile);
+            sessionCookie = readCookieFromFile();
             replaceDriversCurrentSessionCookieByAuthorizedOne(driver);
         } else {
-            sessionCookie = createCookieViaGitHubLogin(driver);
-            storeCookieToLocalFile(cookieSaveFile);
+            createAndStoreCookieFromGitHub(driver);
         }
     }
 
-    private static void storeCookieToLocalFile(File cookieSaveFile) {
+    private static Cookie readCookieFromFile() {
+        Cookie cookie;
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(cookieSaveFile));
+            String sessionCookieValue = reader.readLine();
+            cookie = new Cookie.Builder("SESSION", sessionCookieValue).domain(null).path("/")
+                    .expiresOn(null).isSecure(true).isHttpOnly(true).build();
+            cookieSaveFile.delete();
+        } catch (Exception e){
+            throw new CookieSaveFileReadingError("An error occurred while reading the cookie save file.", e);
+        }
+        return cookie;
+    }
+
+    private static void createAndStoreCookieFromGitHub(WebDriver driver) {
+        if (cookieSaveFile.exists())
+            cookieSaveFile.delete();
+        sessionCookie = createCookieViaGitHubLogin(driver);
+        storeCookieToLocalFile();
+    }
+
+    private static Cookie createCookieViaGitHubLogin(WebDriver driver) {
+        new LoginPage(driver).loginToGithub(username, password);
+        return driver.manage().getCookies().stream().filter(cookie -> cookie.getName().equals("SESSION")).findFirst().get();
+    }
+
+    private static void storeCookieToLocalFile() {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(cookieSaveFile));
             writer.write(sessionCookie.getValue());
@@ -82,23 +101,10 @@ public class CookieInjector {
         }
     }
 
-    private static Cookie createCookieViaGitHubLogin(WebDriver driver) {
-        new LoginPage(driver).loginToGithub(username, password);
-        return driver.manage().getCookies().stream().filter(cookie -> cookie.getName().equals("SESSION")).findFirst().get();
-    }
-
-    private static Cookie readCookieFromFile(File file) {
-        Cookie cookie;
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String sessionCookieValue = reader.readLine();
-            cookie = new Cookie.Builder("SESSION", sessionCookieValue).domain(null).path("/")
-                    .expiresOn(null).isSecure(true).isHttpOnly(true).build();
-            file.delete();
-        } catch (Exception e){
-            throw new CookieSaveFileReadingError("An error occurred while reading the cookie save file.", e);
+    private static void ifCurrentCookieIsDeprecatedReplaceWithNewCookieFromGitHubLogin(WebDriver driver) {
+        driver.get(adminDashboardUrl);
+        if (driver.getCurrentUrl().contains("github")){
+            createAndStoreCookieFromGitHub(driver);
         }
-        return cookie;
     }
-
 }

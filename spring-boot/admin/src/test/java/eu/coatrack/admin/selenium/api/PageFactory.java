@@ -59,7 +59,7 @@ public class PageFactory {
     }
 
     public GatewayRunner getGatewayRunner() {
-        return GatewayRunner.createAndRunGateway(driver);
+        return new GatewayRunner(driver);
     }
 
     public ServiceProviderDashboard getServiceProviderDashboard() {

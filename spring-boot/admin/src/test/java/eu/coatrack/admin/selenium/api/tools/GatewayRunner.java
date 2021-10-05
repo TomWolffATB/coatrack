@@ -26,47 +26,41 @@ import static eu.coatrack.admin.selenium.configuration.PageConfiguration.host;
 public class GatewayRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(GatewayRunner.class);
-    private static final String gatewayJarFileName = "gateway.jar";
+    private final String gatewayJarFileName = "gateway.jar";
 
-    private static WebDriver driver;
-    private static GatewayRunner gatewayRunner = null;
+    private final WebDriver driver;
 
-    private final ServiceProviderTutorial adminTutorial;
-    private final ServiceProviderApiKeys adminApiKeys;
-    private final ServiceProviderGateways adminServiceGateways;
-    private final ServiceProviderServices adminServiceOfferings;
+    private final ServiceProviderTutorial serviceProviderTutorial;
+    private final ServiceProviderApiKeys serviceProviderApiKeys;
+    private final ServiceProviderGateways serviceProviderGateways;
+    private final ServiceProviderServices serviceProviderServices;
 
     private Thread jarThread;
     private ItemDetails itemDetails;
     private File file;
 
-    private GatewayRunner() {
-        adminTutorial = new ServiceProviderTutorial(driver);
-        adminApiKeys = new ServiceProviderApiKeys(driver);
-        adminServiceGateways = new ServiceProviderGateways(driver);
-        adminServiceOfferings = new ServiceProviderServices(driver);
+    public GatewayRunner (WebDriver driver) {
+        this.driver = driver;
+        serviceProviderTutorial = new ServiceProviderTutorial(driver);
+        serviceProviderApiKeys = new ServiceProviderApiKeys(driver);
+        serviceProviderGateways = new ServiceProviderGateways(driver);
+        serviceProviderServices = new ServiceProviderServices(driver);
     }
 
-    //TODO I think this whole singleton logic to prevent two concurrently running gateways is too complex and not necessary at all.
-    public static GatewayRunner createAndRunGateway(WebDriver driver) {
-        GatewayRunner.driver = driver;
-        if (gatewayRunner != null)
-            gatewayRunner.stopGatewayAndCleanup();
-
-        gatewayRunner = new GatewayRunner();
+    public GatewayRunner executeRunner(){
         try {
-            gatewayRunner.itemDetails = gatewayRunner.adminTutorial.createItemsViaTutorial();
-            gatewayRunner.file = downloadGateway(gatewayRunner.itemDetails.gatewayDownloadLink);
-            gatewayRunner.jarThread = executeGatewayJar(gatewayRunner.file);
+            itemDetails = serviceProviderTutorial.createItemsViaTutorial();
+            file = downloadGateway(itemDetails.gatewayDownloadLink);
+            jarThread = executeGatewayJar(file);
         } catch (Exception e) {
-            if (gatewayRunner.jarThread != null)
-                gatewayRunner.stopGatewayAndCleanup();
+            if (jarThread != null)
+                stopGatewayAndCleanup();
             throw new GatewayRunnerInitializationException("Something went wrong during the initialization process.", e);
         }
-        return gatewayRunner;
+        return this;
     }
 
-    private static void executeGatewayDownload(String gatewayDownloadLink) throws IOException, InterruptedException {
+    private void executeGatewayDownload(String gatewayDownloadLink) throws IOException, InterruptedException {
         Runtime rt = Runtime.getRuntime();
         //TODO This is very slow when used for coatrack.eu. Maybe 'wsl curl' would be faster.
         String firstPartOfCommand = "cmd /c curl -v ";
@@ -77,15 +71,15 @@ public class GatewayRunner {
         pr.waitFor();
     }
 
-    private static File downloadGateway(String gatewayDownloadLink) throws IOException, InterruptedException {
+    private File downloadGateway(String gatewayDownloadLink) throws IOException, InterruptedException {
         File file = getGatewayJarFile();
         executeGatewayDownload(gatewayDownloadLink);
         if (!file.exists() || file.length() < 1000)
-            throw new GatewayDownloadFailedException("Trying to download the Gateway '" + gatewayRunner.itemDetails.gatewayName + "' an error occurred.");
+            throw new GatewayDownloadFailedException("Trying to download the Gateway '" + itemDetails.gatewayName + "' an error occurred.");
         return file;
     }
 
-    private static File getGatewayJarFile() {
+    private File getGatewayJarFile() {
         File gatewayJarFile = new File(gatewayJarFileName);
         if (gatewayJarFile.exists())
             gatewayJarFile.delete();
@@ -119,16 +113,15 @@ public class GatewayRunner {
     public void stopGatewayAndCleanup() {
         jarThread.interrupt();
 
-        String gatewayName = adminServiceGateways.getGatewayNameByIdentifier(itemDetails.gatewayIdentifier);
-        adminServiceGateways.deleteGateway(gatewayName);
+        String gatewayName = serviceProviderGateways.getGatewayNameByIdentifier(itemDetails.gatewayIdentifier);
+        serviceProviderGateways.deleteGateway(gatewayName);
 
-        adminApiKeys.deleteApiKey(itemDetails.apiKeyValue);
-        adminServiceOfferings.deleteService(itemDetails.serviceName);
+        serviceProviderApiKeys.deleteApiKey(itemDetails.apiKeyValue);
+        serviceProviderServices.deleteService(itemDetails.serviceName);
 
         file.delete();
         if (file.exists())
             throw new FileCouldNotBeDeletedException("The file " + file.getName() + "could not be deleted.");
-        GatewayRunner.gatewayRunner = null;
     }
 
     public void makeValidServiceCall() {

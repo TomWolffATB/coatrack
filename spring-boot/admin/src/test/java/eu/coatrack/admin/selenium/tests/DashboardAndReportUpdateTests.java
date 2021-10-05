@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DashboardAndReportUpdateTests extends AbstractTestSetup{
 
-    private final GatewayRunner gatewayRunner = pageFactory.getGatewayRunner();
+    private final GatewayRunner gatewayRunner = pageFactory.getGatewayRunner().executeRunner();
     private final ServiceProviderDashboard serviceProviderDashboard = pageFactory.getServiceProviderDashboard();
     private final ServiceConsumerDashboard consumerDashboard = pageFactory.getServiceConsumerDashboard();
 

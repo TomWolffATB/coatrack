@@ -23,13 +23,13 @@ package eu.coatrack.admin.e2e.configuration;
 import eu.coatrack.admin.e2e.api.pages.LoginPage;
 import eu.coatrack.admin.e2e.exceptions.CookieSaveFileReadingError;
 import eu.coatrack.admin.e2e.exceptions.CookieSaveFileWritingError;
+
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.attribute.BasicFileAttributes;
 
+import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.*;
 
 public class CookieInjector {
@@ -42,13 +42,25 @@ public class CookieInjector {
         } else {
             injectNewlyCreatedCookie(driver);
         }
+
+        driver.get(adminDashboardUrl);
+        if (driver.getCurrentUrl().contains("github")){
+            sessionCookie = createCookieViaGitHubLogin(driver);
+            File cookieSaveFile = new File("./sessionCookieSaveFile.txt");
+            if (cookieSaveFile.exists())
+                cookieSaveFile.delete();
+            storeCookieToLocalFile(cookieSaveFile);
+        }
+    }
+
+    private static void replaceDriversCurrentSessionCookieByAuthorizedOne(WebDriver driver) {
+        driver.get(startpageUrl);
+        driver.manage().deleteAllCookies();
+        driver.manage().addCookie(sessionCookie);
     }
 
     private static void injectNewlyCreatedCookie(WebDriver driver) {
         File cookieSaveFile = new File("./sessionCookieSaveFile.txt");
-
-        if (cookieSaveFile.exists() && wasCookieCreatedMoreThanTwelveHoursAgo(cookieSaveFile))
-            cookieSaveFile.delete();
 
         if (cookieSaveFile.exists()){
             sessionCookie = readCookieFromFile(cookieSaveFile);
@@ -56,16 +68,6 @@ public class CookieInjector {
         } else {
             sessionCookie = createCookieViaGitHubLogin(driver);
             storeCookieToLocalFile(cookieSaveFile);
-        }
-    }
-
-    private static boolean wasCookieCreatedMoreThanTwelveHoursAgo(File cookieSaveFile) {
-        try {
-            BasicFileAttributes attr = Files.readAttributes(cookieSaveFile.toPath(), BasicFileAttributes.class);
-            long oneHourInMillis = 1000 * 60 * 60;
-            return System.currentTimeMillis() - attr.creationTime().toMillis() > oneHourInMillis * 12;
-        } catch (IOException e){
-            throw new RuntimeException("An error happened during reading the cookie save file.", e);
         }
     }
 
@@ -78,12 +80,6 @@ public class CookieInjector {
         } catch (Exception e){
             throw new CookieSaveFileWritingError("An error occurred while creating the cookie save file.", e);
         }
-    }
-
-    private static void replaceDriversCurrentSessionCookieByAuthorizedOne(WebDriver driver) {
-        driver.get(startpageUrl);
-        driver.manage().deleteAllCookies();
-        driver.manage().addCookie(sessionCookie);
     }
 
     private static Cookie createCookieViaGitHubLogin(WebDriver driver) {

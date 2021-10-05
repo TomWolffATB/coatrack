@@ -24,14 +24,15 @@ import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetu
 import eu.coatrack.admin.selenium.tests.AbstractTestSetup;
 import org.junit.jupiter.api.*;
 
+import static eu.coatrack.admin.selenium.api.PageFactory.serviceProviderServices;
+import static eu.coatrack.admin.selenium.api.PageFactory.urlReachabilityTools;
+
 public class ServiceListButtonsTests extends AbstractTestSetup {
 
-    private ServiceProviderServices serviceProviderServices;
     private String serviceName;
 
     @BeforeAll
     public void setupService() {
-        serviceProviderServices = pageFactory.getServiceProviderServices();
         serviceName = serviceProviderServices.createPublicService();
     }
 
@@ -52,7 +53,7 @@ public class ServiceListButtonsTests extends AbstractTestSetup {
 
     @AfterAll
     public void assertHavingNoErrorAndCleanup(){
-        pageFactory.getPageChecker().throwExceptionIfErrorPageWasReceived();
+        urlReachabilityTools.throwExceptionIfErrorPageWasReceived();
         serviceProviderServices.deleteService(serviceName);
     }
 

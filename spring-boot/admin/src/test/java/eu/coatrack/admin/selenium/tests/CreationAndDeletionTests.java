@@ -27,6 +27,7 @@ import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetu
 import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetup.ServiceProviderServices;
 import org.junit.jupiter.api.Test;
 
+import static eu.coatrack.admin.selenium.api.PageFactory.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,53 +35,45 @@ public class CreationAndDeletionTests extends AbstractTestSetup {
 
     @Test
     public void createAndDeleteServiceTest() {
-        ServiceProviderServices serviceOfferings = pageFactory.getServiceProviderServices();
-        String serviceName = serviceOfferings.createPublicService();
-        assertTrue(serviceOfferings.isServiceWithinList(serviceName));
+        String serviceName = serviceProviderServices.createPublicService();
+        assertTrue(serviceProviderServices.isServiceWithinList(serviceName));
 
-        serviceOfferings.deleteService(serviceName);
-        assertFalse(serviceOfferings.isServiceWithinList(serviceName));
+        serviceProviderServices.deleteService(serviceName);
+        assertFalse(serviceProviderServices.isServiceWithinList(serviceName));
     }
 
     @Test
     public void createAndDeleteGatewayTest() {
-        ServiceProviderGateways serviceGateways = pageFactory.getServiceProviderGateways();
-        String gatewayName = serviceGateways.createGateway();
-        assertTrue(serviceGateways.isGatewayWithinList(gatewayName));
+        String gatewayName = serviceProviderGateways.createGateway();
+        assertTrue(serviceProviderGateways.isGatewayWithinList(gatewayName));
 
-        serviceGateways.deleteGateway(gatewayName);
-        assertFalse(serviceGateways.isGatewayWithinList(gatewayName));
+        serviceProviderGateways.deleteGateway(gatewayName);
+        assertFalse(serviceProviderGateways.isGatewayWithinList(gatewayName));
     }
 
     @Test
     public void createAndDeleteApiKeyTest() {
-        ServiceProviderServices adminServiceOfferings = pageFactory.getServiceProviderServices();
-        String serviceName = adminServiceOfferings.createPublicService();
-        ServiceProviderApiKeys apiKeys = pageFactory.getServiceProviderApiKeys();
-        String apiKeyValue = apiKeys.createApiKey(serviceName);
-        assertTrue(apiKeys.isApiKeyWithinList(apiKeyValue));
+        String serviceName = serviceProviderServices.createPublicService();
+        String apiKeyValue = serviceProviderApiKeys.createApiKey(serviceName);
+        assertTrue(serviceProviderApiKeys.isApiKeyWithinList(apiKeyValue));
 
-        apiKeys.deleteApiKey(apiKeyValue);
-        adminServiceOfferings.deleteService(serviceName);
-        assertFalse(apiKeys.isApiKeyWithinList(apiKeyValue));
+        serviceProviderApiKeys.deleteApiKey(apiKeyValue);
+        serviceProviderServices.deleteService(serviceName);
+        assertFalse(serviceProviderApiKeys.isApiKeyWithinList(apiKeyValue));
     }
 
     @Test
     public void createAndDeleteConsumerApiKeyForPublicServiceTest() {
-        ServiceProviderServices adminServiceOfferings = pageFactory.getServiceProviderServices();
-        String serviceName = adminServiceOfferings.createPublicService();
+        String serviceName = serviceProviderServices.createPublicService();
+        String apiKeyValue = serviceConsumerServices.createApiKeyFromPublicService(serviceName);
 
-        ServiceConsumerServices consumerServiceOfferings = pageFactory.getServiceConsumerServices();
-        String apiKeyValue = consumerServiceOfferings.createApiKeyFromPublicService(serviceName);
-
-        ServiceConsumerApiKeys consumerApiKeyList = pageFactory.getServiceConsumerApiKeys();
-        assertTrue(consumerApiKeyList.isApiKeyWithinList(apiKeyValue));
+        assertTrue(serviceConsumerApiKeys.isApiKeyWithinList(apiKeyValue));
 
         //TODO Uncomment this line when #56 is solved and merged into this branch.
-        //consumerApiKeyList.deletePublicApiKey(apiKeyValue);
-        pageFactory.getServiceProviderApiKeys().deleteApiKey(apiKeyValue); //To deleted when #56 PR is merged to test the deletion feature.
-        assertFalse(consumerApiKeyList.isApiKeyWithinList(apiKeyValue));
+        //serviceConsumerApiKeyList.deletePublicApiKey(apiKeyValue);
+        serviceProviderApiKeys.deleteApiKey(apiKeyValue); //To deleted when #56 PR is merged to test the deletion feature.
+        assertFalse(serviceConsumerApiKeys.isApiKeyWithinList(apiKeyValue));
 
-        adminServiceOfferings.deleteService(serviceName);
+        serviceProviderServices.deleteService(serviceName);
     }
 }

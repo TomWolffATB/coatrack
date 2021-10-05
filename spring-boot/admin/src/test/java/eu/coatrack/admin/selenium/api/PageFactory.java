@@ -13,68 +13,38 @@ import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetu
 import eu.coatrack.admin.selenium.api.tools.GatewayRunner;
 import eu.coatrack.admin.selenium.api.tools.UrlReachabilityTools;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
 import static eu.coatrack.admin.selenium.configuration.CookieInjector.injectAuthenticationCookieToDriver;
 
 //TODO Maybe it would be simpler to initialize every page at the beginning and make them public final fields.
 // But this approach could create problems as GatewayRunner is executed immediately and would consume resources even for small tests.
 public class PageFactory {
 
-    private final WebDriver driver;
+    private static final WebDriver driver = new FirefoxDriver();
 
-    public PageFactory(WebDriver driver) {
-        this.driver = driver;
+    static {
         injectAuthenticationCookieToDriver(driver);
     }
 
-    public ServiceProviderTutorial getServiceProviderTutorial(){
-        return new ServiceProviderTutorial(driver);
-    }
+    public static final UrlReachabilityTools        urlReachabilityTools        = new UrlReachabilityTools(driver);
+    public static final GatewayRunner               gatewayRunner               = new GatewayRunner(driver);
 
-    public ServiceProviderServices getServiceProviderServices(){
-        return new ServiceProviderServices(driver);
-    }
+    public static final ServiceProviderDashboard    serviceProviderDashboard    = new ServiceProviderDashboard(driver);
+    public static final ServiceProviderTutorial     serviceProviderTutorial     = new ServiceProviderTutorial(driver);
+    public static final ServiceProviderServices     serviceProviderServices     = new ServiceProviderServices(driver);
+    public static final ServiceProviderGateways     serviceProviderGateways     = new ServiceProviderGateways(driver);
+    public static final ServiceProviderApiKeys      serviceProviderApiKeys      = new ServiceProviderApiKeys(driver);
+    public static final ServiceProviderReports      serviceProviderReports      = new ServiceProviderReports(driver);
 
-    public ServiceProviderGateways getServiceProviderGateways() {
-        return new ServiceProviderGateways(driver);
-    }
+    public static final ServiceConsumerServices     serviceConsumerServices     = new ServiceConsumerServices(driver);
+    public static final ServiceConsumerApiKeys      serviceConsumerApiKeys      = new ServiceConsumerApiKeys(driver);
+    public static final ServiceConsumerDashboard    serviceConsumerDashboard    = new ServiceConsumerDashboard(driver);
+    public static final ServiceConsumerReports      serviceConsumerReports      = new ServiceConsumerReports(driver);
 
-    public ServiceProviderApiKeys getServiceProviderApiKeys() {
-        return new ServiceProviderApiKeys(driver);
-    }
-
-    public UrlReachabilityTools getPageChecker(){
-        return new UrlReachabilityTools(driver);
-    }
-
-    public void closeDriver(){
-        driver.close();
-    }
-
-    public ServiceConsumerServices getServiceConsumerServices() {
-        return new ServiceConsumerServices(driver);
-    }
-
-    public ServiceConsumerApiKeys getServiceConsumerApiKeys() {
-        return new ServiceConsumerApiKeys(driver);
-    }
-
-    public GatewayRunner getGatewayRunner() {
-        return new GatewayRunner(driver);
-    }
-
-    public ServiceProviderDashboard getServiceProviderDashboard() {
-        return new ServiceProviderDashboard(driver);
-    }
-
-    public ServiceConsumerDashboard getServiceConsumerDashboard() {
-        return new ServiceConsumerDashboard(driver);
-    }
-
-    public ServiceProviderReports getServiceProviderReports() {
-        return new ServiceProviderReports(driver);
-    }
-
-    public ServiceConsumerReports getServiceConsumerReports() {
-        return new ServiceConsumerReports(driver);
+    static {
+        serviceProviderServices.deleteAllServices();
+        serviceProviderGateways.deleteAllGateways();
+        serviceProviderApiKeys.deleteAllApiKeys();
     }
 }

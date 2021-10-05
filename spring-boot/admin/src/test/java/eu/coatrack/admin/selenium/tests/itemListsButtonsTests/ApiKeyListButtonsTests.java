@@ -20,22 +20,18 @@ package eu.coatrack.admin.selenium.tests.itemListsButtonsTests;
  * #L%
  */
 
-import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetup.ServiceProviderApiKeys;
-import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetup.ServiceProviderServices;
 import eu.coatrack.admin.selenium.tests.AbstractTestSetup;
 import org.junit.jupiter.api.*;
 
+import static eu.coatrack.admin.selenium.api.PageFactory.*;
+
 public class ApiKeyListButtonsTests extends AbstractTestSetup {
 
-    private ServiceProviderApiKeys serviceProviderApiKeys;
     private String apiKeyValue;
-    private ServiceProviderServices serviceProviderServices;
     private String serviceName;
 
     @BeforeAll
     public void setupApiKey() {
-        serviceProviderApiKeys = pageFactory.getServiceProviderApiKeys();
-        serviceProviderServices = pageFactory.getServiceProviderServices();
         serviceName = serviceProviderServices.createPublicService();
         apiKeyValue = serviceProviderApiKeys.createApiKey(serviceName);
     }
@@ -43,21 +39,23 @@ public class ApiKeyListButtonsTests extends AbstractTestSetup {
     @Test
     public void clickingOnCalendarButtonShouldNotCauseErrorPage(){
         serviceProviderApiKeys.clickOnCalenderButtonOfApiKey(apiKeyValue);
+        urlReachabilityTools.throwExceptionIfErrorPageWasReceived();
     }
 
     @Test
     public void clickingDetailsButtonShouldNotCauseErrorPage(){
         serviceProviderApiKeys.clickOnDetailsButtonOfApiKey(apiKeyValue);
+        urlReachabilityTools.throwExceptionIfErrorPageWasReceived();
     }
 
     @Test
     public void clickingEditButtonShouldNotCauseErrorPage(){
         serviceProviderApiKeys.clickOnEditButtonOfApiKey(apiKeyValue);
+        urlReachabilityTools.throwExceptionIfErrorPageWasReceived();
     }
 
     @AfterAll
     public void assertHavingNoErrorAndCleanup(){
-        pageFactory.getPageChecker().throwExceptionIfErrorPageWasReceived();
         serviceProviderApiKeys.deleteApiKey(apiKeyValue);
         serviceProviderServices.deleteService(serviceName);
     }

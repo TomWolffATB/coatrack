@@ -1,34 +1,29 @@
 package eu.coatrack.admin.selenium.tests;
 
-import eu.coatrack.admin.selenium.api.pages.serviceConsumer.ServiceConsumerDashboard;
-import eu.coatrack.admin.selenium.api.pages.serviceConsumer.ServiceConsumerReports;
-import eu.coatrack.admin.selenium.api.pages.serviceProvider.ServiceProviderDashboard;
-import eu.coatrack.admin.selenium.api.pages.serviceProvider.ServiceProviderReports;
-import eu.coatrack.admin.selenium.api.tools.GatewayRunner;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static eu.coatrack.admin.selenium.api.PageFactory.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DashboardAndReportUpdateTests extends AbstractTestSetup{
-
-    private final GatewayRunner gatewayRunner = pageFactory.getGatewayRunner().executeRunner();
-    private final ServiceProviderDashboard serviceProviderDashboard = pageFactory.getServiceProviderDashboard();
-    private final ServiceConsumerDashboard consumerDashboard = pageFactory.getServiceConsumerDashboard();
 
     private final int serviceProviderTotalApiCalls = serviceProviderDashboard.getTotalApiCalls();
     private final int serviceProviderApiUsageTrend = serviceProviderDashboard.getApiUsageTrend();
     private final int serviceProviderCallsOfLoggedInUser = serviceProviderDashboard.getCallsOfLoggedInUser();
 
-    private final int serviceConsumerTotalApiCalls = consumerDashboard.getTotalApiCalls();
-    private final int serviceConsumerNumberOfServicesCalled = consumerDashboard.getNumberOfServicesCalled();
+    private final int serviceConsumerTotalApiCalls = serviceConsumerDashboard.getTotalApiCalls();
+    private final int serviceConsumerNumberOfServicesCalled = serviceConsumerDashboard.getNumberOfServicesCalled();
 
-    private final ServiceProviderReports serviceProviderReports = pageFactory.getServiceProviderReports();
-    private final int serviceProviderReportedServiceCalls = serviceProviderReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
+    private final int serviceProviderReportedServiceCalls;
+    private final int serviceConsumerReportedServiceCalls;
 
-    private final ServiceConsumerReports serviceConsumerReports = pageFactory.getServiceConsumerReports();
-    private final int serviceConsumerReportedServiceCalls = serviceConsumerReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
+    public DashboardAndReportUpdateTests(){
+        gatewayRunner.executeRunner();
+        serviceProviderReportedServiceCalls = serviceProviderReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
+        serviceConsumerReportedServiceCalls = serviceConsumerReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
+    }
 
     @BeforeAll
     public void setupGatewayRunner() {
@@ -53,12 +48,12 @@ public class DashboardAndReportUpdateTests extends AbstractTestSetup{
 
     @Test
     public void consumerDashboardTotalApiCallsUpdateTest() {
-        assertEquals(serviceConsumerTotalApiCalls + 2, consumerDashboard.getTotalApiCalls());
+        assertEquals(serviceConsumerTotalApiCalls + 2, serviceConsumerDashboard.getTotalApiCalls());
     }
 
     @Test
     public void consumerDashboardNumberOfServicesCalledUpdateTest() {
-        assertEquals(serviceConsumerNumberOfServicesCalled + 1, consumerDashboard.getNumberOfServicesCalled());
+        assertEquals(serviceConsumerNumberOfServicesCalled + 1, serviceConsumerDashboard.getNumberOfServicesCalled());
     }
 
     @Test

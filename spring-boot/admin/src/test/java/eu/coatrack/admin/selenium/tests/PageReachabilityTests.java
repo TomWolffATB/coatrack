@@ -22,63 +22,64 @@ package eu.coatrack.admin.selenium.tests;
 
 import org.junit.jupiter.api.Test;
 
+import static eu.coatrack.admin.selenium.api.PageFactory.urlReachabilityTools;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.*;
 
 public class PageReachabilityTests extends AbstractTestSetup{
 
     @Test
     public void testAdminDashboardReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(serviceProviderDashboardUrl);
+        urlReachabilityTools.assertThatUrlIsReachable(serviceProviderDashboardUrl);
     }
 
     @Test
     public void testAdminTutorialReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(serviceProviderTutorialUrl);
+        urlReachabilityTools.assertThatUrlIsReachable(serviceProviderTutorialUrl);
     }
 
     @Test
     public void testAdminServiceListReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(serviceProviderServicesUrl);
+        urlReachabilityTools.assertThatUrlIsReachable(serviceProviderServicesUrl);
     }
 
     @Test
     public void testAdminGatewayListReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(serviceProviderGatewaysUrl);
+        urlReachabilityTools.assertThatUrlIsReachable(serviceProviderGatewaysUrl);
     }
 
     @Test
     public void testAdminApiKeyListReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(serviceProviderApiKeysUrl);
+        urlReachabilityTools.assertThatUrlIsReachable(serviceProviderApiKeysUrl);
     }
 
     @Test
     public void testAdminReportsReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(serviceProviderReportsUrl);
+        urlReachabilityTools.assertThatUrlIsReachable(serviceProviderReportsUrl);
     }
 
     @Test
     public void testConsumerDashboardReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(serviceConsumerDashboardUrl);
+        urlReachabilityTools.assertThatUrlIsReachable(serviceConsumerDashboardUrl);
     }
 
     @Test
     public void testConsumerTutorialReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(serviceConsumerTutorialUrl);
+        urlReachabilityTools.assertThatUrlIsReachable(serviceConsumerTutorialUrl);
     }
 
     @Test
     public void testConsumerApiKeyListReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(serviceConsumerApiKeyListUrl);
+        urlReachabilityTools.assertThatUrlIsReachable(serviceConsumerApiKeyListUrl);
     }
 
     @Test
     public void testConsumerServiceListReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(serviceConsumerServiceListUrl);
+        urlReachabilityTools.assertThatUrlIsReachable(serviceConsumerServiceListUrl);
     }
 
     @Test
     public void testConsumerReportsReachability(){
-        pageFactory.getPageChecker().assertThatUrlIsReachable(serviceConsumerReportsUrl);
+        urlReachabilityTools.assertThatUrlIsReachable(serviceConsumerReportsUrl);
     }
 
 }

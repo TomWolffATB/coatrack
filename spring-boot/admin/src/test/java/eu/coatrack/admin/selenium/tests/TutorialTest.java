@@ -26,23 +26,21 @@ import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetu
 import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetup.ServiceProviderServices;
 import org.junit.jupiter.api.Test;
 
+import static eu.coatrack.admin.selenium.api.PageFactory.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TutorialTest extends AbstractTestSetup {
 
     @Test
     public void tutorialTest() {
-        ItemDetails itemDetails = pageFactory.getServiceProviderTutorial().createItemsViaTutorial();
+        ItemDetails itemDetails = serviceProviderTutorial.createItemsViaTutorial();
 
-        ServiceProviderApiKeys serviceProviderApiKeys = pageFactory.getServiceProviderApiKeys();
         boolean wasApiKeyCreated = serviceProviderApiKeys.isApiKeyWithinList(itemDetails.apiKeyValue);
         assertTrue(wasApiKeyCreated);
 
-        ServiceProviderServices serviceProviderServices = pageFactory.getServiceProviderServices();
         boolean wasServiceCreated = serviceProviderServices.isServiceWithinList(itemDetails.serviceName);
         assertTrue(wasServiceCreated);
 
-        ServiceProviderGateways serviceProviderGateways = pageFactory.getServiceProviderGateways();
         boolean wasGatewayCreated = serviceProviderGateways.isGatewayWithinList(itemDetails.gatewayName);
         assertTrue(wasGatewayCreated);
 

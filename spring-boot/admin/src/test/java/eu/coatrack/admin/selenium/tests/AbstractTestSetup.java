@@ -26,15 +26,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 //TODO Make all tests works flawlessly for coatrack.eu and dev.coatrack.eu.
 
+//TODO Can this class be removed?
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class AbstractTestSetup {
 
-    protected static PageFactory pageFactory = new PageFactory(new FirefoxDriver());
 
-    static {
-        pageFactory.getServiceProviderServices().deleteAllServices();
-        pageFactory.getServiceProviderGateways().deleteAllGateways();
-        pageFactory.getServiceProviderApiKeys().deleteAllApiKeys();
-    }
 
 }

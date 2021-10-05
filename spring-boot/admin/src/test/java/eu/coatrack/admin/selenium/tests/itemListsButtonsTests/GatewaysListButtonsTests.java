@@ -24,31 +24,33 @@ import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetu
 import eu.coatrack.admin.selenium.tests.AbstractTestSetup;
 import org.junit.jupiter.api.*;
 
+import static eu.coatrack.admin.selenium.api.PageFactory.serviceProviderGateways;
+import static eu.coatrack.admin.selenium.api.PageFactory.urlReachabilityTools;
+
 public class GatewaysListButtonsTests extends AbstractTestSetup {
 
-    private ServiceProviderGateways adminServiceGateways;
     private String gatewayName;
 
     @BeforeAll
     public void setupGateway() {
-        adminServiceGateways = pageFactory.getServiceProviderGateways();
-        gatewayName = adminServiceGateways.createGateway();
+        gatewayName = serviceProviderGateways.createGateway();
     }
 
     @Test
     public void clickingFirstEditButtonShouldNotCauseErrorPage(){
-        adminServiceGateways.clickOnDetailsButtonOfGateway(gatewayName);
+        serviceProviderGateways.clickOnDetailsButtonOfGateway(gatewayName);
+        urlReachabilityTools.throwExceptionIfErrorPageWasReceived();
     }
 
     @Test
     public void clickingDetailsButtonShouldNotCauseErrorPage(){
-        adminServiceGateways.clickOnEditButtonOfGateway(gatewayName);
+        serviceProviderGateways.clickOnEditButtonOfGateway(gatewayName);
+        urlReachabilityTools.throwExceptionIfErrorPageWasReceived();
     }
 
     @AfterAll
     public void assertHavingNoErrorAndCleanup(){
-        pageFactory.getPageChecker().throwExceptionIfErrorPageWasReceived();
-        adminServiceGateways.deleteGateway(gatewayName);
+        serviceProviderGateways.deleteGateway(gatewayName);
     }
 
 }

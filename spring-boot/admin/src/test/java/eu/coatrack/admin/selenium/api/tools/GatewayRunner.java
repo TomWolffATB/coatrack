@@ -26,6 +26,7 @@ import static eu.coatrack.admin.selenium.configuration.PageConfiguration.host;
 public class GatewayRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(GatewayRunner.class);
+    private static final String gatewayJarFileName = "gateway.jar";
 
     private static WebDriver driver;
     private static GatewayRunner gatewayRunner = null;
@@ -65,26 +66,32 @@ public class GatewayRunner {
         return gatewayRunner;
     }
 
-    //TODO Split the methods to smaller ones for better readability.
-    private static File downloadGateway(String gatewayDownloadLink) throws IOException, InterruptedException {
-        File file = new File("test.jar");
-        if (file.exists())
-            file.delete();
-        if (file.exists())
-            throw new FileCouldNotBeDeletedException("The file " + file.getName() + "could not be deleted.");
-
+    private static void executeGatewayDownload(String gatewayDownloadLink) throws IOException, InterruptedException {
         Runtime rt = Runtime.getRuntime();
         //TODO This is very slow when used for coatrack.eu. Maybe 'wsl curl' would be faster.
         String firstPartOfCommand = "cmd /c curl -v ";
         if (host.equals("localhost"))
             firstPartOfCommand += "-k ";
-        String command = firstPartOfCommand + "--cookie \"SESSION=" + sessionCookie.getValue() + "\" --output ./test.jar " + gatewayDownloadLink;
+        String command = firstPartOfCommand + "--cookie \"SESSION=" + sessionCookie.getValue() + "\" --output ./" + gatewayJarFileName + " " + gatewayDownloadLink;
         Process pr = rt.exec(command);
         pr.waitFor();
+    }
 
+    private static File downloadGateway(String gatewayDownloadLink) throws IOException, InterruptedException {
+        File file = getGatewayJarFile();
+        executeGatewayDownload(gatewayDownloadLink);
         if (!file.exists() || file.length() < 1000)
             throw new GatewayDownloadFailedException("Trying to download the Gateway '" + gatewayRunner.itemDetails.gatewayName + "' an error occurred.");
         return file;
+    }
+
+    private static File getGatewayJarFile() {
+        File gatewayJarFile = new File(gatewayJarFileName);
+        if (gatewayJarFile.exists())
+            gatewayJarFile.delete();
+        if (gatewayJarFile.exists())
+            throw new FileCouldNotBeDeletedException("The file " + gatewayJarFile.getName() + "could not be deleted.");
+        return gatewayJarFile;
     }
 
     private static Thread executeGatewayJar(File file) throws InterruptedException {

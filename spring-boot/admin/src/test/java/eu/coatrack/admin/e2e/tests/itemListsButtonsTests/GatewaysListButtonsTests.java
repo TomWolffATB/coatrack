@@ -47,7 +47,7 @@ public class GatewaysListButtonsTests extends AbstractTestSetup {
 
     @AfterAll
     public void assertHavingNoErrorAndCleanup(){
-        pageFactory.getPageChecker().assertThatCurrentPageHasNoError();
+        pageFactory.getPageChecker().throwExceptionIfErrorPageWasReceived();
         adminServiceGateways.deleteGateway(gatewayName);
     }
 

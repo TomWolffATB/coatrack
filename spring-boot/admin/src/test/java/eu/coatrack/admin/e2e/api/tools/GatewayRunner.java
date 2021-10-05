@@ -5,7 +5,10 @@ import eu.coatrack.admin.e2e.api.pages.serviceProvider.ItemDetails;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup.AdminApiKeys;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup.AdminServiceGateways;
 import eu.coatrack.admin.e2e.api.pages.serviceProvider.serviceOfferingsSetup.AdminServiceOfferings;
+import eu.coatrack.admin.e2e.exceptions.FileCouldNotBeDeletedException;
+import eu.coatrack.admin.e2e.exceptions.GatewayDownloadFailedException;
 import eu.coatrack.admin.e2e.exceptions.GatewayRunnerInitializationException;
+import eu.coatrack.admin.e2e.exceptions.ServiceCouldNotBeAccessedUsingApiKeyException;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteWatchdog;
@@ -13,15 +16,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 
 import static eu.coatrack.admin.e2e.configuration.CookieInjector.sessionCookie;
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.gatewayAccessUrl;
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.host;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GatewayRunner {
 
@@ -46,6 +46,7 @@ public class GatewayRunner {
         adminServiceOfferings = new AdminServiceOfferings(driver);
     }
 
+    //TODO I think this whole singleton logic to prevent two concurrently running gateways is too complex and not necessary at all.
     public static GatewayRunner createAndRunGateway(WebDriver driver) {
         GatewayRunner.driver = driver;
         if (gatewayRunner != null)
@@ -64,11 +65,13 @@ public class GatewayRunner {
         return gatewayRunner;
     }
 
+    //TODO Split the methods to smaller ones for better readability.
     private static File downloadGateway(String gatewayDownloadLink) throws IOException, InterruptedException {
         File file = new File("test.jar");
         if (file.exists())
             file.delete();
-        assertFalse(file.exists());
+        if (file.exists())
+            throw new FileCouldNotBeDeletedException("The file " + file.getName() + "could not be deleted.");
 
         Runtime rt = Runtime.getRuntime();
         //TODO This is very slow when used for coatrack.eu. Maybe 'wsl curl' would be faster.
@@ -79,9 +82,8 @@ public class GatewayRunner {
         Process pr = rt.exec(command);
         pr.waitFor();
 
-        assertTrue(file.exists());
-        assertTrue(file.length() > 1000);
-
+        if (!file.exists() || file.length() < 1000)
+            throw new GatewayDownloadFailedException("Trying to download the Gateway " + gatewayRunner.itemDetails.gatewayName + " an error occurred.");
         return file;
     }
 
@@ -117,37 +119,25 @@ public class GatewayRunner {
         adminServiceOfferings.deleteService(itemDetails.serviceName);
 
         file.delete();
-        assertFalse(file.exists());
+        if (file.exists())
+            throw new FileCouldNotBeDeletedException("The file " + file.getName() + "could not be deleted.");
         GatewayRunner.gatewayRunner = null;
     }
 
     public void makeValidServiceCall() {
-        boolean result = accessServiceUsingApiKey(itemDetails.serviceId, itemDetails.apiKeyValue);
-        assertTrue(result);
+        if (!isServiceAccessUsingApiKeySuccessful(itemDetails.serviceId, itemDetails.apiKeyValue))
+            throw new ServiceCouldNotBeAccessedUsingApiKeyException("Api key " + itemDetails.apiKeyValue +
+                    " could not access the service with the ID " + itemDetails.serviceId + ".");
     }
 
-    private boolean accessServiceUsingApiKey(String serviceId, String apiKeyValue) {
+    private boolean isServiceAccessUsingApiKeySuccessful(String serviceId, String apiKeyValue) {
         String servicesAccessUrl = gatewayAccessUrl + "/" + serviceId + "?api-key=" + apiKeyValue;
         driver.get(servicesAccessUrl);
         return driver.findElement(By.cssSelector("h1")).getText().equals("Example Domain");
     }
 
-    public void makeInvalidServiceCallUsingWrongServiceName() {
-        String wrongServiceId = itemDetails.serviceId + "x";
-        boolean result = accessServiceUsingApiKey(wrongServiceId, itemDetails.apiKeyValue);
-        assertFalse(result);
-    }
-
-    public void makeInvalidServiceCallUsingWrongApiKeyValue() {
-        String wrongApiKeyValue = itemDetails.apiKeyValue + "x";
-        boolean result = accessServiceUsingApiKey(itemDetails.serviceId, wrongApiKeyValue);
-        assertFalse(result);
-    }
-
     public ItemDetails getItemDetails() {
         return itemDetails;
     }
-
-    //TODO Remove assertions and creation Exception logic instead. Check other classes too.
 
 }

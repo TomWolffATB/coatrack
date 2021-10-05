@@ -20,11 +20,10 @@ package eu.coatrack.admin.e2e.api.tools;
  * #L%
  */
 
-import org.openqa.selenium.By;
+import eu.coatrack.admin.e2e.exceptions.UnexpectedErrorPageReceivedException;
+import eu.coatrack.admin.e2e.exceptions.UrlCouldNotBeReachedException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
-import static eu.coatrack.admin.e2e.configuration.PageConfiguration.adminDashboardUrl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -43,12 +42,13 @@ public class UrlReachabilityTools {
 
     public void assertThatUrlIsReachable(String url){
         driver.get(url);
-        assertThatCurrentPageHasNoError();
-        assertEquals(url, driver.getCurrentUrl());
+        throwExceptionIfErrorPageWasReceived();
+        if (!url.equals(driver.getCurrentUrl()))
+            throw new UrlCouldNotBeReachedException("The URL " + url + " could not be reached.");
     }
 
-    public void assertThatCurrentPageHasNoError(){
+    public void throwExceptionIfErrorPageWasReceived(){
         if (driver.getPageSource().contains("Sorry, an error occurred."))
-            fail();
+            throw new UnexpectedErrorPageReceivedException("A non-error page was expected to appear.");
     }
 }

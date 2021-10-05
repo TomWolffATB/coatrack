@@ -20,15 +20,12 @@ package eu.coatrack.admin.e2e.api.pages;
  * #L%
  */
 
-import eu.coatrack.admin.e2e.api.tools.WaiterUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import static eu.coatrack.admin.e2e.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.e2e.configuration.PageConfiguration.adminDashboardUrl;
-import static eu.coatrack.admin.e2e.configuration.PageConfiguration.startpageUrl;
 
-//TODO The tests should be enabled to login to dev.coatrack.eu which includes the account creation.
 public class LoginPage {
 
     private final WebDriver driver;
@@ -40,7 +37,6 @@ public class LoginPage {
     public void loginToGithub(String username, String password){
         driver.get(adminDashboardUrl);
 
-        //TODO I could let the test suite dynamically decide if a login/new cookie is required or not.
         driver.findElement(By.id("login_field")).click();
         driver.findElement(By.id("login_field")).sendKeys(username);
         driver.findElement(By.id("password")).click();

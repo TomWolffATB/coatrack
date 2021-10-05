@@ -52,7 +52,7 @@ public class ServiceListButtonsTests extends AbstractTestSetup {
 
     @AfterAll
     public void assertHavingNoErrorAndCleanup(){
-        pageFactory.getPageChecker().assertThatCurrentPageHasNoError();
+        pageFactory.getPageChecker().throwExceptionIfErrorPageWasReceived();
         adminServiceOfferings.deleteService(serviceName);
     }
 

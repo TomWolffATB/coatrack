@@ -57,7 +57,7 @@ public class ApiKeyListButtonsTests extends AbstractTestSetup {
 
     @AfterAll
     public void assertHavingNoErrorAndCleanup(){
-        pageFactory.getPageChecker().assertThatCurrentPageHasNoError();
+        pageFactory.getPageChecker().throwExceptionIfErrorPageWasReceived();
         adminAPiKeys.deleteApiKey(apiKeyValue);
         adminServiceOfferings.deleteService(serviceName);
     }

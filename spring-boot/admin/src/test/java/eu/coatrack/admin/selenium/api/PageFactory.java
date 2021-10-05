@@ -17,15 +17,9 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 import static eu.coatrack.admin.selenium.configuration.CookieInjector.injectAuthenticationCookieToDriver;
 
-//TODO Maybe it would be simpler to initialize every page at the beginning and make them public final fields.
-// But this approach could create problems as GatewayRunner is executed immediately and would consume resources even for small tests.
 public class PageFactory {
 
     private static final WebDriver driver = new FirefoxDriver();
-
-    static {
-        injectAuthenticationCookieToDriver(driver);
-    }
 
     public static final UrlReachabilityTools        urlReachabilityTools        = new UrlReachabilityTools(driver);
     public static final GatewayRunner               gatewayRunner               = new GatewayRunner(driver);
@@ -43,6 +37,7 @@ public class PageFactory {
     public static final ServiceConsumerReports      serviceConsumerReports      = new ServiceConsumerReports(driver);
 
     static {
+        injectAuthenticationCookieToDriver(driver);
         serviceProviderServices.deleteAllServices();
         serviceProviderGateways.deleteAllGateways();
         serviceProviderApiKeys.deleteAllApiKeys();

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static eu.coatrack.admin.selenium.api.PageFactory.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DashboardAndReportUpdateTests extends AbstractTestSetup{
+public class DashboardAndReportUpdateTests {
 
     private final int serviceProviderTotalApiCalls = serviceProviderDashboard.getTotalApiCalls();
     private final int serviceProviderApiUsageTrend = serviceProviderDashboard.getApiUsageTrend();
@@ -16,19 +16,17 @@ public class DashboardAndReportUpdateTests extends AbstractTestSetup{
     private final int serviceConsumerTotalApiCalls = serviceConsumerDashboard.getTotalApiCalls();
     private final int serviceConsumerNumberOfServicesCalled = serviceConsumerDashboard.getNumberOfServicesCalled();
 
-    private final int serviceProviderReportedServiceCalls;
-    private final int serviceConsumerReportedServiceCalls;
+    private final int serviceProviderReportedServiceCalls = serviceProviderReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
+    private final int serviceConsumerReportedServiceCalls = serviceConsumerReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
 
     public DashboardAndReportUpdateTests(){
-        gatewayRunner.executeRunner();
-        serviceProviderReportedServiceCalls = serviceProviderReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
-        serviceConsumerReportedServiceCalls = serviceConsumerReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
+        gatewayRunner.makeValidServiceCall();
+        gatewayRunner.makeValidServiceCall();
     }
 
     @BeforeAll
-    public void setupGatewayRunner() {
-        gatewayRunner.makeValidServiceCall();
-        gatewayRunner.makeValidServiceCall();
+    public static void setupGatewayRunner() {
+        gatewayRunner.executeRunner();
     }
 
     @Test
@@ -51,6 +49,7 @@ public class DashboardAndReportUpdateTests extends AbstractTestSetup{
         assertEquals(serviceConsumerTotalApiCalls + 2, serviceConsumerDashboard.getTotalApiCalls());
     }
 
+    //TODO Test is broken, but why?
     @Test
     public void consumerDashboardNumberOfServicesCalledUpdateTest() {
         assertEquals(serviceConsumerNumberOfServicesCalled + 1, serviceConsumerDashboard.getNumberOfServicesCalled());
@@ -67,7 +66,7 @@ public class DashboardAndReportUpdateTests extends AbstractTestSetup{
     }
 
     @AfterAll
-    public void tearDownGatewayRunner() {
+    public static void tearDownGatewayRunner() {
         gatewayRunner.stopGatewayAndCleanup();
     }
 

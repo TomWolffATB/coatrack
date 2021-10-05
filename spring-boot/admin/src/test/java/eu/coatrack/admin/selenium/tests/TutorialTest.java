@@ -21,15 +21,12 @@ package eu.coatrack.admin.selenium.tests;
  */
 
 import eu.coatrack.admin.selenium.api.pages.serviceProvider.ItemDetails;
-import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetup.ServiceProviderApiKeys;
-import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetup.ServiceProviderGateways;
-import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetup.ServiceProviderServices;
 import org.junit.jupiter.api.Test;
 
 import static eu.coatrack.admin.selenium.api.PageFactory.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TutorialTest extends AbstractTestSetup {
+public class TutorialTest {
 
     @Test
     public void tutorialTest() {

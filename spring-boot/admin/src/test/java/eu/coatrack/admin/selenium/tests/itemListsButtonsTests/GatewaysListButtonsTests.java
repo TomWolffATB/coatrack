@@ -20,19 +20,17 @@ package eu.coatrack.admin.selenium.tests.itemListsButtonsTests;
  * #L%
  */
 
-import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetup.ServiceProviderGateways;
-import eu.coatrack.admin.selenium.tests.AbstractTestSetup;
 import org.junit.jupiter.api.*;
 
 import static eu.coatrack.admin.selenium.api.PageFactory.serviceProviderGateways;
 import static eu.coatrack.admin.selenium.api.PageFactory.urlReachabilityTools;
 
-public class GatewaysListButtonsTests extends AbstractTestSetup {
+public class GatewaysListButtonsTests {
 
-    private String gatewayName;
+    private static String gatewayName;
 
     @BeforeAll
-    public void setupGateway() {
+    public static void setupGateway() {
         gatewayName = serviceProviderGateways.createGateway();
     }
 
@@ -49,7 +47,7 @@ public class GatewaysListButtonsTests extends AbstractTestSetup {
     }
 
     @AfterAll
-    public void assertHavingNoErrorAndCleanup(){
+    public static void assertHavingNoErrorAndCleanup(){
         serviceProviderGateways.deleteGateway(gatewayName);
     }
 

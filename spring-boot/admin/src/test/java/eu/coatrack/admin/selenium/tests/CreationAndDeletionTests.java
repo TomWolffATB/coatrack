@@ -31,7 +31,7 @@ import static eu.coatrack.admin.selenium.api.PageFactory.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CreationAndDeletionTests extends AbstractTestSetup {
+public class CreationAndDeletionTests {
 
     @Test
     public void createAndDeleteServiceTest() {

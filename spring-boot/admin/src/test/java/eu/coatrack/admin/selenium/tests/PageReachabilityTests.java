@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 import static eu.coatrack.admin.selenium.api.PageFactory.urlReachabilityTools;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.*;
 
-public class PageReachabilityTests extends AbstractTestSetup{
+public class PageReachabilityTests {
 
     @Test
     public void testAdminDashboardReachability(){

@@ -20,19 +20,17 @@ package eu.coatrack.admin.selenium.tests.itemListsButtonsTests;
  * #L%
  */
 
-import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetup.ServiceProviderServices;
-import eu.coatrack.admin.selenium.tests.AbstractTestSetup;
 import org.junit.jupiter.api.*;
 
 import static eu.coatrack.admin.selenium.api.PageFactory.serviceProviderServices;
 import static eu.coatrack.admin.selenium.api.PageFactory.urlReachabilityTools;
 
-public class ServiceListButtonsTests extends AbstractTestSetup {
+public class ServiceListButtonsTests {
 
-    private String serviceName;
+    private static String serviceName;
 
     @BeforeAll
-    public void setupService() {
+    public static void setupService() {
         serviceName = serviceProviderServices.createPublicService();
     }
 
@@ -52,7 +50,7 @@ public class ServiceListButtonsTests extends AbstractTestSetup {
     }
 
     @AfterAll
-    public void assertHavingNoErrorAndCleanup(){
+    public static void assertHavingNoErrorAndCleanup(){
         urlReachabilityTools.throwExceptionIfErrorPageWasReceived();
         serviceProviderServices.deleteService(serviceName);
     }

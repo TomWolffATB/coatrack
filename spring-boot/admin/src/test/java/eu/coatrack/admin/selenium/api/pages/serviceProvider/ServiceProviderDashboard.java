@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.serviceProviderDashboardUrl;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.username;
 
-//TODO All the driver field and constructor logic could be simplified by using an abstract super class.
 public class ServiceProviderDashboard extends AbstractDashboardTemplate {
 
     public ServiceProviderDashboard(WebDriver driver) {

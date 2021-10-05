@@ -30,6 +30,7 @@ public class GatewayRunner {
 
     private final WebDriver driver;
 
+    //TODO Such fields can be removed as the pages can be received from PageFactory. Check other classes out as well.
     private final ServiceProviderTutorial serviceProviderTutorial;
     private final ServiceProviderApiKeys serviceProviderApiKeys;
     private final ServiceProviderGateways serviceProviderGateways;
@@ -47,7 +48,7 @@ public class GatewayRunner {
         serviceProviderServices = new ServiceProviderServices(driver);
     }
 
-    public GatewayRunner executeRunner(){
+    public void executeRunner(){
         try {
             itemDetails = serviceProviderTutorial.createItemsViaTutorial();
             file = downloadGateway(itemDetails.gatewayDownloadLink);
@@ -57,7 +58,6 @@ public class GatewayRunner {
                 stopGatewayAndCleanup();
             throw new GatewayRunnerInitializationException("Something went wrong during the initialization process.", e);
         }
-        return this;
     }
 
     private void executeGatewayDownload(String gatewayDownloadLink) throws IOException, InterruptedException {

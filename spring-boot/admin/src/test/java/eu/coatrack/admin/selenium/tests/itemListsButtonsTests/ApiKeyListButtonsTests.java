@@ -20,18 +20,17 @@ package eu.coatrack.admin.selenium.tests.itemListsButtonsTests;
  * #L%
  */
 
-import eu.coatrack.admin.selenium.tests.AbstractTestSetup;
 import org.junit.jupiter.api.*;
 
 import static eu.coatrack.admin.selenium.api.PageFactory.*;
 
-public class ApiKeyListButtonsTests extends AbstractTestSetup {
+public class ApiKeyListButtonsTests {
 
-    private String apiKeyValue;
-    private String serviceName;
+    private static String apiKeyValue;
+    private static String serviceName;
 
     @BeforeAll
-    public void setupApiKey() {
+    public static void setupApiKey() {
         serviceName = serviceProviderServices.createPublicService();
         apiKeyValue = serviceProviderApiKeys.createApiKey(serviceName);
     }
@@ -55,7 +54,7 @@ public class ApiKeyListButtonsTests extends AbstractTestSetup {
     }
 
     @AfterAll
-    public void assertHavingNoErrorAndCleanup(){
+    public static void assertHavingNoErrorAndCleanup(){
         serviceProviderApiKeys.deleteApiKey(apiKeyValue);
         serviceProviderServices.deleteService(serviceName);
     }

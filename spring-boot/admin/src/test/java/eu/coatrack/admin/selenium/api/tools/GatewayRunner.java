@@ -13,9 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
+import java.net.Socket;
 
 import static eu.coatrack.admin.selenium.api.PageFactory.*;
 import static eu.coatrack.admin.selenium.api.UtilFactory.driver;
+import static eu.coatrack.admin.selenium.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.admin.selenium.configuration.CookieInjector.sessionCookie;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.localGatewayAccessUrl;
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.host;
@@ -81,8 +83,6 @@ public class GatewayRunner {
             String line = "java -jar " + file.getPath();
             CommandLine cmdLine = CommandLine.parse(line);
             DefaultExecutor executor = new DefaultExecutor();
-            ExecuteWatchdog watchdog = new ExecuteWatchdog(300000);
-            executor.setWatchdog(watchdog);
             try {
                 executor.execute(cmdLine);
             } catch (IOException e) {
@@ -91,11 +91,23 @@ public class GatewayRunner {
         });
         jarExecutionThread.setDaemon(true);
         jarExecutionThread.start();
-
-        //TODO Wait until the gateway is setup and listens on port 8088. Maybe by fetching the logs?
-        Thread.sleep(30000);
+        waitUntilGatewayIsInitialized();
 
         return jarExecutionThread;
+    }
+
+    private static void waitUntilGatewayIsInitialized() {
+        boolean isConnectionEstablished = false;
+        while (!isConnectionEstablished){
+            try {
+                Socket socket = new Socket("localhost", 8088);
+                isConnectionEstablished = true;
+                socket.close();
+            } catch (Exception e){
+                logger.debug("Connection to Gateway could not yet be established.");
+                sleepMillis(1000);
+            }
+        }
     }
 
     public void stopGatewayAndCleanup() {

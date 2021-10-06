@@ -26,28 +26,10 @@ import java.util.Properties;
 
 public class PageConfiguration {
 
-    //Input Parameters
     public static final String username;
     public static final String password;
-
-    //Page URLs
     public static final String host;
     public static final String startpageUrl;
-    public static final String serviceProviderDashboardUrl;
-    public static final String serviceProviderTutorialUrl;
-    public static final String serviceProviderServicesUrl;
-    public static final String serviceProviderGatewaysUrl;
-    public static final String serviceProviderApiKeysUrl;
-    public static final String serviceProviderReportsUrl;
-
-    public static final String serviceConsumerDashboardUrl;
-    public static final String serviceConsumerTutorialUrl;
-    public static final String serviceConsumerApiKeyListUrl;
-    public static final String serviceConsumerServiceListUrl;
-    public static final String serviceConsumerReportsUrl;
-
-    public static final String exampleServiceUrl;
-    public static final String localGatewayAccessUrl;
 
     static {
         File configFile = new File("config.properties");
@@ -68,27 +50,26 @@ public class PageConfiguration {
             else
                 startpageUrl = protocol + "://" + host;
 
-            serviceProviderDashboardUrl = startpageUrl + props.getProperty("adminDashboardUrl");
-            serviceProviderTutorialUrl = startpageUrl + props.getProperty("adminTutorialUrl");
-            serviceProviderServicesUrl = startpageUrl + props.getProperty("adminServiceListUrl");
-            serviceProviderGatewaysUrl = startpageUrl + props.getProperty("adminGatewayListUrl");
-            serviceProviderApiKeysUrl = startpageUrl + props.getProperty("adminApiKeyListUrl");
-            serviceProviderReportsUrl = startpageUrl + props.getProperty("adminReportsUrl");
-
-            serviceConsumerDashboardUrl = startpageUrl + props.getProperty("consumerDashboardUrl");
-            serviceConsumerTutorialUrl = startpageUrl + props.getProperty("consumerTutorialUrl");
-            serviceConsumerApiKeyListUrl = startpageUrl + props.getProperty("consumerApiKeyListUrl");
-            serviceConsumerServiceListUrl = startpageUrl + props.getProperty("consumerServiceListUrl");
-            serviceConsumerReportsUrl = startpageUrl + props.getProperty("consumerReportsUrl");
-
-            exampleServiceUrl = props.getProperty("providerServiceUrl");
-            localGatewayAccessUrl = props.getProperty("gatewayAccessUrl");
-
-
             reader.close();
         } catch (Exception e) {
             throw new RuntimeException("The reading of the page configuration failed.", e);
         }
     }
+
+    public static final String serviceProviderDashboardUrl      = startpageUrl + "/admin";
+    public static final String serviceProviderTutorialUrl       = startpageUrl + "/admin/gettingstarted";
+    public static final String serviceProviderServicesUrl       = startpageUrl + "/admin/services";
+    public static final String serviceProviderGatewaysUrl       = startpageUrl + "/admin/proxies";
+    public static final String serviceProviderApiKeysUrl        = startpageUrl + "/admin/api-keys";
+    public static final String serviceProviderReportsUrl        = startpageUrl + "/admin/reports";
+
+    public static final String serviceConsumerDashboardUrl      = startpageUrl + "/admin/consumer";
+    public static final String serviceConsumerTutorialUrl       = startpageUrl + "/admin/consumer/gettingstarted";
+    public static final String serviceConsumerApiKeyListUrl     = startpageUrl + "/admin/api-keys/consumer/list";
+    public static final String serviceConsumerServiceListUrl    = startpageUrl + "/admin/services/consumer/list";
+    public static final String serviceConsumerReportsUrl        = startpageUrl + "/admin/reports/consumer";
+
+    public static final String exampleServiceUrl                = "http://example.org/";
+    public static final String localGatewayAccessUrl            = "http://localhost:8088";
 
 }

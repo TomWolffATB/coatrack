@@ -20,6 +20,8 @@ package eu.coatrack.admin.selenium.configuration;
  * #L%
  */
 
+//TODO This configuration could be simplified and the API can be made more robust, when the TableUtils automatically
+// searches for the right column for a button. Is that a good idea?
 public class TableConfiguration {
 
     public static final String emptyTableText = "No items yet";

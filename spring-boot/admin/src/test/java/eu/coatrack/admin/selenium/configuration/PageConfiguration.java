@@ -26,10 +26,7 @@ import java.util.Properties;
 
 public class PageConfiguration {
 
-    public static final String username;
-    public static final String password;
-    public static final String host;
-    public static final String startpageUrl;
+    public static final String username, password, host, startpageUrl;
 
     static {
         File configFile = new File("config.properties");
@@ -56,20 +53,21 @@ public class PageConfiguration {
         }
     }
 
-    public static final String serviceProviderDashboardUrl      = startpageUrl + "/admin";
-    public static final String serviceProviderTutorialUrl       = startpageUrl + "/admin/gettingstarted";
-    public static final String serviceProviderServicesUrl       = startpageUrl + "/admin/services";
-    public static final String serviceProviderGatewaysUrl       = startpageUrl + "/admin/proxies";
-    public static final String serviceProviderApiKeysUrl        = startpageUrl + "/admin/api-keys";
-    public static final String serviceProviderReportsUrl        = startpageUrl + "/admin/reports";
+    public static final String
+            serviceProviderDashboardUrl      = startpageUrl + "/admin",
+            serviceProviderTutorialUrl       = startpageUrl + "/admin/gettingstarted",
+            serviceProviderServicesUrl       = startpageUrl + "/admin/services",
+            serviceProviderGatewaysUrl       = startpageUrl + "/admin/proxies",
+            serviceProviderApiKeysUrl        = startpageUrl + "/admin/api-keys",
+            serviceProviderReportsUrl        = startpageUrl + "/admin/reports",
 
-    public static final String serviceConsumerDashboardUrl      = startpageUrl + "/admin/consumer";
-    public static final String serviceConsumerTutorialUrl       = startpageUrl + "/admin/consumer/gettingstarted";
-    public static final String serviceConsumerApiKeyListUrl     = startpageUrl + "/admin/api-keys/consumer/list";
-    public static final String serviceConsumerServiceListUrl    = startpageUrl + "/admin/services/consumer/list";
-    public static final String serviceConsumerReportsUrl        = startpageUrl + "/admin/reports/consumer";
+            serviceConsumerDashboardUrl      = startpageUrl + "/admin/consumer",
+            serviceConsumerTutorialUrl       = startpageUrl + "/admin/consumer/gettingstarted",
+            serviceConsumerApiKeyListUrl     = startpageUrl + "/admin/api-keys/consumer/list",
+            serviceConsumerServiceListUrl    = startpageUrl + "/admin/services/consumer/list",
+            serviceConsumerReportsUrl        = startpageUrl + "/admin/reports/consumer",
 
-    public static final String exampleServiceUrl                = "http://example.org/";
-    public static final String localGatewayAccessUrl            = "http://localhost:8088";
+            exampleServiceUrl                = "http://example.org/",
+            localGatewayAccessUrl            = "http://localhost:8088";
 
 }

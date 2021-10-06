@@ -22,53 +22,62 @@ package eu.coatrack.admin.selenium.configuration;
 
 import static eu.coatrack.admin.selenium.configuration.PageConfiguration.startpageUrl;
 
-//TODO This configuration could be simplified and the API can be made more robust, when the TableUtils automatically
-// searches for the right column for a button. Is that a good idea?
 public class TableConfiguration {
 
-    public static final String emptyTableText = "No items yet";
-    public static final String trashButtonClassName = "fa-trash";
-    public static final String uiDialogClassName = "ui-dialog";
+    public static final String
+            emptyTableText = "No items yet",
+            trashButtonClassName = "fa-trash",
+            uiDialogClassName = "ui-dialog";
 
-    public static final String  serviceProviderApiKeysTableId = "apiKeyTable";
-    public static final int     serviceProviderApiKeysTrashButtonColumn = 6;
-    public static final int     serviceProviderApiKeysDefaultNameColumn = 2;
-    public static final int     serviceProviderApiKeysCalenderButtonColumn = 5;
-    public static final int     serviceProviderApiKeysDetailsButtonColumn = 6;
-    public static final int     serviceProviderApiKeysEditButtonColumn = 6;
-    public static final String  serviceProviderApiKeysCalenderButtonClassName = "glyphicon-calendar";
-    public static final String  serviceProviderApiKeysDetailsButtonClassName = "fa-search-plus";
-    public static final String  serviceProviderApiKeysEditButtonClassName = "fa-pencil-square-o";
+    public static final String
+            serviceProviderApiKeysTableId = "apiKeyTable",
+            serviceProviderApiKeysCalenderButtonClassName = "glyphicon-calendar",
+            serviceProviderApiKeysDetailsButtonClassName = "fa-search-plus",
+            serviceProviderApiKeysEditButtonClassName = "fa-pencil-square-o";
+    public static final int
+            serviceProviderApiKeysTrashButtonColumn = 6,
+            serviceProviderApiKeysDefaultNameColumn = 2,
+            serviceProviderApiKeysCalenderButtonColumn = 5,
+            serviceProviderApiKeysDetailsButtonColumn = 6,
+            serviceProviderApiKeysEditButtonColumn = 6;
 
-    public static final String  serviceProviderGatewaysTableId = "proxiesTable";
-    public static final int     serviceProviderGatewaysTrashButtonColumn = startpageUrl.contains("https://coatrack.eu") ? 8 : 9; //TODO To be adapted when coatrack.eu merges the Gateway Health Monitor feature.
-    public static final int     serviceProviderGatewaysNameColumn = 0;
-    public static final int     serviceProviderGatewaysDetailsButtonColumn = 7;
-    public static final int     serviceProviderGatewaysEditButtonColumn = startpageUrl.contains("https://coatrack.eu") ? 8 : 9; //TODO To be adapted when coatrack.eu merges the Gateway Health Monitor feature.
-    public static final int     serviceProviderGatewaysIdColumn = 1;
-    public static final String  serviceProviderGatewaysDetailsButtonClassName = "fa-bar-chart";
-    public static final String  serviceProviderGatewaysEditButtonClassName = "fa-pencil-square-o";
+    public static final String
+            serviceProviderGatewaysTableId = "proxiesTable",
+            serviceProviderGatewaysDetailsButtonClassName = "fa-bar-chart",
+            serviceProviderGatewaysEditButtonClassName = "fa-pencil-square-o";
+    public static final int
+            serviceProviderGatewaysTrashButtonColumn = startpageUrl.contains("https://coatrack.eu") ? 8 : 9, //TODO To be adapted when coatrack.eu merges the Gateway Health Monitor feature.
+            serviceProviderGatewaysNameColumn = 0,
+            serviceProviderGatewaysDetailsButtonColumn = 7,
+            serviceProviderGatewaysEditButtonColumn = startpageUrl.contains("https://coatrack.eu") ? 8 : 9, //TODO To be adapted when coatrack.eu merges the Gateway Health Monitor feature.
+            serviceProviderGatewaysIdColumn = 1;
 
-    public static final String  serviceProviderServicesTableId = "servicesTable";
-    public static final int     serviceProviderServicesIdColumn = 2;
-    public static final int     serviceProviderServicesNameColumn = 0;
-    public static final int     serviceProviderServicesTrashButtonColumn = 6;
-    public static final int     serviceProviderServicesDefaultNameColumn = 0;
-    public static final int     serviceProviderServicesFirstEditButtonColumn = 6;
-    public static final int     serviceProviderServicesDetailsButtonColumn = 6;
-    public static final int     serviceProviderServicesSecondEditButtonColumn = 6;
-    public static final String  serviceProviderServicesFirstEditButtonClassName = "fa-image";
-    public static final String  serviceProviderServicesDetailsButtonClassName = "fa-search-plus";
-    public static final String  serviceProviderServicesSecondEditButtonClassName = "fa-pencil-square-o";
+    public static final String
+            serviceProviderServicesTableId = "servicesTable",
+            serviceProviderServicesFirstEditButtonClassName = "fa-image",
+            serviceProviderServicesDetailsButtonClassName = "fa-search-plus",
+            serviceProviderServicesSecondEditButtonClassName = "fa-pencil-square-o";
+    public static final int
+            serviceProviderServicesIdColumn = 2,
+            serviceProviderServicesNameColumn = 0,
+            serviceProviderServicesTrashButtonColumn = 6,
+            serviceProviderServicesDefaultNameColumn = 0,
+            serviceProviderServicesFirstEditButtonColumn = 6,
+            serviceProviderServicesDetailsButtonColumn = 6,
+            serviceProviderServicesSecondEditButtonColumn = 6;
 
-    public static final String  serviceConsumerApiKeysTableId = "apiKeyTable";
-    public static final int     serviceConsumerApiKeysTrashButtonColumn = 6; //Will be usable when #56 PR is merged.
-    public static final int     serviceConsumerApiKeysDefaultNameColumn = 3;
+    public static final String
+            serviceConsumerApiKeysTableId = "apiKeyTable";
+    public static final int
+            serviceConsumerApiKeysTrashButtonColumn = 6, //Will be usable when #56 PR is merged.
+            serviceConsumerApiKeysDefaultNameColumn = 3;
 
-    public static final String  serviceConsumerServicesTableId = "servicesTable";
+    public static final String
+            serviceConsumerServicesTableId = "servicesTable";
     //There is no deletion button for service in consumer services table, yet. However, this parameter is required by TableUtils.
-    public static final int     serviceConsumerServicesTrashButtonColumn = 0;
-    public static final int     serviceConsumerServicesDefaultNameColumn = 0;
-    public static final int     serviceConsumerServicesApiKeyGenerationColumn = 4;
+    public static final int
+            serviceConsumerServicesTrashButtonColumn = 0,
+            serviceConsumerServicesDefaultNameColumn = 0,
+            serviceConsumerServicesApiKeyGenerationColumn = 4;
 
 }

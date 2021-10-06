@@ -48,7 +48,7 @@ public class ServiceProviderTutorial {
                 .until(ExpectedConditions.presenceOfElementLocated(By.linkText("Click here to download your CoatRack Gateway")));
 
         String gatewayDownloadLink = gatewayDownloadLinkElement.getAttribute("href");
-        String apiKeyValue = driver.findElement(By.cssSelector(".row:nth-child(3) p:nth-child(2)")).getText();
+        String apiKeyValue = driver.findElements(By.cssSelector("strong")).stream().filter(s -> s.findElements(By.cssSelector("span")).size() > 0).findFirst().get().findElement(By.cssSelector("span")).getText();
         String[] gatewayDownloadLinkParts = gatewayDownloadLink.split("/");
         String gatewayIdentifier = gatewayDownloadLinkParts[gatewayDownloadLinkParts.length-2];
         String serviceId = serviceProviderServiceTableUtils.getColumnTextFromItemRow(serviceName, serviceProviderServicesNameColumn, serviceProviderServicesIdColumn);

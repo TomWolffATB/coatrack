@@ -23,10 +23,12 @@ package eu.coatrack.admin.selenium.tests;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import static eu.coatrack.admin.selenium.api.PageFactory.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class DashboardAndReportUpdateTests {
 
     private final int serviceProviderTotalApiCalls = serviceProviderDashboard.getTotalApiCalls();
@@ -36,17 +38,15 @@ public class DashboardAndReportUpdateTests {
     private final int serviceConsumerTotalApiCalls = serviceConsumerDashboard.getTotalApiCalls();
     private final int serviceConsumerNumberOfServicesCalled = serviceConsumerDashboard.getNumberOfServicesCalled();
 
-    private final int serviceProviderReportedServiceCalls = serviceProviderReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
-    private final int serviceConsumerReportedServiceCalls = serviceConsumerReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
+    private final int serviceProviderReportedServiceCalls;
+    private final int serviceConsumerReportedServiceCalls;
 
     public DashboardAndReportUpdateTests(){
-        gatewayRunner.makeValidServiceCall();
-        gatewayRunner.makeValidServiceCall();
-    }
-
-    @BeforeAll
-    public static void setupGatewayRunner() {
         gatewayRunner.executeRunner();
+        serviceProviderReportedServiceCalls = serviceProviderReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
+        serviceConsumerReportedServiceCalls = serviceConsumerReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
+        gatewayRunner.makeValidServiceCall();
+        gatewayRunner.makeValidServiceCall();
     }
 
     @Test
@@ -69,7 +69,6 @@ public class DashboardAndReportUpdateTests {
         assertEquals(serviceConsumerTotalApiCalls + 2, serviceConsumerDashboard.getTotalApiCalls());
     }
 
-    //TODO Test is broken, but why?
     @Test
     public void consumerDashboardNumberOfServicesCalledUpdateTest() {
         assertEquals(serviceConsumerNumberOfServicesCalled + 1, serviceConsumerDashboard.getNumberOfServicesCalled());

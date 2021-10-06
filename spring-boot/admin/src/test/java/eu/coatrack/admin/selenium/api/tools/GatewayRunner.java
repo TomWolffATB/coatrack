@@ -32,7 +32,6 @@ public class GatewayRunner {
     public void executeRunner(){
         try {
             itemDetails = serviceProviderTutorial.createItemsViaTutorial();
-            System.out.println("Download link: " + itemDetails.gatewayDownloadLink);
             file = downloadGateway(itemDetails.gatewayDownloadLink);
             jarThread = executeGatewayJar(file);
         } catch (Exception e) {
@@ -44,7 +43,12 @@ public class GatewayRunner {
 
     private void executeGatewayDownload(String gatewayDownloadLink) throws IOException, InterruptedException {
         Runtime rt = Runtime.getRuntime();
-        String firstPartOfCommand = "cmd /c wsl curl -v ";
+        String firstPartOfCommand;
+        //TODO Why does localhost only work with normal curl and coatrack.eu with wsl-curl?
+        if (host.equals("localhost"))
+            firstPartOfCommand = "cmd /c curl -v ";
+        else
+            firstPartOfCommand = "cmd /c wsl curl -v ";
         if (host.equals("localhost"))
             firstPartOfCommand += "-k ";
         String command = firstPartOfCommand + "--cookie \"SESSION=" + sessionCookie.getValue() + "\" --output ./" + gatewayJarFileName + " " + gatewayDownloadLink;

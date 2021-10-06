@@ -37,6 +37,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import static eu.coatrack.admin.selenium.configuration.CookieInjector.injectAuthenticationCookieToDriver;
+import static eu.coatrack.admin.selenium.configuration.PageConfiguration.startpageUrl;
 
 public class PageFactory {
 
@@ -63,6 +64,8 @@ public class PageFactory {
         injectAuthenticationCookieToDriver(driver);
         serviceProviderServices.deleteAllServices();
         serviceProviderGateways.deleteAllGateways();
-        serviceProviderApiKeys.deleteAllApiKeys();
+        //TODO The if condition can be removed when the API key deletion button is working on dev.coatrack.eu again.
+        if (!startpageUrl.contains("dev.coatrack.eu"))
+            serviceProviderApiKeys.deleteAllApiKeys();
     }
 }

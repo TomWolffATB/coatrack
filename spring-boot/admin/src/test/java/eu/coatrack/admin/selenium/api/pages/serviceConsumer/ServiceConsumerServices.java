@@ -21,6 +21,7 @@ package eu.coatrack.admin.selenium.api.pages.serviceConsumer;
  */
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -46,6 +47,6 @@ public class ServiceConsumerServices {
                 .filter(row -> serviceConsumerServiceTableUtils.getCellInColumn(row, serviceConsumerServicesDefaultNameColumn).getText().contains(serviceName))
                 .findFirst().get();
         serviceConsumerApiKeyTableUtils.getCellInColumn(rowOfService, serviceConsumerServicesApiKeyGenerationColumn)
-                .findElement(By.cssSelector("button")).click();
+                .findElement(By.cssSelector("button")).sendKeys(Keys.RETURN);
     }
 }

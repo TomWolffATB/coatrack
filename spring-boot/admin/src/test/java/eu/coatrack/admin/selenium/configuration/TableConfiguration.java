@@ -20,6 +20,8 @@ package eu.coatrack.admin.selenium.configuration;
  * #L%
  */
 
+import static eu.coatrack.admin.selenium.configuration.PageConfiguration.startpageUrl;
+
 //TODO This configuration could be simplified and the API can be made more robust, when the TableUtils automatically
 // searches for the right column for a button. Is that a good idea?
 public class TableConfiguration {
@@ -39,10 +41,10 @@ public class TableConfiguration {
     public static final String  serviceProviderApiKeysEditButtonClassName = "fa-pencil-square-o";
 
     public static final String  serviceProviderGatewaysTableId = "proxiesTable";
-    public static final int     serviceProviderGatewaysTrashButtonColumn = 9;
+    public static final int     serviceProviderGatewaysTrashButtonColumn = startpageUrl.contains("https://coatrack.eu") ? 8 : 9; //TODO To be adapted when coatrack.eu merges the Gateway Health Monitor feature.
     public static final int     serviceProviderGatewaysNameColumn = 0;
     public static final int     serviceProviderGatewaysDetailsButtonColumn = 7;
-    public static final int     serviceProviderGatewaysEditButtonColumn = 9;
+    public static final int     serviceProviderGatewaysEditButtonColumn = startpageUrl.contains("https://coatrack.eu") ? 8 : 9; //TODO To be adapted when coatrack.eu merges the Gateway Health Monitor feature.
     public static final int     serviceProviderGatewaysIdColumn = 1;
     public static final String  serviceProviderGatewaysDetailsButtonClassName = "fa-bar-chart";
     public static final String  serviceProviderGatewaysEditButtonClassName = "fa-pencil-square-o";

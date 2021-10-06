@@ -23,17 +23,19 @@ import static eu.coatrack.admin.selenium.configuration.PageConfiguration.host;
 public class GatewayRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(GatewayRunner.class);
-    private final String gatewayJarFileName = "gateway.jar";
 
     private Thread jarThread;
     private ItemDetails itemDetails;
-    private File file;
+    private File gatewayJar;
 
     public void executeRunner(){
+        if (jarThread != null)
+            stopGatewayAndCleanup();
+
         try {
             itemDetails = serviceProviderTutorial.createItemsViaTutorial();
-            file = downloadGateway(itemDetails.gatewayDownloadLink);
-            jarThread = executeGatewayJar(file);
+            gatewayJar = downloadGateway(itemDetails.gatewayDownloadLink);
+            jarThread = executeGatewayJar(gatewayJar);
         } catch (Exception e) {
             if (jarThread != null)
                 stopGatewayAndCleanup();
@@ -41,36 +43,37 @@ public class GatewayRunner {
         }
     }
 
-    private void executeGatewayDownload(String gatewayDownloadLink) throws IOException, InterruptedException {
-        Runtime rt = Runtime.getRuntime();
-        String firstPartOfCommand;
-        //TODO Why does localhost only work with normal curl and coatrack.eu with wsl-curl?
-        if (host.equals("localhost"))
-            firstPartOfCommand = "cmd /c curl -v ";
-        else
-            firstPartOfCommand = "cmd /c wsl curl -v ";
-        if (host.equals("localhost"))
-            firstPartOfCommand += "-k ";
-        String command = firstPartOfCommand + "--cookie \"SESSION=" + sessionCookie.getValue() + "\" --output ./" + gatewayJarFileName + " " + gatewayDownloadLink;
-        Process pr = rt.exec(command);
-        pr.waitFor();
-    }
-
     private File downloadGateway(String gatewayDownloadLink) throws IOException, InterruptedException {
-        File file = getGatewayJarFile();
-        executeGatewayDownload(gatewayDownloadLink);
-        if (!file.exists() || file.length() < 1000)
+        File gatewayJar = getGatewayJarFile();
+        executeGatewayDownload(gatewayDownloadLink, gatewayJar.getName());
+        if (!gatewayJar.exists() || gatewayJar.length() < 1000)
             throw new GatewayDownloadFailedException("Trying to download the Gateway '" + itemDetails.gatewayName + "' an error occurred.");
-        return file;
+        return gatewayJar;
     }
 
     private File getGatewayJarFile() {
-        File gatewayJarFile = new File(gatewayJarFileName);
+        File gatewayJarFile = new File("gateway.jar");
         if (gatewayJarFile.exists())
             gatewayJarFile.delete();
         if (gatewayJarFile.exists())
             throw new FileCouldNotBeDeletedException("The file " + gatewayJarFile.getName() + "could not be deleted.");
         return gatewayJarFile;
+    }
+
+    private void executeGatewayDownload(String gatewayDownloadLink, String gatewayJarName) throws IOException, InterruptedException {
+        Runtime rt = Runtime.getRuntime();
+        String gatewayDownloadCommand = createGatewayDownloadCommand(gatewayDownloadLink, gatewayJarName);
+        Process pr = rt.exec(gatewayDownloadCommand);
+        pr.waitFor();
+    }
+
+    private String createGatewayDownloadCommand(String gatewayDownloadLink, String gatewayJarFileName) {
+        String firstPartOfCommand;
+        if (host.equals("localhost"))
+            firstPartOfCommand = "cmd /c curl -v -k ";
+        else
+            firstPartOfCommand = "cmd /c wsl curl -v ";
+        return firstPartOfCommand + "--cookie \"SESSION=" + sessionCookie.getValue() + "\" --output ./" + gatewayJarFileName + " " + gatewayDownloadLink;
     }
 
     private static Thread executeGatewayJar(File file) throws InterruptedException {
@@ -97,6 +100,7 @@ public class GatewayRunner {
 
     public void stopGatewayAndCleanup() {
         jarThread.interrupt();
+        jarThread = null;
 
         String gatewayName = serviceProviderGateways.getGatewayNameByIdentifier(itemDetails.gatewayIdentifier);
         serviceProviderGateways.deleteGateway(gatewayName);
@@ -104,9 +108,9 @@ public class GatewayRunner {
         serviceProviderApiKeys.deleteApiKey(itemDetails.apiKeyValue);
         serviceProviderServices.deleteService(itemDetails.serviceName);
 
-        file.delete();
-        if (file.exists())
-            throw new FileCouldNotBeDeletedException("The file " + file.getName() + "could not be deleted.");
+        gatewayJar.delete();
+        if (gatewayJar.exists())
+            throw new FileCouldNotBeDeletedException("The file " + gatewayJar.getName() + "could not be deleted.");
     }
 
     public void makeValidServiceCall() {

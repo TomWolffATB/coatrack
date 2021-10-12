@@ -76,7 +76,7 @@ public class ServiceProviderTutorial {
         driver.findElement(By.id("serviceForFreeYes")).click();
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
 
-        sleepMillis(1000);
+        sleepMillis(2000);
         driver.findElement(By.linkText("Finish")).sendKeys(Keys.RETURN);
     }
 }

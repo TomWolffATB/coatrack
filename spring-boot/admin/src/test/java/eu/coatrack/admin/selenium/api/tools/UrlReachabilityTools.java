@@ -35,7 +35,7 @@ public class UrlReachabilityTools {
             driver.get(urlToBeVisited);
     }
 
-    public void assertThatUrlIsReachable(String url){
+    public void throwExceptionIfUrlIsNotReachable(String url){
         driver.get(url);
         throwExceptionIfErrorPageWasReceived();
         if (!url.equals(driver.getCurrentUrl()))
@@ -43,7 +43,10 @@ public class UrlReachabilityTools {
     }
 
     public void throwExceptionIfErrorPageWasReceived(){
-        if (driver.getPageSource().contains("Sorry, an error occurred."))
-            throw new UnexpectedErrorPageReceivedException("A non-error page was expected to appear.");
+        String pageSource = driver.getPageSource();
+        if (pageSource.contains("Sorry, an error occurred."))
+            throw new UnexpectedErrorPageReceivedException("The CoatRack error page appeared.");
+        else if (pageSource.contains("Whitelabel Error Page"))
+            throw new UnexpectedErrorPageReceivedException("A Whitelabel Error Page appeared.");
     }
 }

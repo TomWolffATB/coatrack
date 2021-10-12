@@ -29,57 +29,57 @@ public class PageReachabilityTests {
 
     @Test
     public void testAdminDashboardReachability(){
-        urlReachabilityTools.assertThatUrlIsReachable(serviceProviderDashboardUrl);
+        urlReachabilityTools.throwExceptionIfUrlIsNotReachable(serviceProviderDashboardUrl);
     }
 
     @Test
     public void testAdminTutorialReachability(){
-        urlReachabilityTools.assertThatUrlIsReachable(serviceProviderTutorialUrl);
+        urlReachabilityTools.throwExceptionIfUrlIsNotReachable(serviceProviderTutorialUrl);
     }
 
     @Test
     public void testAdminServiceListReachability(){
-        urlReachabilityTools.assertThatUrlIsReachable(serviceProviderServicesUrl);
+        urlReachabilityTools.throwExceptionIfUrlIsNotReachable(serviceProviderServicesUrl);
     }
 
     @Test
     public void testAdminGatewayListReachability(){
-        urlReachabilityTools.assertThatUrlIsReachable(serviceProviderGatewaysUrl);
+        urlReachabilityTools.throwExceptionIfUrlIsNotReachable(serviceProviderGatewaysUrl);
     }
 
     @Test
     public void testAdminApiKeyListReachability(){
-        urlReachabilityTools.assertThatUrlIsReachable(serviceProviderApiKeysUrl);
+        urlReachabilityTools.throwExceptionIfUrlIsNotReachable(serviceProviderApiKeysUrl);
     }
 
     @Test
     public void testAdminReportsReachability(){
-        urlReachabilityTools.assertThatUrlIsReachable(serviceProviderReportsUrl);
+        urlReachabilityTools.throwExceptionIfUrlIsNotReachable(serviceProviderReportsUrl);
     }
 
     @Test
     public void testConsumerDashboardReachability(){
-        urlReachabilityTools.assertThatUrlIsReachable(serviceConsumerDashboardUrl);
+        urlReachabilityTools.throwExceptionIfUrlIsNotReachable(serviceConsumerDashboardUrl);
     }
 
     @Test
     public void testConsumerTutorialReachability(){
-        urlReachabilityTools.assertThatUrlIsReachable(serviceConsumerTutorialUrl);
+        urlReachabilityTools.throwExceptionIfUrlIsNotReachable(serviceConsumerTutorialUrl);
     }
 
     @Test
     public void testConsumerApiKeyListReachability(){
-        urlReachabilityTools.assertThatUrlIsReachable(serviceConsumerApiKeyListUrl);
+        urlReachabilityTools.throwExceptionIfUrlIsNotReachable(serviceConsumerApiKeyListUrl);
     }
 
     @Test
     public void testConsumerServiceListReachability(){
-        urlReachabilityTools.assertThatUrlIsReachable(serviceConsumerServiceListUrl);
+        urlReachabilityTools.throwExceptionIfUrlIsNotReachable(serviceConsumerServiceListUrl);
     }
 
     @Test
     public void testConsumerReportsReachability(){
-        urlReachabilityTools.assertThatUrlIsReachable(serviceConsumerReportsUrl);
+        urlReachabilityTools.throwExceptionIfUrlIsNotReachable(serviceConsumerReportsUrl);
     }
 
 }

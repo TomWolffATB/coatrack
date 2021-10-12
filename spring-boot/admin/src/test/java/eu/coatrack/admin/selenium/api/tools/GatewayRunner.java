@@ -1,13 +1,10 @@
 package eu.coatrack.admin.selenium.api.tools;
 
 import eu.coatrack.admin.selenium.api.pages.serviceProvider.ItemDetails;
-import eu.coatrack.admin.selenium.exceptions.FileCouldNotBeDeletedException;
-import eu.coatrack.admin.selenium.exceptions.GatewayDownloadFailedException;
-import eu.coatrack.admin.selenium.exceptions.GatewayRunnerInitializationException;
-import eu.coatrack.admin.selenium.exceptions.ServiceCouldNotBeAccessedUsingApiKeyException;
+import eu.coatrack.admin.selenium.exceptions.*;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.ExecuteWatchdog;
+import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,10 +68,17 @@ public class GatewayRunner {
 
     private String createGatewayDownloadCommand(String gatewayDownloadLink, String gatewayJarFileName) {
         String firstPartOfCommand;
-        if (host.equals("localhost"))
-            firstPartOfCommand = "cmd /c curl -v -k ";
+        if (SystemUtils.IS_OS_WINDOWS) {
+            if (host.equals("localhost"))
+                firstPartOfCommand = "cmd /c curl -v -k ";
+            else
+                firstPartOfCommand = "cmd /c wsl curl -v ";
+        }
+        else if (SystemUtils.IS_OS_LINUX)
+            firstPartOfCommand = "curl -v ";
         else
-            firstPartOfCommand = "cmd /c wsl curl -v ";
+            throw new UnsupportedOperatingSystemException("This feature supports Linux and Windows only.");
+
         return firstPartOfCommand + "--cookie \"SESSION=" + sessionCookie.getValue() + "\" --output ./" + gatewayJarFileName + " " + gatewayDownloadLink;
     }
 

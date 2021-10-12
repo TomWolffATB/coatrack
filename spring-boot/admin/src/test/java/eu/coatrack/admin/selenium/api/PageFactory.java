@@ -21,10 +21,7 @@ package eu.coatrack.admin.selenium.api;
  */
 
 import eu.coatrack.admin.selenium.api.pages.LoginPage;
-import eu.coatrack.admin.selenium.api.pages.serviceConsumer.ServiceConsumerApiKeys;
-import eu.coatrack.admin.selenium.api.pages.serviceConsumer.ServiceConsumerDashboard;
-import eu.coatrack.admin.selenium.api.pages.serviceConsumer.ServiceConsumerReports;
-import eu.coatrack.admin.selenium.api.pages.serviceConsumer.ServiceConsumerServices;
+import eu.coatrack.admin.selenium.api.pages.serviceConsumer.*;
 import eu.coatrack.admin.selenium.api.pages.serviceProvider.ServiceProviderDashboard;
 import eu.coatrack.admin.selenium.api.pages.serviceProvider.ServiceProviderReports;
 import eu.coatrack.admin.selenium.api.pages.serviceProvider.serviceOfferingsSetup.ServiceProviderApiKeys;
@@ -59,6 +56,7 @@ public class PageFactory {
     public static final ServiceConsumerApiKeys      serviceConsumerApiKeys      = new ServiceConsumerApiKeys();
     public static final ServiceConsumerDashboard    serviceConsumerDashboard    = new ServiceConsumerDashboard();
     public static final ServiceConsumerReports      serviceConsumerReports      = new ServiceConsumerReports();
+    public static final ServiceConsumerTutorial     serviceConsumerTutorial     = new ServiceConsumerTutorial();
 
     static {
         injectAuthenticationCookieToDriver(driver);

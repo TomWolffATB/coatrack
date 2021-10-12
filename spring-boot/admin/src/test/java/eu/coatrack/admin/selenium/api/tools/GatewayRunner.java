@@ -59,11 +59,11 @@ public class GatewayRunner {
         return gatewayJarFile;
     }
 
-    private void executeGatewayDownload(String gatewayDownloadLink, String gatewayJarName) throws IOException, InterruptedException {
-        Runtime rt = Runtime.getRuntime();
+    private void executeGatewayDownload(String gatewayDownloadLink, String gatewayJarName) throws IOException {
         String gatewayDownloadCommand = createGatewayDownloadCommand(gatewayDownloadLink, gatewayJarName);
-        Process pr = rt.exec(gatewayDownloadCommand);
-        pr.waitFor();
+        CommandLine cmdLine = CommandLine.parse(gatewayDownloadCommand);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.execute(cmdLine);
     }
 
     private String createGatewayDownloadCommand(String gatewayDownloadLink, String gatewayJarFileName) {
@@ -77,7 +77,7 @@ public class GatewayRunner {
         else if (SystemUtils.IS_OS_LINUX)
             firstPartOfCommand = "curl -v ";
         else
-            throw new UnsupportedOperatingSystemException("This feature supports Linux and Windows only.");
+            throw new UnsupportedOperatingSystemException("The Selenium feature is supported by Linux and Windows only.");
 
         return firstPartOfCommand + "--cookie \"SESSION=" + sessionCookie.getValue() + "\" --output ./" + gatewayJarFileName + " " + gatewayDownloadLink;
     }

@@ -67,18 +67,9 @@ public class GatewayRunner {
     }
 
     private String createGatewayDownloadCommand(String gatewayDownloadLink, String gatewayJarFileName) {
-        String firstPartOfCommand;
-        if (SystemUtils.IS_OS_WINDOWS) {
-            if (host.equals("localhost"))
-                firstPartOfCommand = "cmd /c curl -v -k ";
-            else
-                firstPartOfCommand = "cmd /c wsl curl -v ";
-        }
-        else if (SystemUtils.IS_OS_LINUX)
-            firstPartOfCommand = "curl -v ";
-        else
-            throw new UnsupportedOperatingSystemException("The Selenium feature is supported by Linux and Windows only.");
-
+        String firstPartOfCommand = "curl -v ";
+        if (host.equals("localhost"))
+            firstPartOfCommand += "-k ";
         return firstPartOfCommand + "--cookie \"SESSION=" + sessionCookie.getValue() + "\" --output ./" + gatewayJarFileName + " " + gatewayDownloadLink;
     }
 

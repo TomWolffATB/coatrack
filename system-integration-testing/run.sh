@@ -1,9 +1,9 @@
 #!/bin/sh
 #TODO in execute.sh the shebang is missing, which might be why it is not working yet. Dont forget to make script executable first via 'chmod +x'.
 
-NETWORK_NAME="Hello World"
-IMAGE_NAME="java-appv2"
-CONTAINER_NAME="java-appv2"
+NETWORK_NAME="selenium-network"
+IMAGE_NAME="selenium-tests"
+CONTAINER_NAME="selenium-tests"
 
 #Create image if necessary
 #TODO If Ubuntu image with installed software does not exist, then create one.
@@ -16,7 +16,7 @@ CONTAINER_NAME="java-appv2"
 printf "\nSetting up network and containers"
 docker network create "$NETWORK_NAME"
 docker run --rm -d --network="$NETWORK_NAME" --shm-size="2g" --name selenium selenium/standalone-firefox
-docker run --rm -d --network="$NETWORK_NAME" --name "$CONTAINER_NAME" --entrypoint "/home/execute-tests.sh" "$IMAGE_NAME"
+docker run --rm -d --network="$NETWORK_NAME" --name "$CONTAINER_NAME" --entrypoint "/home/docker-script.sh" "$IMAGE_NAME"
 
 printf "\nCopying project files to java test application container"
 docker cp config.properties "${CONTAINER_NAME}:/home"

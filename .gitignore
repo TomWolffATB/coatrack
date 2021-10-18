@@ -46,6 +46,7 @@ local.properties
 /spring-boot/proxy/target/
 /spring-boot/admin/target/
 /spring-boot/config-server/target/
+/system-integration-testing/target
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -54,10 +55,3 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/
-
-
-
-
-
-
-

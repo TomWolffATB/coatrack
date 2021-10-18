@@ -1,20 +1,11 @@
 #!/bin/sh
 #TODO in execute.sh the shebang is missing, which might be why it is not working yet. Dont forget to make script executable first via 'chmod +x'.
-#TODO Abstract network name and java container name, also implement network creation and cleanup
 
-#Run containers via Shell
-#docker network create test-net
-docker run --rm -d --network="test-net" --shm-size="2g" --name selenium selenium/standalone-firefox
-docker run --rm -d --network="test-net" --name java-appv2 --entrypoint "/home/execute-tests.sh" java-appv2
+NETWORK_NAME="Hello World"
+IMAGE_NAME="java-appv2"
+CONTAINER_NAME="java-appv2"
 
-#Copy project files to docker container
-#docker cp docker-script.sh java-appv2:/home
-docker cp config.properties java-appv2:/home
-docker cp src java-appv2:/home
-docker cp pom.xml java-appv2:/home
-
-docker logs -f java-appv2
-
+#Create image if necessary
 #TODO If Ubuntu image with installed software does not exist, then create one.
 #TODO Prepare Ubuntu Image
 #DEBIAN_FRONTEND=noninteractive apt-get install -y curl wget openjdk-11-jdk maven
@@ -22,12 +13,19 @@ docker logs -f java-appv2
 #mvn compile
 #docker commit java-app java-app
 
-#TODO Run java-app, start 'mvn package' automatically, print its console content to host and let it terminate.
-#TODO Stop other container and delete the network. Maybe Docker Compose instead?
-#Console content: docker logs -f <CONTAINER>
+printf "\nSetting up network and containers"
+docker network create "$NETWORK_NAME"
+docker run --rm -d --network="$NETWORK_NAME" --shm-size="2g" --name selenium selenium/standalone-firefox
+docker run --rm -d --network="$NETWORK_NAME" --name "$CONTAINER_NAME" --entrypoint "/home/execute-tests.sh" "$IMAGE_NAME"
 
-#TODO Extract test report from Docker container to host
+printf "\nCopying project files to java test application container"
+docker cp config.properties "${CONTAINER_NAME}:/home"
+docker cp src "${CONTAINER_NAME}:/home"
+docker cp pom.xml "${CONTAINER_NAME}:/home"
 
-#Stop and remove containers
-#docker stop java-app
+printf "\nFollowing the test execution"
+docker logs -f "$CONTAINER_NAME"
+
+printf "\nCleanup"
 docker stop selenium
+docker network rm "$NETWORK_NAME"

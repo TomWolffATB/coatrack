@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #TODO Replace sleep function by let the java application wait until port is reachable like GatewayRunner does.
-echo "Sleep"
+echo "SleepHELLO"
 sleep 5s
 
 echo "Go to /home"

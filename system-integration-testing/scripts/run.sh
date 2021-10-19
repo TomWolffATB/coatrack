@@ -1,10 +1,7 @@
 #!/bin/sh
 
-NETWORK="selenium-test-network"
-TEST_EXECUTOR="selenium-test-executor"
-SELENIUM_SERVER="selenium-server"
-
-sh stop.sh
+. ./init-variables.sh
+. ./stop.sh
 
 if docker images | grep -q "selenium/standalone-firefox"; then
   printf "\nA selenium server image is already installed. No pull required.\n"
@@ -13,11 +10,11 @@ else
   docker pull selenium/standalone-firefox
 fi
 
-if docker images | grep -q $TEST_EXECUTOR; then
+if docker images | grep -q "$TEST_EXECUTOR"; then
   printf "\nA selenium-test-executor image is already installed. No build required.\n"
 else
   printf "\nBuilding a selenium-test-executor image.\n"
-  docker build -t $TEST_EXECUTOR .
+  docker build -t "$TEST_EXECUTOR" .
 fi
 
 if docker network ls | grep -q "$NETWORK"; then
@@ -34,7 +31,7 @@ printf "\nSetting up Selenium test executor\n"
 docker run --rm -d --network="$NETWORK" --name "$TEST_EXECUTOR" "$TEST_EXECUTOR"
 
 printf "\nCopying project files to java test application container\n"
-cd $(dirname $0)/..
+cd "$(dirname "$0")"/.. || exit
 docker cp config.properties "${TEST_EXECUTOR}:/home"
 docker cp src "${TEST_EXECUTOR}:/home"
 docker cp pom.xml "${TEST_EXECUTOR}:/home"
@@ -42,7 +39,7 @@ docker cp pom.xml "${TEST_EXECUTOR}:/home"
 printf "\nPrinting the test execution logs:\n\n"
 docker logs -f "$TEST_EXECUTOR"
 
-sh stop.sh
+. ./stop.sh
 
 printf "\nCleanup network \n"
 docker network rm "$NETWORK"

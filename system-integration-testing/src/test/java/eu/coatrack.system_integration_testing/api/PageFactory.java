@@ -46,7 +46,7 @@ public class PageFactory {
 
     static {
         try {
-            remoteWebDriverUrl = new URL("http://selenium:4444");
+            remoteWebDriverUrl = new URL("http://selenium-server:4444");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

@@ -4,15 +4,7 @@ NETWORK="selenium-test-network"
 TEST_EXECUTOR="selenium-test-executor"
 SELENIUM_SERVER="selenium-server"
 
-if docker ps | grep -q "$TEST_EXECUTOR"; then
-  printf "\nSelenium test executor is still running and will therefore be stopped.\n"
-  docker stop $TEST_EXECUTOR
-fi
-
-if docker ps | grep -q "$SELENIUM_SERVER"; then
-  printf "\nSelenium server is still running and will therefore be stopped.\n"
-  docker stop $SELENIUM_SERVER
-fi
+sh stop.sh
 
 if docker images | grep -q "selenium/standalone-firefox"; then
   printf "\nA selenium server image is already installed. No pull required.\n"
@@ -49,8 +41,7 @@ docker cp pom.xml "${TEST_EXECUTOR}:/home"
 printf "\nPrinting the test execution logs:\n\n"
 docker logs -f "$TEST_EXECUTOR"
 
-printf "\nCleanup Selenium Server \n"
-docker stop selenium
+sh stop.sh
 
 printf "\nCleanup network \n"
 docker network rm "$NETWORK"

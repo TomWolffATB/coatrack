@@ -34,6 +34,7 @@ printf "\nSetting up Selenium test executor\n"
 docker run --rm -d --network="$NETWORK" --name "$TEST_EXECUTOR" "$TEST_EXECUTOR"
 
 printf "\nCopying project files to java test application container\n"
+cd $(dirname $0)/..
 docker cp config.properties "${TEST_EXECUTOR}:/home"
 docker cp src "${TEST_EXECUTOR}:/home"
 docker cp pom.xml "${TEST_EXECUTOR}:/home"

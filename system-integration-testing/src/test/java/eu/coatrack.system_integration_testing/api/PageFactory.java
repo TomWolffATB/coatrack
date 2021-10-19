@@ -37,6 +37,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static eu.coatrack.system_integration_testing.api.tools.WaiterUtils.waitUntilHostListensOnPort;
 import static eu.coatrack.system_integration_testing.configuration.CookieInjector.injectAuthenticationCookieToDriver;
 import static eu.coatrack.system_integration_testing.configuration.PageConfiguration.startpageUrl;
 
@@ -45,14 +46,16 @@ public class PageFactory {
     static private URL remoteWebDriverUrl;
 
     static {
+        String host = "selenium-server";
+        int port = 4444;
         try {
-            remoteWebDriverUrl = new URL("http://selenium-server:4444");
+            remoteWebDriverUrl = new URL("http://" + host + ":" + port);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+        waitUntilHostListensOnPort(host, port);
     }
 
-    //TODO Wait until port 4444 is reachable. I think I already implemented such a function in GatewayRunner.
     static final WebDriver driver = new RemoteWebDriver(remoteWebDriverUrl, new FirefoxOptions());
 
     public static final UrlReachabilityTools urlReachabilityTools        = new UrlReachabilityTools();

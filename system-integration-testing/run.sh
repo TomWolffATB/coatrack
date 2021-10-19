@@ -22,9 +22,13 @@ else
   docker build -t $TEST_EXECUTOR .
 fi
 
-printf "\nSetting up network and containers\n"
-docker network create "$NETWORK"
+printf "\nSetting up network\n"
+docker network create "$NETWORK" #TODO Check if network already exists.
+
+printf "\nSetting up Selenium server\n"
 docker run --rm -d --network="$NETWORK" --shm-size="2g" --name "$SELENIUM_SERVER" selenium/standalone-firefox
+
+printf "\nSetting up Selenium test executor\n"
 docker run --rm -d --network="$NETWORK" --name "$TEST_EXECUTOR" "$TEST_EXECUTOR"
 
 printf "\nCopying project files to java test application container\n"

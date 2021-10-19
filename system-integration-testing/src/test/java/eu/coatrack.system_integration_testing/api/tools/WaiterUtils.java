@@ -26,11 +26,27 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.Socket;
+
 import static eu.coatrack.system_integration_testing.api.UtilFactory.driver;
 
 public class WaiterUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(WaiterUtils.class);
+
+    public static void waitUntilHostListensOnPort(String host, int port) {
+        boolean isConnectionEstablished = false;
+        while (!isConnectionEstablished){
+            try {
+                Socket socket = new Socket(host, port);
+                isConnectionEstablished = true;
+                socket.close();
+            } catch (Exception e){
+                logger.debug("Connection to host {}:{} could not yet be established.", host, port);
+                sleepMillis(1000);
+            }
+        }
+    }
 
     public void waitForElementWithId(String id) {
         new WebDriverWait(driver, 3).until(ExpectedConditions.elementToBeClickable(By.id(id)));

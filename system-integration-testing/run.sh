@@ -5,6 +5,7 @@ IMAGE_NAME="selenium-test-executor"
 CONTAINER_NAME="selenium-test-executor"
 SELENIUM_CONTAINER_NAME="selenium"
 
+#TODO Maybe add 'conditional logic' here so instead of errors proper text message are displayed.
 docker stop $CONTAINER_NAME
 docker stop $SELENIUM_CONTAINER_NAME
 

@@ -1,5 +1,6 @@
 #!/bin/sh
 
+cd "$(dirname "$0")" || exit
 . ./init-variables.sh
 
 if docker ps | grep -q "$TEST_EXECUTOR"; then

@@ -1,5 +1,7 @@
 #!/bin/sh
+set -e
 
+cd "$(dirname "$0")"
 . ./init-variables.sh
 . ./stop.sh
 
@@ -31,7 +33,7 @@ printf "\nSetting up Selenium test executor\n"
 docker run --rm -d --network="$NETWORK" --name "$TEST_EXECUTOR" "$TEST_EXECUTOR"
 
 printf "\nCopying project files to java test application container\n"
-cd "$(dirname "$0")"/.. || exit
+cd .. || exit
 docker cp config.properties "${TEST_EXECUTOR}:/home"
 docker cp src "${TEST_EXECUTOR}:/home"
 docker cp pom.xml "${TEST_EXECUTOR}:/home"
@@ -39,7 +41,7 @@ docker cp pom.xml "${TEST_EXECUTOR}:/home"
 printf "\nPrinting the test execution logs:\n\n"
 docker logs -f "$TEST_EXECUTOR"
 
-. ./stop.sh
+. ./scripts/stop.sh
 
 printf "\nCleanup network \n"
 docker network rm "$NETWORK"

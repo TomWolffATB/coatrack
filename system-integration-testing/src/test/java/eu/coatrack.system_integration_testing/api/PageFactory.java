@@ -30,7 +30,10 @@ import eu.coatrack.system_integration_testing.api.pages.serviceProvider.serviceO
 import eu.coatrack.system_integration_testing.api.pages.serviceProvider.serviceOfferingsSetup.ServiceProviderServices;
 import eu.coatrack.system_integration_testing.api.tools.GatewayRunner;
 import eu.coatrack.system_integration_testing.api.tools.UrlReachabilityTools;
+import eu.coatrack.system_integration_testing.exceptions.UnsupportedOperatingSystemException;
+import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -43,20 +46,34 @@ import static eu.coatrack.system_integration_testing.configuration.PageConfigura
 
 public class PageFactory {
 
-    static private URL remoteWebDriverUrl;
+    static final WebDriver driver = createWebDriver();
 
-    static {
+    private static WebDriver createWebDriver() {
+        WebDriver driver;
+        if (SystemUtils.IS_OS_LINUX) {
+            driver = createRemoteWebDriver();
+        } else if (SystemUtils.IS_OS_WINDOWS) {
+            driver = new FirefoxDriver();
+        } else {
+            throw new UnsupportedOperatingSystemException("Only Windows and Linux are allowed as Operating Systems.");
+        }
+        return driver;
+    }
+
+    private static WebDriver createRemoteWebDriver() {
+        WebDriver remoteWebDriver = null;
+        URL remoteWebDriverUrl;
         String host = "selenium-server";
         int port = 4444;
         try {
             remoteWebDriverUrl = new URL("http://" + host + ":" + port);
+            waitUntilHostListensOnPort(host, port);
+            remoteWebDriver = new RemoteWebDriver(remoteWebDriverUrl, new FirefoxOptions());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        waitUntilHostListensOnPort(host, port);
+        return remoteWebDriver;
     }
-
-    static final WebDriver driver = new RemoteWebDriver(remoteWebDriverUrl, new FirefoxOptions());
 
     public static final UrlReachabilityTools urlReachabilityTools        = new UrlReachabilityTools();
     public static final GatewayRunner gatewayRunner               = new GatewayRunner();

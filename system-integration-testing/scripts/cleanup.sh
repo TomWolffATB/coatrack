@@ -1,8 +1,8 @@
 #!/bin/sh
 
+cd "$(dirname "$0")" || exit
 . ./init-variables.sh
-
-sh stop.sh
+. ./stop.sh
 
 docker network rm "$NETWORK"
 docker rmi "$TEST_EXECUTOR"

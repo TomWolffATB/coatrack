@@ -16,7 +16,7 @@ if docker images | grep -q "$TEST_EXECUTOR"; then
   printf "\nA selenium-test-executor image is already installed. No build required.\n"
 else
   printf "\nBuilding a selenium-test-executor image.\n"
-  docker build -t "$TEST_EXECUTOR" .
+  docker build -t "$TEST_EXECUTOR" ..
 fi
 
 if docker network ls | grep -q "$NETWORK"; then

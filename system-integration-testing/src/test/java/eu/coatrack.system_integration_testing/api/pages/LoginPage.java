@@ -20,6 +20,10 @@ package eu.coatrack.system_integration_testing.api.pages;
  * #L%
  */
 
+import eu.coatrack.system_integration_testing.exceptions.LoginViaGitHubFailedException;
+import eu.coatrack.system_integration_testing.exceptions.NoRedirectionToGitHubLoginPage;
+import eu.coatrack.system_integration_testing.exceptions.UnsupportedTwoFactorAuthenticationException;
+import eu.coatrack.system_integration_testing.exceptions.WrongGitHubCredentialsException;
 import org.openqa.selenium.By;
 
 import static eu.coatrack.system_integration_testing.api.UtilFactory.driver;
@@ -29,26 +33,55 @@ import static eu.coatrack.system_integration_testing.configuration.PageConfigura
 public class LoginPage {
 
     public void loginToGithub(String username, String password){
-        driver.get(serviceProviderDashboardUrl);
+        getRedirectedToGitHubLoginPage();
+        fillInGitHubLoginForm(username, password);
+        createNewCoatRackAccountIfRequired();
+    }
 
+    private void getRedirectedToGitHubLoginPage() {
+        driver.get(serviceProviderDashboardUrl);
+        if (!driver.getCurrentUrl().contains("github"))
+            throw new NoRedirectionToGitHubLoginPage("The website didn't redirect the unauthenticated " +
+                    "user to the GitHub login form.");
+    }
+
+    private void fillInGitHubLoginForm(String username, String password) {
+        insertCredentialsAndLogin(username, password);
+        sleepMillis(3000);
+        if (driver.getCurrentUrl().contains("github")) {
+            throwAccordingException();
+        }
+    }
+
+    private void insertCredentialsAndLogin(String username, String password) {
         driver.findElement(By.id("login_field")).click();
         driver.findElement(By.id("login_field")).sendKeys(username);
         driver.findElement(By.id("password")).click();
         driver.findElement(By.id("password")).sendKeys(password);
         driver.findElement(By.name("commit")).click();
-
-        sleepMillis(2000);
-        if (driver.getPageSource().contains("Register New"))
-            createNewAccount();
-
-        driver.get(serviceProviderDashboardUrl);
     }
 
-    private void createNewAccount() {
-        driver.findElement(By.id("firstname")).sendKeys("John");
-        driver.findElement(By.name("lastname")).sendKeys("Connor");
-        driver.findElement(By.name("company")).sendKeys("Skynet");
-        driver.findElement(By.name("submit")).click();
+    private void throwAccordingException() {
+        if (driver.getCurrentUrl().contains("verified-device")) {
+            throw new UnsupportedTwoFactorAuthenticationException("GitHub requires a second form of " +
+                    "authentication which is not supported.");
+        } else if (driver.getCurrentUrl().contains("Incorrect username or password.")) {
+            throw new WrongGitHubCredentialsException("Wrong credentials were being used for the " +
+                    "authentication via GitHub login.");
+        } else {
+            throw new LoginViaGitHubFailedException("An error happened during the GitHub login. The user was " +
+                    "not correctly redirected to the CoatRack Web Application.");
+        }
+    }
+
+    private void createNewCoatRackAccountIfRequired() {
+        if (driver.getPageSource().contains("Register New")) {
+            driver.findElement(By.id("firstname")).sendKeys("John");
+            driver.findElement(By.name("lastname")).sendKeys("Connor");
+            driver.findElement(By.name("company")).sendKeys("Skynet");
+            driver.findElement(By.name("submit")).click();
+            sleepMillis(2000);
+        }
     }
 
 }

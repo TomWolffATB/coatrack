@@ -30,14 +30,16 @@ import eu.coatrack.system_integration_testing.api.pages.serviceProvider.serviceO
 import eu.coatrack.system_integration_testing.api.pages.serviceProvider.serviceOfferingsSetup.ServiceProviderServices;
 import eu.coatrack.system_integration_testing.api.tools.GatewayRunner;
 import eu.coatrack.system_integration_testing.api.tools.UrlReachabilityTools;
+import eu.coatrack.system_integration_testing.exceptions.RemoteWebDriverCreationFailedException;
 import eu.coatrack.system_integration_testing.exceptions.UnsupportedOperatingSystemException;
 import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static eu.coatrack.system_integration_testing.api.tools.WaiterUtils.waitUntilHostListensOnPort;
@@ -46,13 +48,17 @@ import static eu.coatrack.system_integration_testing.configuration.PageConfigura
 
 public class PageFactory {
 
+    private static final Logger logger = LoggerFactory.getLogger(PageFactory.class);
+
     static final WebDriver driver = createWebDriver();
 
     private static WebDriver createWebDriver() {
         WebDriver driver;
         if (SystemUtils.IS_OS_LINUX) {
+            logger.info("Creating RemoteWebDriver via Selenium server.");
             driver = createRemoteWebDriver();
         } else if (SystemUtils.IS_OS_WINDOWS) {
+            logger.info("Creating WebDriver with local driver instance.");
             driver = new FirefoxDriver();
         } else {
             throw new UnsupportedOperatingSystemException("Only Windows and Linux are allowed as Operating Systems.");
@@ -61,40 +67,41 @@ public class PageFactory {
     }
 
     private static WebDriver createRemoteWebDriver() {
-        WebDriver remoteWebDriver = null;
-        URL remoteWebDriverUrl;
+        //TODO Variables are to be put in a config file.
         String host = "selenium-server";
         int port = 4444;
         try {
-            remoteWebDriverUrl = new URL("http://" + host + ":" + port);
+            URL remoteWebDriverUrl = new URL("http://" + host + ":" + port);
             waitUntilHostListensOnPort(host, port);
-            remoteWebDriver = new RemoteWebDriver(remoteWebDriverUrl, new FirefoxOptions());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+            return new RemoteWebDriver(remoteWebDriverUrl, new FirefoxOptions());
+        } catch (Exception e) {
+            throw new RemoteWebDriverCreationFailedException("The creation of a RemoteWebDriver failed due to:", e);
         }
-        return remoteWebDriver;
     }
 
-    public static final UrlReachabilityTools urlReachabilityTools        = new UrlReachabilityTools();
-    public static final GatewayRunner gatewayRunner               = new GatewayRunner();
+    public static final UrlReachabilityTools urlReachabilityTools           = new UrlReachabilityTools();
+    public static final GatewayRunner gatewayRunner                         = new GatewayRunner();
 
-    public static final LoginPage loginPage                   = new LoginPage();
+    public static final LoginPage loginPage                                 = new LoginPage();
 
-    public static final ServiceProviderDashboard serviceProviderDashboard    = new ServiceProviderDashboard();
+    public static final ServiceProviderDashboard serviceProviderDashboard   = new ServiceProviderDashboard();
     public static final ServiceProviderTutorial serviceProviderTutorial     = new ServiceProviderTutorial();
     public static final ServiceProviderServices serviceProviderServices     = new ServiceProviderServices();
     public static final ServiceProviderGateways serviceProviderGateways     = new ServiceProviderGateways();
-    public static final ServiceProviderApiKeys serviceProviderApiKeys      = new ServiceProviderApiKeys();
-    public static final ServiceProviderReports serviceProviderReports      = new ServiceProviderReports();
+    public static final ServiceProviderApiKeys serviceProviderApiKeys       = new ServiceProviderApiKeys();
+    public static final ServiceProviderReports serviceProviderReports       = new ServiceProviderReports();
 
     public static final ServiceConsumerServices serviceConsumerServices     = new ServiceConsumerServices();
-    public static final ServiceConsumerApiKeys serviceConsumerApiKeys      = new ServiceConsumerApiKeys();
-    public static final ServiceConsumerDashboard serviceConsumerDashboard    = new ServiceConsumerDashboard();
-    public static final ServiceConsumerReports serviceConsumerReports      = new ServiceConsumerReports();
+    public static final ServiceConsumerApiKeys serviceConsumerApiKeys       = new ServiceConsumerApiKeys();
+    public static final ServiceConsumerDashboard serviceConsumerDashboard   = new ServiceConsumerDashboard();
+    public static final ServiceConsumerReports serviceConsumerReports       = new ServiceConsumerReports();
     public static final ServiceConsumerTutorial serviceConsumerTutorial     = new ServiceConsumerTutorial();
 
     static {
+        logger.info("Injecting authentication cookie.");
         injectAuthenticationCookieToDriver(driver);
+
+        logger.info("Cleanup: Deleting all items of the user.");
         serviceProviderServices.deleteAllServices();
         serviceProviderGateways.deleteAllGateways();
         //TODO The if condition can be removed when the API key deletion button is working on dev.coatrack.eu again.

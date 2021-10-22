@@ -22,6 +22,7 @@ package eu.coatrack.system_integration_testing.configuration;
 
 import eu.coatrack.system_integration_testing.exceptions.CookieSaveFileReadingError;
 import eu.coatrack.system_integration_testing.exceptions.CookieSaveFileWritingError;
+import eu.coatrack.system_integration_testing.exceptions.LoginViaGitHubFailedException;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 

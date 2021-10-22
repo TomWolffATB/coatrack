@@ -42,7 +42,7 @@ public class PageConfiguration {
             host = props.getProperty("host");
             String port = props.getProperty("port");
 
-            if (host.equals("localhost"))
+            if (host.equals("localhost") || host.equals("host.docker.internal"))
                 startpageUrl = protocol + "://" + host + ":" + port;
             else
                 startpageUrl = protocol + "://" + host;
@@ -68,6 +68,9 @@ public class PageConfiguration {
             serviceConsumerReportsUrl        = startpageUrl + "/admin/reports/consumer",
 
             exampleServiceUrl                = "http://example.org/",
-            localGatewayAccessUrl            = "http://localhost:8088";
+            localGatewayAccessUrl            = "http://localhost:8088",
+            seleniumServerHostName           = host.equals("host.docker.internal") ? "localhost" : "selenium-server";
+
+    public static final int seleniumServerPort = 4444;
 
 }

@@ -44,7 +44,7 @@ import java.net.URL;
 
 import static eu.coatrack.system_integration_testing.api.tools.WaiterUtils.waitUntilHostListensOnPort;
 import static eu.coatrack.system_integration_testing.configuration.CookieInjector.injectAuthenticationCookieToDriver;
-import static eu.coatrack.system_integration_testing.configuration.PageConfiguration.startpageUrl;
+import static eu.coatrack.system_integration_testing.configuration.PageConfiguration.*;
 
 public class PageFactory {
 
@@ -67,12 +67,9 @@ public class PageFactory {
     }
 
     private static WebDriver createRemoteWebDriver() {
-        //TODO Variables are to be put in a config file.
-        String host = "selenium-server";
-        int port = 4444;
         try {
-            URL remoteWebDriverUrl = new URL("http://" + host + ":" + port);
-            waitUntilHostListensOnPort(host, port);
+            URL remoteWebDriverUrl = new URL("http://" + seleniumServerHostName + ":" + seleniumServerPort);
+            waitUntilHostListensOnPort(seleniumServerHostName, seleniumServerPort);
             return new RemoteWebDriver(remoteWebDriverUrl, new FirefoxOptions());
         } catch (Exception e) {
             throw new RemoteWebDriverCreationFailedException("The creation of a RemoteWebDriver failed due to:", e);

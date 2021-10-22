@@ -95,7 +95,7 @@ public class GatewayRunner {
         return firstPartOfCommand + "--cookie \"SESSION=" + sessionCookie.getValue() + "\" --output ./" + gatewayJarFileName + " " + gatewayDownloadLink;
     }
 
-    private static Thread executeGatewayJar(File file) throws InterruptedException {
+    private static Thread executeGatewayJar(File file) {
         Thread jarExecutionThread = new Thread(() -> {
             String line = "java -jar " + file.getPath();
             CommandLine cmdLine = CommandLine.parse(line);
@@ -129,12 +129,13 @@ public class GatewayRunner {
     }
 
     public void makeValidServiceCall() {
-        if (!isServiceAccessUsingApiKeySuccessful(itemDetails.serviceId, itemDetails.apiKeyValue))
+        boolean wasServiceCallSuccessful = tryToAccessServiceUsingApiKey(itemDetails.serviceId, itemDetails.apiKeyValue);
+        if (!wasServiceCallSuccessful)
             throw new ServiceCouldNotBeAccessedUsingApiKeyException("Api key " + itemDetails.apiKeyValue +
                     " could not access the service with the ID " + itemDetails.serviceId + ".");
     }
 
-    private boolean isServiceAccessUsingApiKeySuccessful(String serviceId, String apiKeyValue) {
+    private boolean tryToAccessServiceUsingApiKey(String serviceId, String apiKeyValue) {
         String servicesAccessUrl = localGatewayAccessUrl + "/" + serviceId + "?api-key=" + apiKeyValue;
         driver.get(servicesAccessUrl);
         return driver.findElement(By.cssSelector("h1")).getText().equals("Example Domain");

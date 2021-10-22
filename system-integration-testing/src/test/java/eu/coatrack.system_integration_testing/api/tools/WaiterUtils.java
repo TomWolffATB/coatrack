@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.Socket;
+import java.time.Duration;
 
 import static eu.coatrack.system_integration_testing.api.UtilFactory.driver;
 
@@ -42,29 +43,25 @@ public class WaiterUtils {
                 isConnectionEstablished = true;
                 socket.close();
             } catch (Exception e){
-                logger.debug("Connection to host {}:{} could not yet be established.", host, port);
-                sleepMillis(1000);
+                logger.info("Connection to host {}:{} could not yet be established.", host, port);
+                sleepMillis(5000);
             }
         }
     }
 
     public void waitForElementWithId(String id) {
-        new WebDriverWait(driver, 3).until(ExpectedConditions.elementToBeClickable(By.id(id)));
-    }
-
-    public void waitForElementWithCssSelector(String cssSelector) {
-        new WebDriverWait(driver, 3).until(ExpectedConditions.elementToBeClickable(By.id(cssSelector)));
+        new WebDriverWait(driver, Duration.ofSeconds(3)).until(ExpectedConditions.elementToBeClickable(By.id(id)));
     }
 
     public static void sleepMillis(int millis) {
         try {
             Thread.sleep(millis);
-        } catch (Exception e){
-            logger.error("The sleep process failed.", e);
+        } catch (InterruptedException e){
+            logger.info("The sleep process was interrupted.", e);
         }
     }
 
     public void waitUpToAMinuteForElementWithId(String id) {
-        new WebDriverWait(driver, 60).until(ExpectedConditions.elementToBeClickable(By.id(id)));
+        new WebDriverWait(driver, Duration.ofSeconds(60)).until(ExpectedConditions.elementToBeClickable(By.id(id)));
     }
 }

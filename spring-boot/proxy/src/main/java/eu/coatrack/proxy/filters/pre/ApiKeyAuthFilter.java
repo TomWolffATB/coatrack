@@ -23,6 +23,7 @@ package eu.coatrack.proxy.filters.pre;
 import eu.coatrack.proxy.security.ApiKeyAuthToken;
 import eu.coatrack.proxy.security.ApiKeyAuthenticator;
 import eu.coatrack.api.ApiKey;
+import eu.coatrack.proxy.security.exceptions.ApiKeyValidityCouldNotBeDecidedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,5 +64,9 @@ public class ApiKeyAuthFilter extends GenericFilterBean {
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
         filterChain.doFilter(servletRequest, servletResponse);
+        if (SecurityContextHolder.getContext().getAuthentication() == null){
+            throw new ApiKeyValidityCouldNotBeDecidedException("The Gateway is not able to decide the API keys " +
+                    "validity due to an internal error.");
+        }
     }
 }

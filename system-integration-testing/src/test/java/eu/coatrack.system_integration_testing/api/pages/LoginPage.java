@@ -47,9 +47,14 @@ public class LoginPage {
 
     private void fillInGitHubLoginForm(String username, String password) {
         insertCredentialsAndLogin(username, password);
-        sleepMillis(3000);
-        if (driver.getCurrentUrl().contains("github")) {
-            throwAccordingException();
+
+        int checkAttemptsThatGitHubWasLeft = 0;
+        while (driver.getCurrentUrl().contains("github")){
+            if (checkAttemptsThatGitHubWasLeft > 10)
+                throwAccordingException();
+
+            checkAttemptsThatGitHubWasLeft++;
+            sleepMillis(1000);
         }
     }
 

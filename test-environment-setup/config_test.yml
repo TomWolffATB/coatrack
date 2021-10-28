@@ -38,7 +38,7 @@ data:
   ygg.proxy.executable-jar.filename-custom.prefix: coatrack-gateway-
   ygg.proxy.executable-jar.filename-custom.suffix: ".jar"
   ygg.proxy.generate-bootstrap-properties.spring.application.name.prefix: ygg-proxy-
-  ygg.proxy.generate-bootstrap-properties.spring.cloud.config.uri: https://integration-config.coatrack.eu
+  ygg.proxy.generate-bootstrap-properties.spring.cloud.config.uri: https://config.test.coatrack.eu
 
   spring.cloud.config.uri: http://coatrack-config-server
   spring.cloud.config.username: admin
@@ -47,8 +47,12 @@ data:
   spring.session.jdbc.initialize-schema: always
   spring.session.jdbc.schema: org/springframework/session/jdbc/schema-postgresql.sql
   spring.jpa.hibernate.ddl-auto: create-drop
-  security.oauth2.client.clientId: 21a84668d01527c4b788
-  security.oauth2.client.clientSecret: ca1bc92395c491245e3a1f50c84d31d6e1b2f908
+  
+  # ***********
+  # Security
+  # ***********
+  security.oauth2.client.clientId: 3bf52b2c263318ee1d6f
+  security.oauth2.client.clientSecret: 611835f590b73197ea3a750c0ae3008a887f6a9b
   security.oauth2.client.accessTokenUri: https://github.com/login/oauth/access_token
   security.oauth2.client.userAuthorizationUri: https://github.com/login/oauth/authorize
   security.oauth2.client.tokenName: oauth_token

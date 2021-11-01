@@ -68,7 +68,7 @@ public class PageConfiguration {
             serviceConsumerReportsUrl        = startpageUrl + "/admin/reports/consumer",
 
             exampleServiceUrl                = "http://example.org/",
-            localGatewayAccessUrl            = "http://localhost:8088",
+            localGatewayAccessUrl            = host.equals("host.docker.internal") ? "http://localhost:8088" : "http://selenium-test-executor:8088",
             seleniumServerHostName           = host.equals("host.docker.internal") ? "localhost" : "selenium-server";
 
     public static final int seleniumServerPort = 4444;

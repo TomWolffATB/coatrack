@@ -20,6 +20,7 @@ package eu.coatrack.system_integration_testing.api.tools;
  * #L%
  */
 
+import eu.coatrack.system_integration_testing.exceptions.HostWasNotReachableWithinAMinuteException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -37,6 +38,7 @@ public class WaiterUtils {
 
     public static void waitUntilHostListensOnPort(String host, int port) {
         boolean isConnectionEstablished = false;
+        int counter = 0;
         while (!isConnectionEstablished){
             try {
                 Socket socket = new Socket(host, port);
@@ -44,8 +46,13 @@ public class WaiterUtils {
                 socket.close();
             } catch (Exception e){
                 logger.info("Connection to host {}:{} could not yet be established.", host, port);
+                counter++;
                 sleepMillis(5000);
             }
+
+            if (counter >= 12)
+                throw new HostWasNotReachableWithinAMinuteException("All attempts to establish a connection to "
+                        + host + ":" + port + " failed within a minute.");
         }
     }
 

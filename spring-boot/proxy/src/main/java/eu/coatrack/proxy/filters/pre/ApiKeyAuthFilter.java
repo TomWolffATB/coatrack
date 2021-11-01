@@ -55,18 +55,31 @@ public class ApiKeyAuthFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         log.debug(String.format("Api key auth filter received request of type %s", servletRequest.getClass()));
 
+        Authentication authToken = null;
         if (servletRequest instanceof HttpServletRequest) {
             final HttpServletRequest req = (HttpServletRequest) servletRequest;
             final String keyParam = req.getParameter(ApiKey.API_KEY_REQUEST_PARAMETER_NAME);
             log.debug(String.format("request parameter '%s' has value '%s'", ApiKey.API_KEY_REQUEST_PARAMETER_NAME, keyParam));
 
-            Authentication authToken = new ApiKeyAuthToken(keyParam, Collections.emptyList());
+            authToken = new ApiKeyAuthToken(keyParam, Collections.emptyList());
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
         filterChain.doFilter(servletRequest, servletResponse);
-        if (SecurityContextHolder.getContext().getAuthentication() == null){
+
+        if (SecurityContextHolder.getContext().getAuthentication() == null)
+            causeInternalServerErrorWhenAuthenticationCouldNotBeDecided(authToken);
+    }
+
+    private void causeInternalServerErrorWhenAuthenticationCouldNotBeDecided(Authentication authToken) {
+        Authentication resultAuthentication;
+        try {
+            resultAuthentication = apiKeyAuthenticator.authenticate(authToken);
+        } catch (Exception e) {
+            //Exception is already logged by the AuthenticationManager.
+            return;
+        }
+        if (resultAuthentication == null)
             throw new ApiKeyValidityCouldNotBeDecidedException("The Gateway is not able to decide the API keys " +
                     "validity due to an internal error.");
-        }
     }
 }

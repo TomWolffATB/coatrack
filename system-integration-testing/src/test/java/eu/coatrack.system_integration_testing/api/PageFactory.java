@@ -101,8 +101,6 @@ public class PageFactory {
         logger.info("Cleanup: Deleting all items of the user.");
         serviceProviderServices.deleteAllServices();
         serviceProviderGateways.deleteAllGateways();
-        //TODO The if condition can be removed when the API key deletion button is working on dev.coatrack.eu again.
-        if (!startpageUrl.contains("dev.coatrack.eu"))
-            serviceProviderApiKeys.deleteAllApiKeys();
+        serviceProviderApiKeys.deleteAllApiKeys();
     }
 }

@@ -41,6 +41,7 @@ docker cp pom.xml "${TEST_EXECUTOR}:/home"
 printf "\nPrinting the test execution logs:\n\n"
 docker logs -f "$TEST_EXECUTOR"
 
+cd "$(dirname "$0")"
 . ./scripts/stop.sh
 
 printf "\nCleanup network \n"

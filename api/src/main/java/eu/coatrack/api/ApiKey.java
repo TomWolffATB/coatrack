@@ -31,6 +31,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
+import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
+
 /**
  * @author gr-hovest
  */
@@ -151,5 +153,17 @@ public class ApiKey {
                 + ", serviceApi=" + serviceApi
                 + ", user=" + user
                 + '}';
+    }
+
+    public ApiKey convertToHashedApiKey() {
+        ApiKey hashedApiKey = new ApiKey();
+        hashedApiKey.setId(id);
+        String hashedKeyValue = sha256Hex(keyValue);
+        hashedApiKey.setKeyValue(hashedKeyValue);
+        hashedApiKey.setCreated(created);
+        hashedApiKey.setValidUntil(validUntil);
+        hashedApiKey.setServiceApi(serviceApi);
+        hashedApiKey.setUser(user);
+        return hashedApiKey;
     }
 }

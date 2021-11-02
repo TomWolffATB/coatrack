@@ -98,6 +98,6 @@ public class GatewayApiController {
             return proxy.getServiceApis().stream()
                     .flatMap(
                             serviceApi -> serviceApi.getApiKeys().stream()
-                    ).collect(Collectors.toList());
+                    ).map(ApiKey::convertToHashedApiKey).collect(Collectors.toList());
     }
 }

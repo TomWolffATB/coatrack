@@ -38,14 +38,12 @@ public class PageConfiguration {
 
             username = props.getProperty("username");
             password = props.getProperty("password");
-            String protocol = props.getProperty("protocol");
             host = props.getProperty("host");
-            String port = props.getProperty("port");
 
             if (host.equals("localhost") || host.equals("host.docker.internal"))
-                startpageUrl = protocol + "://" + host + ":" + port;
+                startpageUrl = "http://" + host + ":" + "8080";
             else
-                startpageUrl = protocol + "://" + host;
+                startpageUrl = "https://" + host;
 
             reader.close();
         } catch (Exception e) {
@@ -68,8 +66,8 @@ public class PageConfiguration {
             serviceConsumerReportsUrl        = startpageUrl + "/admin/reports/consumer",
 
             exampleServiceUrl                = "http://example.org/",
-            localGatewayAccessUrl            = host.equals("host.docker.internal") ? "http://localhost:8088" : "http://selenium-test-executor:8088",
-            seleniumServerHostName           = host.equals("host.docker.internal") ? "localhost" : "selenium-server";
+            localGatewayAccessUrl            = "http://localhost:8088",
+            seleniumServerHostName           = "localhost";
 
     public static final int seleniumServerPort = 4444;
 

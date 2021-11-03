@@ -75,7 +75,7 @@ public class LoginPage {
                     "authentication via GitHub login.");
         } else {
             throw new LoginViaGitHubFailedException("An error happened during the GitHub login. The user was " +
-                    "not correctly redirected to the CoatRack Web Application.");
+                    "not correctly redirected to the CoatRack Web Application. Current URL is: " + driver.getCurrentUrl());
         }
     }
 

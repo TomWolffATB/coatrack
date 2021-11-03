@@ -19,13 +19,6 @@ else
   docker build -t "$TEST_EXECUTOR" ..
 fi
 
-if docker network ls | grep -q "$NETWORK"; then
-  printf "\nNetwork is already set up.\n"
-else
-  printf "\nSetting up network.\n"
-  docker network create "$NETWORK"
-fi
-
 printf "\nSetting up Selenium server\n"
 docker run --rm -d --network="$NETWORK" --shm-size="2g" --name "$SELENIUM_SERVER" selenium/standalone-firefox
 
@@ -41,8 +34,4 @@ docker cp pom.xml "${TEST_EXECUTOR}:/home"
 printf "\nPrinting the test execution logs:\n\n"
 docker logs -f "$TEST_EXECUTOR"
 
-cd "$(dirname "$0")"
 . ./scripts/stop.sh
-
-printf "\nCleanup network \n"
-docker network rm "$NETWORK"

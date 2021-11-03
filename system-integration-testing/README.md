@@ -4,7 +4,7 @@
 
 * Linux Commandline, for Windows use WSL
 * Docker installation
-* Credentials for a GitHub account and CoatRack Web Application URL - please, insert them in the ```config.properties``` file.
+* GitHub account
 
 
 
@@ -18,9 +18,18 @@
 
 
 
-### Testing a local CoatRack build with Docker
+### Run the tests
 
-* ```config.properties```: Change the value of ```host``` to "host.docker.internal".
+* ```config.properties```: 
+  * Insert the login credentials of the GitHub account in the fields ```username``` and ```password```.
+  * ```host``` should have the value of a CoatRack web address like ```coatrack.eu``` or ```dev.coatrack.eu```.
+* Execute ```run.sh```.
+
+
+
+### Setup a local test build
+
+* ```config.properties```: Change the value of ```host``` to ```host.docker.internal```.
 * Ensure the OAuth2 Application settings ```Homepage URL``` and ```Authorization callback URL``` on GitHub to have the value ```http://host.docker.internal:8080```. Otherwise you will receive a URL mismatch error during the redirection from GitHub login to the CoatRack Web Application.
 *  ```application.yml```:
   * Ensure the presence of the correct credentials for the just mentioned OAuth2 application, namely ```spring.security.oauth2.client.registration.github.client-id``` and ```client-secret```.
@@ -31,11 +40,12 @@
 
 
 
-### Testing with IntelliJ
+### Testing with Firefox Instance as GUI
 
-* To see what actually happens behind the scenes, you can execute the tests in IntelliJ on a Windows machine only. You also require following installations: 
-  * wget and curl (propbably already installed by default, check via CLI)
+* This feature does only work for remote hosts like ````coatrack.eu```` or ```dev.coatrack.eu```.
+* To see what actually happens behind the scenes, you can execute the tests via your IDE on a Windows machine only. You also require following installations: 
+  * wget and curl (probably already installed by default, check via CLI)
   * [geckodriver](https://github.com/mozilla/geckodriver/releases) (at least version 0.30)
   * firefox
-  * openjdk-11 
-* And you have to make them accessible for the CLI by setting the proper Environment Variables (PATH).
+  * java (openjdk-11)
+* You also have to make them accessible for the CLI by setting the proper Environment Variables (PATH).

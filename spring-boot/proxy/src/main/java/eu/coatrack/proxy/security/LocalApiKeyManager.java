@@ -22,6 +22,7 @@ package eu.coatrack.proxy.security;
 
 import eu.coatrack.api.ApiKey;
 import eu.coatrack.proxy.security.exceptions.ApiKeyNotFoundInLocalApiKeyListException;
+import eu.coatrack.proxy.security.exceptions.ApiKeyValueWasNullException;
 import eu.coatrack.proxy.security.exceptions.LocalApiKeyListWasNotInitializedException;
 import eu.coatrack.proxy.security.exceptions.OfflineWorkingTimeExceedingException;
 import org.slf4j.Logger;
@@ -94,6 +95,10 @@ public class LocalApiKeyManager {
 
     private ApiKey extractApiKeyFromLocalApiKeyList(String apiKeyValue) {
         log.debug("Trying to extract the API key with the value {} from the local list.", apiKeyValue);
+
+        if (apiKeyValue == null)
+            throw new ApiKeyValueWasNullException("The API key could not be found in the local API key list " +
+                    "because its value was null.");
 
         String hashedApiKeyValue = sha256Hex(apiKeyValue);
         Optional<ApiKey> optionalApiKey = localHashedApiKeyList.stream().filter(

@@ -23,6 +23,7 @@ package eu.coatrack.proxy.security;
 import eu.coatrack.api.ApiKey;
 import eu.coatrack.proxy.security.exceptions.ApiKeyFetchingFailedException;
 import eu.coatrack.proxy.security.exceptions.ApiKeyNotFoundInLocalApiKeyListException;
+import eu.coatrack.proxy.security.exceptions.ApiKeyValueWasNullException;
 import eu.coatrack.proxy.security.exceptions.OfflineWorkingTimeExceedingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,12 +45,13 @@ public class LocalApiKeyManager_ApiKeyFindingInLocalApiKeyListTest extends Local
 
     @Test
     public void nullApiKeyValueShouldCauseException() {
-        assertThrows(ApiKeyNotFoundInLocalApiKeyListException.class, () -> localApiKeyManager.getApiKeyEntityFromLocalCache(null));
+        assertThrows(ApiKeyValueWasNullException.class, () -> localApiKeyManager.getApiKeyEntityFromLocalCache(null));
     }
 
     @Test
     public void apiKeyIsFoundInLocalApiKeyListAndThereforeReturned() {
-        assertSame(apiKey, localApiKeyManager.getApiKeyEntityFromLocalCache(apiKey.getKeyValue()));
+        ApiKey apiKeyFoundInLocalList = localApiKeyManager.getApiKeyEntityFromLocalCache(apiKey.getKeyValue());
+        assertEquals(apiKey.getKeyValue(), apiKeyFoundInLocalList.getKeyValue());
     }
 
     @Test
@@ -83,7 +85,8 @@ public class LocalApiKeyManager_ApiKeyFindingInLocalApiKeyListTest extends Local
         when(apiKeyFetcherMock.requestLatestApiKeyListFromAdmin()).thenReturn(null);
         localApiKeyManager.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
 
-        assertSame(apiKey, localApiKeyManager.getApiKeyEntityFromLocalCache(apiKey.getKeyValue()));
+        ApiKey apiKeyFoundInLocalList = localApiKeyManager.getApiKeyEntityFromLocalCache(apiKey.getKeyValue());
+        assertEquals(apiKey.getKeyValue(), apiKeyFoundInLocalList.getKeyValue());
     }
 
     @Test
@@ -93,7 +96,8 @@ public class LocalApiKeyManager_ApiKeyFindingInLocalApiKeyListTest extends Local
         LocalApiKeyManager localApiKeyManager = new LocalApiKeyManager(apiKeyFetcherMock, deadlineIsOneMinuteAfterNow);
         localApiKeyManager.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
 
-        assertEquals(apiKey, localApiKeyManager.getApiKeyEntityFromLocalCache(apiKey.getKeyValue()));
+        ApiKey apiKeyFoundInLocalList = localApiKeyManager.getApiKeyEntityFromLocalCache(apiKey.getKeyValue());
+        assertEquals(apiKey.getKeyValue(), apiKeyFoundInLocalList.getKeyValue());
     }
 
     @Test

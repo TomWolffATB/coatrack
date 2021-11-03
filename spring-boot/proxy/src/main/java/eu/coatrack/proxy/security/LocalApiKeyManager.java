@@ -138,13 +138,9 @@ public class LocalApiKeyManager {
 
     private void updateGatewayMode(GatewayMode currentGatewayMode) {
         if (lastModeDisplayedInLog != currentGatewayMode) {
-            logGatewayMode(currentGatewayMode);
+            log.info(currentGatewayMode == GatewayMode.ONLINE ? switchingToOnlineModeMessage : switchingToOfflineModeMessage);
             lastModeDisplayedInLog = currentGatewayMode;
         }
-    }
-
-    private void logGatewayMode(GatewayMode currentGatewayMode) {
-        log.info(currentGatewayMode == GatewayMode.ONLINE ? switchingToOnlineModeMessage : switchingToOfflineModeMessage);
     }
 
     /*

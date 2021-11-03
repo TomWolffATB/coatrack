@@ -58,8 +58,8 @@ public class ApiKeyFetcher {
         try {
             ResponseEntity<ApiKey[]> responseEntity = restTemplate.getForEntity(
                     urlResourcesProvider.getApiKeyListRequestUrl(), ApiKey[].class);
-            ApiKey[] apiKeys = (ApiKey[]) extractBodyFromResponseEntity(responseEntity);
-            return new ArrayList<>(Arrays.asList(apiKeys));
+            ApiKey[] hashedApiKeys = (ApiKey[]) extractBodyFromResponseEntity(responseEntity);
+            return new ArrayList<>(Arrays.asList(hashedApiKeys));
         } catch (RestClientException e) {
             throw new ApiKeyFetchingFailedException("Trying to request the latest API key list from Admin, the " +
                     "connection failed.", e);

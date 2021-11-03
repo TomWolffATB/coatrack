@@ -33,10 +33,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
 /**
  * Provides a local cache for API keys, allowing the gateway to validate API keys without connection to CoatRack
@@ -55,7 +56,7 @@ public class LocalApiKeyManager {
     public final static String switchingToOfflineModeMessage = "Gateway is switching to offline mode.";
     public final static String switchingToOnlineModeMessage = "Gateway is switching to online mode.";
 
-    private List<ApiKey> localApiKeyList;
+    private List<ApiKey> localHashedApiKeyList;
     private LocalDateTime deadlineWhenOfflineModeShallStopWorking;
     private boolean isLocalApiKeyListInitialized = false;
 
@@ -94,12 +95,15 @@ public class LocalApiKeyManager {
     private ApiKey extractApiKeyFromLocalApiKeyList(String apiKeyValue) {
         log.debug("Trying to extract the API key with the value {} from the local list.", apiKeyValue);
 
-        Optional<ApiKey> optionalApiKey = localApiKeyList.stream().filter(
-                apiKeyFromLocalList -> apiKeyFromLocalList.getKeyValue().equals(apiKeyValue)
+        String hashedApiKeyValue = sha256Hex(apiKeyValue);
+        Optional<ApiKey> optionalApiKey = localHashedApiKeyList.stream().filter(
+                apiKeyFromLocalList -> apiKeyFromLocalList.getKeyValue().equals(hashedApiKeyValue)
         ).findFirst();
 
         if (optionalApiKey.isPresent()) {
-            return optionalApiKey.get();
+            ApiKey apiKey = optionalApiKey.get().clone();
+            apiKey.setKeyValue(apiKeyValue);
+            return apiKey;
         } else {
             throw new ApiKeyNotFoundInLocalApiKeyListException("The API key with the value " + apiKeyValue +
                     " could not be found in the local API key list.");
@@ -112,8 +116,8 @@ public class LocalApiKeyManager {
         log.debug("Trying to update the local API key list by contacting CoatRack admin.");
 
         try {
-            List<ApiKey> fetchedApiKeyList = apiKeyFetcher.requestLatestApiKeyListFromAdmin();
-            updateApiKeyList(fetchedApiKeyList);
+            List<ApiKey> fetchedHashedApiKeyList = apiKeyFetcher.requestLatestApiKeyListFromAdmin();
+            updateApiKeyList(fetchedHashedApiKeyList);
             updateGatewayMode(GatewayMode.ONLINE);
         } catch (Exception e) {
             log.error("API key list fetching process failed: ", e);
@@ -121,10 +125,10 @@ public class LocalApiKeyManager {
         }
     }
 
-    private void updateApiKeyList(List<ApiKey> fetchedApiKeyList) {
-        Assert.notNull(fetchedApiKeyList, "The local API key list will not be " +
+    private void updateApiKeyList(List<ApiKey> fetchedHashedApiKeyList) {
+        Assert.notNull(fetchedHashedApiKeyList, "The local API key list will not be " +
                 "updated since the fetched API key list was null.");
-        localApiKeyList = fetchedApiKeyList;
+        localHashedApiKeyList = fetchedHashedApiKeyList;
         deadlineWhenOfflineModeShallStopWorking = LocalDateTime.now()
                 .plusMinutes(numberOfMinutesTheGatewayShallWorkInOfflineMode);
 

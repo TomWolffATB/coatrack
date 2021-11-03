@@ -25,12 +25,13 @@ import eu.coatrack.api.ApiKey;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 import static org.mockito.Mockito.mock;
 
 public abstract class LocalApiKeyManager_AbstractTestSetupProvider {
 
     protected ApiKey apiKey;
-    protected List<ApiKey> apiKeyList;
+    protected List<ApiKey> hashedApiKeyList;
     protected ApiKeyFetcher apiKeyFetcherMock;
     protected LocalApiKeyManager localApiKeyManager;
 
@@ -38,8 +39,11 @@ public abstract class LocalApiKeyManager_AbstractTestSetupProvider {
         apiKey = new ApiKey();
         apiKey.setKeyValue("ca716b82-745c-4f6d-a38b-ff8fe140ffd1");
 
-        apiKeyList = new ArrayList<>();
-        apiKeyList.add(apiKey);
+        hashedApiKeyList = new ArrayList<>();
+        ApiKey hashedApiKey = apiKey.clone();
+        String hashedKeyValue = sha256Hex(apiKey.getKeyValue());
+        hashedApiKey.setKeyValue(hashedKeyValue);
+        hashedApiKeyList.add(hashedApiKey);
 
         apiKeyFetcherMock = mock(ApiKeyFetcher.class);
         long timeInMinutesTheGatewayWorksWithoutConnectionToAdmin = 60;

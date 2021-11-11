@@ -121,7 +121,7 @@ public class LocalApiKeyManager {
         log.debug("Trying to update the local API key list by contacting CoatRack admin.");
 
         try {
-            List<ApiKey> fetchedHashedApiKeyList = apiKeyFetcher.requestLatestApiKeyListFromAdmin();
+            List<ApiKey> fetchedHashedApiKeyList = apiKeyFetcher.requestLatestHashedApiKeyListFromAdmin();
             updateApiKeyList(fetchedHashedApiKeyList);
             updateGatewayMode(GatewayMode.ONLINE);
         } catch (Exception e) {

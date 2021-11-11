@@ -41,24 +41,24 @@ public class UrlResourcesProvider {
     @Value("${ygg.admin.api-base-url}")
     private String adminBaseUrl;
 
-    @Value("${ygg.admin.resources.get-api-key-list-by-gatewayId}")
-    private String adminResourceToFetchApiKeyList;
+    @Value("${ygg.admin.resources.get-hashed-api-key-list-by-gatewayId}")
+    private String adminResourceToFetchHashedApiKeyList;
 
     @Value("${ygg.admin.resources.search-api-keys-by-token-value}")
     private String adminResourceToFetchSingleApiKey;
 
     private String
-            apiKeyListRequestUrl,
-            apiKeyRequestUrlWithoutApiKeyValueAndGatewayId;
+            hashedApiKeyListRequestUrl,
+            hashedApiKeyRequestUrlWithoutApiKeyValueAndGatewayId;
 
     @PostConstruct
     private void initUrls() {
-        apiKeyListRequestUrl = attachGatewayIdToUrl(adminBaseUrl + adminResourceToFetchApiKeyList);
-        apiKeyRequestUrlWithoutApiKeyValueAndGatewayId = adminBaseUrl + adminResourceToFetchSingleApiKey;
+        hashedApiKeyListRequestUrl = attachGatewayIdToUrl(adminBaseUrl + adminResourceToFetchHashedApiKeyList);
+        hashedApiKeyRequestUrlWithoutApiKeyValueAndGatewayId = adminBaseUrl + adminResourceToFetchSingleApiKey;
     }
 
     public String getApiKeyRequestUrl(String apiKeyValue) {
-        return attachGatewayIdToUrl(apiKeyRequestUrlWithoutApiKeyValueAndGatewayId + apiKeyValue);
+        return attachGatewayIdToUrl(hashedApiKeyRequestUrlWithoutApiKeyValueAndGatewayId + apiKeyValue);
     }
 
     public String attachGatewayIdToUrl(String urlWithoutApiKeyRequestParam) {
@@ -67,7 +67,7 @@ public class UrlResourcesProvider {
                 + Proxy.GATEWAY_API_KEY_REQUEST_PARAMETER_NAME + "=" + gatewayId;
     }
 
-    public String getApiKeyListRequestUrl() {
-        return apiKeyListRequestUrl;
+    public String getHashedApiKeyListRequestUrl() {
+        return hashedApiKeyListRequestUrl;
     }
 }

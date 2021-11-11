@@ -22,7 +22,6 @@ import eu.coatrack.api.ApiKey;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -57,7 +56,7 @@ public abstract class ApiKeyFetcher_AbstractTestSetup {
 
     private UrlResourcesProvider createUrlResourcesProviderMock() {
         UrlResourcesProvider mock = mock(UrlResourcesProvider.class);
-        when(mock.getApiKeyListRequestUrl()).thenReturn("test");
+        when(mock.getHashedApiKeyListRequestUrl()).thenReturn("test");
         when(mock.getApiKeyRequestUrl(anyString())).thenReturn("test");
         return mock;
     }

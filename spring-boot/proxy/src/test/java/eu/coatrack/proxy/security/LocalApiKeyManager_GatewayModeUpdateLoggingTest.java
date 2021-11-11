@@ -123,13 +123,13 @@ public class LocalApiKeyManager_GatewayModeUpdateLoggingTest extends LocalApiKey
 
     public void letLocalApiKeyManagerSwitchToOnlineMode() {
         reset(apiKeyFetcherMock);
-        when(apiKeyFetcherMock.requestLatestApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
+        when(apiKeyFetcherMock.requestLatestHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
         localApiKeyManager.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
     }
 
     public void letLocalApiKeyManagerSwitchToOfflineMode() {
         reset(apiKeyFetcherMock);
-        when(apiKeyFetcherMock.requestLatestApiKeyListFromAdmin()).thenThrow(new ApiKeyFetchingFailedException("test"));
+        when(apiKeyFetcherMock.requestLatestHashedApiKeyListFromAdmin()).thenThrow(new ApiKeyFetchingFailedException("test"));
 
         //This method fails due to the thrown ApiKeyFetchingException and causes the gateway to switch to offline mode.
         localApiKeyManager.refreshLocalApiKeyCacheWithApiKeysFromAdmin();

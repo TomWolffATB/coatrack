@@ -39,7 +39,7 @@ public class LocalApiKeyManager_ApiKeyFindingInLocalApiKeyListTest extends Local
     @BeforeEach
     public void fillLocalApiKeyListWithListContainingValidApiKey() throws ApiKeyFetchingFailedException {
         super.setupLocalApiKeyManagerWithoutInitializingLocalApiKeyList();
-        when(apiKeyFetcherMock.requestLatestApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
+        when(apiKeyFetcherMock.requestLatestHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
         localApiKeyManager.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
     }
 
@@ -59,7 +59,7 @@ public class LocalApiKeyManager_ApiKeyFindingInLocalApiKeyListTest extends Local
         List<ApiKey> apiKeyListNotContainingTheIncomingApiKey = createApiKeyListNotContainingTheIncomingApiKey();
 
         reset(apiKeyFetcherMock);
-        when(apiKeyFetcherMock.requestLatestApiKeyListFromAdmin()).thenReturn(apiKeyListNotContainingTheIncomingApiKey);
+        when(apiKeyFetcherMock.requestLatestHashedApiKeyListFromAdmin()).thenReturn(apiKeyListNotContainingTheIncomingApiKey);
         localApiKeyManager.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
 
         assertThrows(ApiKeyNotFoundInLocalApiKeyListException.class, () -> localApiKeyManager.getApiKeyEntityFromLocalCache(apiKey.getKeyValue()));
@@ -82,7 +82,7 @@ public class LocalApiKeyManager_ApiKeyFindingInLocalApiKeyListTest extends Local
     @Test
     public void localApiKeyListShouldNotUpdateWhenApiKeyFetcherDeliversNull() {
         reset(apiKeyFetcherMock);
-        when(apiKeyFetcherMock.requestLatestApiKeyListFromAdmin()).thenReturn(null);
+        when(apiKeyFetcherMock.requestLatestHashedApiKeyListFromAdmin()).thenReturn(null);
         localApiKeyManager.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
 
         ApiKey apiKeyFoundInLocalList = localApiKeyManager.getApiKeyEntityFromLocalCache(apiKey.getKeyValue());

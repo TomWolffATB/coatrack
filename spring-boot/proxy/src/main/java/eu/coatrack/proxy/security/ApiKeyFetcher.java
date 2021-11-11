@@ -52,12 +52,12 @@ public class ApiKeyFetcher {
         this.urlResourcesProvider = urlResourcesProvider;
     }
 
-    public List<ApiKey> requestLatestApiKeyListFromAdmin() {
-        log.debug("Requesting latest API key list from CoatRack admin.");
+    public List<ApiKey> requestLatestHashedApiKeyListFromAdmin() {
+        log.debug("Requesting latest hashed API key list from CoatRack admin.");
 
         try {
             ResponseEntity<ApiKey[]> responseEntity = restTemplate.getForEntity(
-                    urlResourcesProvider.getApiKeyListRequestUrl(), ApiKey[].class);
+                    urlResourcesProvider.getHashedApiKeyListRequestUrl(), ApiKey[].class);
             ApiKey[] hashedApiKeys = (ApiKey[]) extractBodyFromResponseEntity(responseEntity);
             return new ArrayList<>(Arrays.asList(hashedApiKeys));
         } catch (RestClientException e) {

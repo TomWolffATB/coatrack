@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import static eu.coatrack.system_integration_testing.api.PageFactory.*;
+import static eu.coatrack.system_integration_testing.api.tools.WaiterUtils.sleepMillis;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -46,6 +47,8 @@ public class DashboardAndReportUpdateTests {
         serviceConsumerReportedServiceCalls = serviceConsumerReports.getNumberOfServiceCalls(gatewayRunner.getItemDetails().serviceName);
         gatewayRunner.makeValidServiceCall();
         gatewayRunner.makeValidServiceCall();
+        //TODO It would probably better to make an explicit wait until the numbers have updated accordingly.
+        sleepMillis(5000);
     }
 
     @Test

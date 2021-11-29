@@ -45,7 +45,7 @@ public class WaiterUtils {
                 isConnectionEstablished = true;
                 socket.close();
             } catch (Exception e){
-                logger.info("Connection to host {}:{} could not yet be established.", host, port);
+                logger.info("Host {}:{} is not reachable, yet. Therefore the current process is waiting it.", host, port);
                 counter++;
                 sleepMillis(5000);
             }

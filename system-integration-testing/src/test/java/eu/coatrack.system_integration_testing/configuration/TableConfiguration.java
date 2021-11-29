@@ -46,10 +46,10 @@ public class TableConfiguration {
             serviceProviderGatewaysDetailsButtonClassName = "fa-bar-chart",
             serviceProviderGatewaysEditButtonClassName = "fa-pencil-square-o";
     public static final int
-            serviceProviderGatewaysTrashButtonColumn = startpageUrl.contains("https://coatrack.eu") ? 8 : 9, //TODO To be adapted when coatrack.eu merges the Gateway Health Monitor feature.
+            serviceProviderGatewaysTrashButtonColumn = 9,
             serviceProviderGatewaysNameColumn = 0,
             serviceProviderGatewaysDetailsButtonColumn = 7,
-            serviceProviderGatewaysEditButtonColumn = startpageUrl.contains("https://coatrack.eu") ? 8 : 9, //TODO To be adapted when coatrack.eu merges the Gateway Health Monitor feature.
+            serviceProviderGatewaysEditButtonColumn = 9,
             serviceProviderGatewaysIdColumn = 1;
 
     public static final String

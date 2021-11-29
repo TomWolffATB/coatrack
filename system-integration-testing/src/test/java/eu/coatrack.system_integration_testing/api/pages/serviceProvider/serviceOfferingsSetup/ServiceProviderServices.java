@@ -60,7 +60,8 @@ public class ServiceProviderServices {
         driver.findElement(By.linkText("Next")).sendKeys(Keys.RETURN);
         sleepMillis(1000);
         driver.findElement(By.linkText("Finish")).sendKeys(Keys.RETURN);
-        sleepMillis(1000);
+        //TODO A better solution would be to make an explicit wait until the specific item entry is found in the list.
+        sleepMillis(3000);
     }
 
     public boolean isServiceWithinList(String serviceName) {

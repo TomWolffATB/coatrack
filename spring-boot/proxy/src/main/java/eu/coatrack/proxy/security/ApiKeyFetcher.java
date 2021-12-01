@@ -56,7 +56,7 @@ public class ApiKeyFetcher {
     }
 
     public List<HashedApiKey> requestLatestHashedApiKeyListFromAdmin() {
-        log.debug("Requesting latest hashed API key list from CoatRack admin.");
+        log.debug("Requesting latest API key list from from " + urlResourcesProvider.getHashedApiKeyListRequestUrl());
 
         try {
             ResponseEntity<HashedApiKey[]> responseEntity = restTemplate.getForEntity(
@@ -94,7 +94,7 @@ public class ApiKeyFetcher {
         return errorMessage;
     }
 
-    public ApiKey requestHashedApiKeyFromAdmin(String apiKeyValue) {
+    public ApiKey requestApiKeyFromAdmin(String apiKeyValue) {
         log.debug("Requesting API key with the hashed value {} from CoatRack admin.", sha256Hex(apiKeyValue));
 
         try {

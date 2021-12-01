@@ -174,13 +174,13 @@ public class ApiKeyAuthenticatorTest {
             throws ApiKeyFetchingFailedException {
         switch (resultOfApiKeyRequestToAdmin) {
             case NULL:
-                when(apiKeyFetcherMock.requestHashedApiKeyFromAdmin(anyString())).thenReturn(null);
+                when(apiKeyFetcherMock.requestApiKeyFromAdmin(anyString())).thenReturn(null);
                 break;
             case API_KEY:
-                when(apiKeyFetcherMock.requestHashedApiKeyFromAdmin(apiKey.getKeyValue())).thenReturn(apiKey);
+                when(apiKeyFetcherMock.requestApiKeyFromAdmin(apiKey.getKeyValue())).thenReturn(apiKey);
                 break;
             case API_KEY_FETCHING_FAILED_EXCEPTION:
-                when(apiKeyFetcherMock.requestHashedApiKeyFromAdmin(anyString())).thenThrow(new ApiKeyFetchingFailedException("test"));
+                when(apiKeyFetcherMock.requestApiKeyFromAdmin(anyString())).thenThrow(new ApiKeyFetchingFailedException("test"));
                 break;
         }
     }

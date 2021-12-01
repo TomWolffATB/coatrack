@@ -20,7 +20,6 @@ package eu.coatrack.api;
  * #L%
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import java.util.logging.Logger;
 import javax.persistence.Entity;
@@ -157,7 +156,8 @@ public class ApiKey {
 
     public HashedApiKey convertToHashedApiKey() {
         String hashedKeyValue = sha256Hex(keyValue);
-        HashedApiKey hashedApiKey = new HashedApiKey(hashedKeyValue);
+        HashedApiKey hashedApiKey = new HashedApiKey();
+        hashedApiKey.hashedKeyValue = hashedKeyValue;
         hashedApiKey.validUntil = validUntil;
         hashedApiKey.serviceApi = serviceApi;
         hashedApiKey.deletedWhen = deletedWhen;

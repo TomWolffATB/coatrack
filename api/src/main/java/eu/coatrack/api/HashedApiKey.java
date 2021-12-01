@@ -20,18 +20,16 @@ package eu.coatrack.api;
  * #L%
  */
 
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
+import lombok.NoArgsConstructor;
+
 import java.util.Date;
 
+@NoArgsConstructor
 public class HashedApiKey {
 
-    public final String hashedApiKeyValue;
+    public String hashedKeyValue;
     public Date validUntil;
     public ServiceApi serviceApi;
     public Date deletedWhen;
 
-    public HashedApiKey(String hashedApiKeyValue) {
-        this.hashedApiKeyValue = hashedApiKeyValue;
-    }
 }

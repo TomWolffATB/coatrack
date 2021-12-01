@@ -69,9 +69,11 @@ public class LocalApiKeyManager_ApiKeyFindingInLocalApiKeyListTest extends Local
     private List<HashedApiKey> createApiKeyListNotContainingTheIncomingApiKey() {
         List<HashedApiKey> listWithoutTheIncomingApiKey = new ArrayList<>();
 
-        HashedApiKey wrongApiKey1 = new HashedApiKey("not matching value 1");
+        HashedApiKey wrongApiKey1 = new HashedApiKey();
+        wrongApiKey1.hashedKeyValue = "not matching value 1";
         listWithoutTheIncomingApiKey.add(wrongApiKey1);
-        HashedApiKey wrongApiKey2 = new HashedApiKey("not matching value 2");
+        HashedApiKey wrongApiKey2 = new HashedApiKey();
+        wrongApiKey2.hashedKeyValue = "not matching value 2";
         listWithoutTheIncomingApiKey.add(wrongApiKey2);
 
         return listWithoutTheIncomingApiKey;

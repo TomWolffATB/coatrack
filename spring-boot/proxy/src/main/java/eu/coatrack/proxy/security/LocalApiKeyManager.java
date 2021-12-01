@@ -103,7 +103,7 @@ public class LocalApiKeyManager {
 
         String hashedApiKeyValue = sha256Hex(apiKeyValue);
         Optional<HashedApiKey> optionalApiKey = localHashedApiKeyList.stream().filter(
-                apiKeyFromLocalList -> apiKeyFromLocalList.hashedApiKeyValue.equals(hashedApiKeyValue)
+                apiKeyFromLocalList -> apiKeyFromLocalList.hashedKeyValue.equals(hashedApiKeyValue)
         ).findFirst();
 
         if (optionalApiKey.isPresent()) {

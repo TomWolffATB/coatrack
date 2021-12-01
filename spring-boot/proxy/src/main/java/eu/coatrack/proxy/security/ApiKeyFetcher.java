@@ -21,6 +21,7 @@ package eu.coatrack.proxy.security;
  */
 
 import eu.coatrack.api.ApiKey;
+import eu.coatrack.api.HashedApiKey;
 import eu.coatrack.proxy.security.exceptions.ApiKeyFetchingFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,13 +53,13 @@ public class ApiKeyFetcher {
         this.urlResourcesProvider = urlResourcesProvider;
     }
 
-    public List<ApiKey> requestLatestHashedApiKeyListFromAdmin() {
+    public List<HashedApiKey> requestLatestHashedApiKeyListFromAdmin() {
         log.debug("Requesting latest hashed API key list from CoatRack admin.");
 
         try {
-            ResponseEntity<ApiKey[]> responseEntity = restTemplate.getForEntity(
-                    urlResourcesProvider.getHashedApiKeyListRequestUrl(), ApiKey[].class);
-            ApiKey[] hashedApiKeys = (ApiKey[]) extractBodyFromResponseEntity(responseEntity);
+            ResponseEntity<HashedApiKey[]> responseEntity = restTemplate.getForEntity(
+                    urlResourcesProvider.getHashedApiKeyListRequestUrl(), HashedApiKey[].class);
+            HashedApiKey[] hashedApiKeys = (HashedApiKey[]) extractBodyFromResponseEntity(responseEntity);
             return new ArrayList<>(Arrays.asList(hashedApiKeys));
         } catch (RestClientException e) {
             throw new ApiKeyFetchingFailedException("Trying to request the latest API key list from Admin, the " +

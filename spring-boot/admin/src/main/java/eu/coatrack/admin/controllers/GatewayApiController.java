@@ -24,6 +24,7 @@ import eu.coatrack.admin.model.repository.ApiKeyRepository;
 import eu.coatrack.admin.model.repository.ProxyRepository;
 import eu.coatrack.admin.model.repository.ServiceApiRepository;
 import eu.coatrack.api.ApiKey;
+import eu.coatrack.api.HashedApiKey;
 import eu.coatrack.api.Proxy;
 import eu.coatrack.api.ServiceApi;
 import org.slf4j.Logger;
@@ -70,7 +71,7 @@ public class GatewayApiController {
 
     //Due to legacy code reasons the gateway API key and the gateway id are exactly the same.
     @GetMapping("/api/gateways/api-keys")
-    public ResponseEntity<List<ApiKey>> findApiKeyListByGatewayApiKey(@RequestParam("gateway-api-key") String gatewayIdAndApiKey) {
+    public ResponseEntity<List<HashedApiKey>> findApiKeyListByGatewayApiKey(@RequestParam("gateway-api-key") String gatewayIdAndApiKey) {
         log.debug("The gateway with the ID {} requests its latest API key list.", gatewayIdAndApiKey);
         try {
             Proxy callingProxy = proxyRepository.findById(gatewayIdAndApiKey);
@@ -90,7 +91,7 @@ public class GatewayApiController {
         }
     }
 
-    private List<ApiKey> getApiKeysBelongingToServicesOf(Proxy proxy) {
+    private List<HashedApiKey> getApiKeysBelongingToServicesOf(Proxy proxy) {
         if (proxy.getServiceApis() == null || proxy.getServiceApis().isEmpty()) {
             log.debug("The gateway with the ID {} does not provide any services.", proxy.getId());
             return new ArrayList<>();

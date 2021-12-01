@@ -21,6 +21,7 @@ package eu.coatrack.proxy.security;
  */
 
 import eu.coatrack.api.ApiKey;
+import eu.coatrack.api.HashedApiKey;
 import eu.coatrack.proxy.security.exceptions.ApiKeyNotFoundInLocalApiKeyListException;
 import eu.coatrack.proxy.security.exceptions.ApiKeyValueWasNullException;
 import eu.coatrack.proxy.security.exceptions.LocalApiKeyListWasNotInitializedException;
@@ -57,7 +58,7 @@ public class LocalApiKeyManager {
     public final static String switchingToOfflineModeMessage = "Gateway is switching to offline mode.";
     public final static String switchingToOnlineModeMessage = "Gateway is switching to online mode.";
 
-    private List<ApiKey> localHashedApiKeyList;
+    private List<HashedApiKey> localHashedApiKeyList;
     private LocalDateTime deadlineWhenOfflineModeShallStopWorking;
     private boolean isLocalApiKeyListInitialized = false;
 
@@ -101,18 +102,25 @@ public class LocalApiKeyManager {
                     "because its value was null.");
 
         String hashedApiKeyValue = sha256Hex(apiKeyValue);
-        Optional<ApiKey> optionalApiKey = localHashedApiKeyList.stream().filter(
-                apiKeyFromLocalList -> apiKeyFromLocalList.getKeyValue().equals(hashedApiKeyValue)
+        Optional<HashedApiKey> optionalApiKey = localHashedApiKeyList.stream().filter(
+                apiKeyFromLocalList -> apiKeyFromLocalList.hashedApiKeyValue.equals(hashedApiKeyValue)
         ).findFirst();
 
         if (optionalApiKey.isPresent()) {
-            ApiKey apiKey = optionalApiKey.get().clone();
-            apiKey.setKeyValue(apiKeyValue);
-            return apiKey;
+            return recreateApiKey(optionalApiKey.get(), apiKeyValue);
         } else {
             throw new ApiKeyNotFoundInLocalApiKeyListException("The API key with the value " + apiKeyValue +
                     " could not be found in the local API key list.");
         }
+    }
+
+    private ApiKey recreateApiKey(HashedApiKey hashedApiKey, String apiKeyValue) {;
+        ApiKey apiKey = new ApiKey();
+        apiKey.setKeyValue(apiKeyValue);
+        apiKey.setServiceApi(hashedApiKey.serviceApi);
+        apiKey.setValidUntil(hashedApiKey.validUntil);
+        apiKey.setDeletedWhen(hashedApiKey.deletedWhen);
+        return apiKey;
     }
 
     @Async
@@ -121,7 +129,7 @@ public class LocalApiKeyManager {
         log.debug("Trying to update the local API key list by contacting CoatRack admin.");
 
         try {
-            List<ApiKey> fetchedHashedApiKeyList = apiKeyFetcher.requestLatestHashedApiKeyListFromAdmin();
+            List<HashedApiKey> fetchedHashedApiKeyList = apiKeyFetcher.requestLatestHashedApiKeyListFromAdmin();
             updateApiKeyList(fetchedHashedApiKeyList);
             updateGatewayMode(GatewayMode.ONLINE);
         } catch (Exception e) {
@@ -130,7 +138,7 @@ public class LocalApiKeyManager {
         }
     }
 
-    private void updateApiKeyList(List<ApiKey> fetchedHashedApiKeyList) {
+    private void updateApiKeyList(List<HashedApiKey> fetchedHashedApiKeyList) {
         Assert.notNull(fetchedHashedApiKeyList, "The local API key list will not be " +
                 "updated since the fetched API key list was null.");
         localHashedApiKeyList = fetchedHashedApiKeyList;

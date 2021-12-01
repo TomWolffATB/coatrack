@@ -155,22 +155,12 @@ public class ApiKey {
                 + '}';
     }
 
-    @Override
-    public ApiKey clone() {
-        ApiKey apiKeyClone = new ApiKey();
-        apiKeyClone.setId(id);
-        apiKeyClone.setKeyValue(keyValue);
-        apiKeyClone.setCreated(created);
-        apiKeyClone.setValidUntil(validUntil);
-        apiKeyClone.setServiceApi(serviceApi);
-        apiKeyClone.setUser(user);
-        return apiKeyClone;
-    }
-
-    public ApiKey convertToHashedApiKey() {
-        ApiKey hashedApiKey = this.clone();
+    public HashedApiKey convertToHashedApiKey() {
         String hashedKeyValue = sha256Hex(keyValue);
-        hashedApiKey.setKeyValue(hashedKeyValue);
+        HashedApiKey hashedApiKey = new HashedApiKey(hashedKeyValue);
+        hashedApiKey.validUntil = validUntil;
+        hashedApiKey.serviceApi = serviceApi;
+        hashedApiKey.deletedWhen = deletedWhen;
         return hashedApiKey;
     }
 }

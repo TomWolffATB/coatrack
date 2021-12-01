@@ -109,8 +109,8 @@ public class LocalApiKeyManager {
         if (optionalApiKey.isPresent()) {
             return recreateApiKey(optionalApiKey.get(), apiKeyValue);
         } else {
-            throw new ApiKeyNotFoundInLocalApiKeyListException("The API key with the value " + apiKeyValue +
-                    " could not be found in the local API key list.");
+            throw new ApiKeyNotFoundInLocalApiKeyListException("The API key with the hashed value "
+                    + sha256Hex(apiKeyValue) + " could not be found in the local API key list.");
         }
     }
 

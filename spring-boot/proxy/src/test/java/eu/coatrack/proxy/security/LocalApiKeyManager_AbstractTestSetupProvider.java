@@ -38,7 +38,7 @@ public abstract class LocalApiKeyManager_AbstractTestSetupProvider {
 
     public void setupLocalApiKeyManagerWithoutInitializingLocalApiKeyList() {
         apiKey = new ApiKey();
-        apiKey.setKeyValue("ca716b82-745c-4f6d-a38b-ff8fe140ffd1");
+        apiKey.setKeyValue("ee11ee22-ee33-ee44-ee55-ee66ee77ee88");
 
         hashedApiKeyList = new ArrayList<>();
         HashedApiKey hashedApiKey = apiKey.convertToHashedApiKey();

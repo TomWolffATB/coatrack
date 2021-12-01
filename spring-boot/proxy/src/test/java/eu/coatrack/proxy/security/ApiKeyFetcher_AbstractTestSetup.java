@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 
 public abstract class ApiKeyFetcher_AbstractTestSetup {
 
-    protected static final String someApiKeyValue = "ca716b82-745c-4f6d-a38b-ff8fe140ffd1";
+    protected static final String someApiKeyValue = "ee11ee22-ee33-ee44-ee55-ee66ee77ee88";
 
     protected ApiKeyFetcher apiKeyFetcher;
     protected RestTemplate restTemplateMock;
@@ -44,7 +44,7 @@ public abstract class ApiKeyFetcher_AbstractTestSetup {
     @BeforeEach
     public void setup() {
         apiKey = new ApiKey();
-        apiKey.setKeyValue("ca716b82-745c-4f6d-a38b-ff8fe140ffd1");
+        apiKey.setKeyValue("ee11ee22-ee33-ee44-ee55-ee66ee77ee88");
 
         hashedApiKey = apiKey.convertToHashedApiKey();
 

@@ -56,7 +56,7 @@ public class ApiKeyAuthenticatorTest {
         serviceApi.setUriIdentifier("weather-data-service");
 
         ApiKey localApiKey = new ApiKey();
-        localApiKey.setKeyValue("ca716b82-745c-4f6d-a38b-ff8fe140ffd1");
+        localApiKey.setKeyValue("ee11ee22-ee33-ee44-ee55-ee66ee77ee88");
         localApiKey.setServiceApi(serviceApi);
 
         return localApiKey;

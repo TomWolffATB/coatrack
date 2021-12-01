@@ -102,8 +102,8 @@ public class ApiKeyFetcher {
                     urlResourcesProvider.getApiKeyRequestUrl(apiKeyValue), ApiKey.class);
             return (ApiKey) extractBodyFromResponseEntity(responseEntity);
         } catch (RestClientException e) {
-            throw new ApiKeyFetchingFailedException("Trying to request the API key with the value " + apiKeyValue +
-                    " from CoatRack admin, the connection failed.", e);
+            throw new ApiKeyFetchingFailedException("Trying to request the API key with the hashed value " +
+                    sha256Hex(apiKeyValue) + " from CoatRack admin, the connection failed.", e);
         }
     }
 }

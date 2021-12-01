@@ -50,7 +50,7 @@ public class ApiKeyValidatorTest {
     private ApiKey createValidApiKey() {
         ApiKey apiKeyToBeCreated = new ApiKey();
         apiKeyToBeCreated.setDeletedWhen(null);
-        apiKeyToBeCreated.setKeyValue("ca716b82-745c-4f6d-a38b-ff8fe140ffd1");
+        apiKeyToBeCreated.setKeyValue("ee11ee22-ee33-ee44-ee55-ee66ee77ee88");
         apiKeyToBeCreated.setValidUntil(oneMinuteAfterNow);
         return apiKeyToBeCreated;
     }

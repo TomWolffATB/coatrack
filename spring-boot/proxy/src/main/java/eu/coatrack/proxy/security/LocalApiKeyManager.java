@@ -95,7 +95,7 @@ public class LocalApiKeyManager {
     }
 
     private ApiKey extractApiKeyFromLocalApiKeyList(String apiKeyValue) {
-        log.debug("Trying to extract the API key with the value {} from the local list.", apiKeyValue);
+        log.debug("Trying to extract the API key with the hashed value {} from the local list.", sha256Hex(apiKeyValue));
 
         if (apiKeyValue == null)
             throw new ApiKeyValueWasNullException("The API key could not be found in the local API key list " +

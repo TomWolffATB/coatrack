@@ -38,6 +38,8 @@ import java.util.regex.Pattern;
 
 import eu.coatrack.api.ApiKey;
 
+import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
+
 public class MetricsCounterService {
 
     private static final Logger log = LoggerFactory.getLogger(MetricsCounterService.class);
@@ -56,11 +58,11 @@ public class MetricsCounterService {
     // this ID should be unique for each start of the proxy application, so that CoatRack admin knows when counting was restarted
     private static final String counterSessionID = UUID.randomUUID().toString();
 
-    public void increment(HttpServletRequest request, String apiKey, MetricType metricType, Integer httpResponseCode) {
-        log.debug(String.format("incrementing metric '%s' for URI '%s' and api key %s",
+    public void increment(HttpServletRequest request, String apiKeyValue, MetricType metricType, Integer httpResponseCode) {
+        log.debug(String.format("incrementing metric '%s' for URI '%s' and API key with hash value %s",
                 metricType,
                 request.getRequestURI(),
-                apiKey
+                sha256Hex(apiKeyValue)
         ));
 
         String requestMethod = request.getMethod();
@@ -97,7 +99,7 @@ public class MetricsCounterService {
                 .append(SEPARATOR)
                 .append(requestMethod) // [2]
                 .append(SEPARATOR)
-                .append(apiKey) // [3]
+                .append(apiKeyValue) // [3]
                 .append(SEPARATOR)
                 .append(metricType) // [4]
                 .append(SEPARATOR)
@@ -116,7 +118,6 @@ public class MetricsCounterService {
 
         // check if this is a custom metric
         if (elements[0].equals("counter." + PREFIX)) {
-            log.debug("Metrics for transmission: " + inputMetric.getName());
 
             Metric outputMetric = new Metric();
             outputMetric.setRequestMethod(elements[2]);

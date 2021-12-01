@@ -36,6 +36,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
+
 /**
  *  Checks if the API key token value sent by the client is valid. If so, an authentication object
  *  including the granted authorities is generated, to be further handled by access decision voters.
@@ -68,7 +70,6 @@ public class ApiKeyAuthenticator implements AuthenticationManager {
         if (authentication == null)
             throw new BadCredentialsException("The authentication was null");
 
-        log.debug("Verifying the authentication {}.", authentication.getName());
         try {
             String apiKeyValue = extractApiKeyValueFromAuthentication(authentication);
             return createAuthTokenIfApiKeyIsValid(apiKeyValue);
@@ -82,7 +83,6 @@ public class ApiKeyAuthenticator implements AuthenticationManager {
 
     private String extractApiKeyValueFromAuthentication(Authentication authentication) {
         try{
-            log.debug("Getting API key value from authentication {}.", authentication.getName());
             Assert.notNull(authentication.getCredentials(), "The credentials of " + authentication.getName()
                     + " were null.");
             Assert.isInstanceOf(String.class, authentication.getCredentials());
@@ -103,25 +103,25 @@ public class ApiKeyAuthenticator implements AuthenticationManager {
     }
 
     private boolean doesApiKeyBelongToAdminApp(String apiKeyValue) {
-        log.debug("Checking if '{}' is an API key of the admin application.", apiKeyValue);
+        log.debug("Checking if API key with hashed value '{}' is an API key of the admin application.", sha256Hex(apiKeyValue));
         return apiKeyValue.equals(ApiKey.API_KEY_FOR_YGG_ADMIN_TO_ACCESS_PROXIES);
     }
 
     private Authentication createAdminAuthTokenFromApiKey(String apiKeyValue) {
-        log.debug("Creating admin authentication token using API key with the value {}.", apiKeyValue);
+        log.debug("Creating admin authentication token using API key with the hashed value {}.", sha256Hex(apiKeyValue));
         ApiKeyAuthToken apiKeyAuthTokenForValidApiKey = new ApiKeyAuthToken(apiKeyValue, authoritiesGrantedToCoatRackAdminApp);
         apiKeyAuthTokenForValidApiKey.setAuthenticated(true);
         return apiKeyAuthTokenForValidApiKey;
     }
 
     private Authentication createConsumerAuthTokenIfApiKeyIsValid(String apiKeyValue) {
-        log.debug("Verifying the API with the value {} from consumer.", apiKeyValue);
+        log.debug("Verifying the API with the hashed value {} from consumer.", sha256Hex(apiKeyValue));
 
         ApiKey apiKey = getApiKeyEntityByApiKeyValue(apiKeyValue);
         if (apiKeyValidator.isApiKeyValid(apiKey))
             return createAuthTokenGrantingAccessToServiceApi(apiKey);
         else
-            throw new BadCredentialsException("The API key " + apiKeyValue + " is not valid.");
+            throw new BadCredentialsException("The API key with the hashed value " + sha256Hex(apiKeyValue) + " is not valid.");
     }
 
     private ApiKey getApiKeyEntityByApiKeyValue(String apiKeyValue) {
@@ -129,15 +129,15 @@ public class ApiKeyAuthenticator implements AuthenticationManager {
         try {
             apiKey = apiKeyFetcher.requestHashedApiKeyFromAdmin(apiKeyValue);
         } catch (ApiKeyFetchingFailedException e) {
-            log.debug("Trying to verify consumers API key with the value {}, the connection to admin failed. " +
-                    "Therefore checking the local API key list as fallback solution.", apiKeyValue);
+            log.debug("Trying to verify consumers API key with the hash value {}, the connection to admin failed. " +
+                    "Therefore checking the local API key list as fallback solution.", sha256Hex(apiKeyValue));
             apiKey = localApiKeyManager.getApiKeyEntityFromLocalCache(apiKeyValue);
         }
         return apiKey;
     }
 
     private ApiKeyAuthToken createAuthTokenGrantingAccessToServiceApi(ApiKey apiKey) {
-        log.debug("Create consumers authentication token using API key with the value {}.", apiKey.getKeyValue());
+        log.debug("Create consumers authentication token using API key with the hash value {}.", sha256Hex(apiKey.getKeyValue()));
 
         String serviceUriIdentifier = apiKey.getServiceApi().getUriIdentifier();
         ApiKeyAuthToken apiKeyAuthToken = new ApiKeyAuthToken(apiKey.getKeyValue(), Collections.singleton(

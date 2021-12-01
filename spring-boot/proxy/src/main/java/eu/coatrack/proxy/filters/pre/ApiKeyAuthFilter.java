@@ -38,6 +38,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Collections;
 
+import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
+
 /**
  * Simple filter that extracts the API key token value from the incoming request and adds it to the security context
  *
@@ -47,9 +49,6 @@ public class ApiKeyAuthFilter extends GenericFilterBean {
 
     private static final Logger log = LoggerFactory.getLogger(ApiKeyAuthFilter.class);
 
-    @Autowired
-    private ApiKeyAuthenticator apiKeyAuthenticator;
-
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         log.debug(String.format("Api key auth filter received request of type %s", servletRequest.getClass()));
@@ -57,7 +56,7 @@ public class ApiKeyAuthFilter extends GenericFilterBean {
         if (servletRequest instanceof HttpServletRequest) {
             final HttpServletRequest req = (HttpServletRequest) servletRequest;
             final String keyParam = req.getParameter(ApiKey.API_KEY_REQUEST_PARAMETER_NAME);
-            log.debug(String.format("request parameter '%s' has value '%s'", ApiKey.API_KEY_REQUEST_PARAMETER_NAME, keyParam));
+            log.debug(String.format("Request parameter '%s' has the hashed key value '%s'", ApiKey.API_KEY_REQUEST_PARAMETER_NAME, sha256Hex(keyParam)));
 
             Authentication authToken = new ApiKeyAuthToken(keyParam, Collections.emptyList());
             SecurityContextHolder.getContext().setAuthentication(authToken);

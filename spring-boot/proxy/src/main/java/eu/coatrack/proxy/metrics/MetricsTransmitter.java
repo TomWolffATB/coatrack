@@ -104,7 +104,6 @@ public class MetricsTransmitter implements GaugeWriter {
                                     "?proxyId=" + myProxyID +
                                     "&apiKeyValue=" + metricToTransmit.getApiKey().getKeyValue()));
 
-            log.debug("uri to transmit metric: {}", uriToTransmitMetric.toString());
             Object idOfTransmittedMetric = restTemplate.postForObject(uriToTransmitMetric, metricToTransmit, Long.class);
             log.info("transmitted Metrics to admin: {} - response was metric ID {}", metricToTransmit.toString(), idOfTransmittedMetric);
 

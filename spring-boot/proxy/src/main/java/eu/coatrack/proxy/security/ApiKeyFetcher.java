@@ -33,6 +33,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
+import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
+
 /**
  * Sends requests to the Coatrack admin server to receive single
  * API keys or a list of API keys for all services offered by this gateway.
@@ -68,7 +70,6 @@ public class ApiKeyFetcher {
     }
 
     private Object extractBodyFromResponseEntity(ResponseEntity<?> responseEntity) {
-        log.debug("Extracting ResponseEntity: " + responseEntity);
 
         Optional<String> errorMessage = validateResponseEntityAndCreateErrorMessageInCaseOfProblems(responseEntity);
 
@@ -94,7 +95,7 @@ public class ApiKeyFetcher {
     }
 
     public ApiKey requestHashedApiKeyFromAdmin(String apiKeyValue) {
-        log.debug("Requesting API key with the value {} from CoatRack admin.", apiKeyValue);
+        log.debug("Requesting API key with the hashed value {} from CoatRack admin.", sha256Hex(apiKeyValue));
 
         try {
             ResponseEntity<ApiKey> responseEntity = restTemplate.getForEntity(

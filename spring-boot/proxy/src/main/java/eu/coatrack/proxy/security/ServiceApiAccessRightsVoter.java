@@ -65,9 +65,6 @@ public class ServiceApiAccessRightsVoter implements AccessDecisionVoter<FilterIn
 
     @Override
     public int vote(Authentication authentication, FilterInvocation filterInvocation, Collection<ConfigAttribute> attributes) {
-        log.debug("authentication '{}' filter invocation '{}' attributes '{}'",
-                authentication, filterInvocation, attributes.stream().map(Object::toString));
-
         HttpServletRequest httpServletRequest = filterInvocation.getHttpRequest();
 
         String servletPath = httpServletRequest.getServletPath();

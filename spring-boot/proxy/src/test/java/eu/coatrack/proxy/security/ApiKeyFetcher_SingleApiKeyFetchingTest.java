@@ -21,6 +21,7 @@ package eu.coatrack.proxy.security;
  */
 
 import eu.coatrack.api.ApiKey;
+import eu.coatrack.api.HashedApiKey;
 import eu.coatrack.proxy.security.exceptions.ApiKeyFetchingFailedException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -45,43 +46,43 @@ public class ApiKeyFetcher_SingleApiKeyFetchingTest extends ApiKeyFetcher_Abstra
     @Test
     public void nullApiKeyResponseEntityShouldCauseException() {
         when(restTemplateMock.getForEntity(anyString(), eq(ApiKey.class))).thenReturn(null);
-        assertThrows(ApiKeyFetchingFailedException.class, () -> apiKeyFetcher.requestApiKeyFromAdmin(someApiKeyValue));
+        assertThrows(ApiKeyFetchingFailedException.class, () -> apiKeyFetcher.requestHashedApiKeyFromAdmin(someApiKeyValue));
     }
 
     @Test
     public void exceptionAtApiKeyFetchingShouldCauseException() {
         when(restTemplateMock.getForEntity(anyString(), eq(ApiKey.class)))
                 .thenThrow(new RestClientException("test"));
-        assertThrows(ApiKeyFetchingFailedException.class, () -> apiKeyFetcher.requestApiKeyFromAdmin(someApiKeyValue));
+        assertThrows(ApiKeyFetchingFailedException.class, () -> apiKeyFetcher.requestHashedApiKeyFromAdmin(someApiKeyValue));
     }
 
     @Test
     public void validApiKeyResponseEntityFromAdminShouldDeliverApiKey() {
         when(restTemplateMock.getForEntity(anyString(), eq(ApiKey.class)))
                 .thenReturn(new ResponseEntity<>(apiKey, HttpStatus.OK));
-        assertSame(apiKeyFetcher.requestApiKeyFromAdmin(apiKey.getKeyValue()), apiKey);
+        assertSame(apiKeyFetcher.requestHashedApiKeyFromAdmin(apiKey.getKeyValue()), apiKey);
     }
 
     @Test
     public void nonOkHttpStatusShouldCauseException() {
-        when(restTemplateMock.getForEntity(anyString(), eq(ApiKey.class)))
-                .thenReturn(new ResponseEntity<>(apiKey, HttpStatus.INTERNAL_SERVER_ERROR));
-        assertThrows(ApiKeyFetchingFailedException.class, () -> apiKeyFetcher.requestApiKeyFromAdmin(apiKey.getKeyValue()));
+        when(restTemplateMock.getForEntity(anyString(), eq(HashedApiKey.class)))
+                .thenReturn(new ResponseEntity<>(hashedApiKey, HttpStatus.INTERNAL_SERVER_ERROR));
+        assertThrows(ApiKeyFetchingFailedException.class, () -> apiKeyFetcher.requestHashedApiKeyFromAdmin(hashedApiKey.hashedApiKeyValue));
     }
 
     @Test
     public void apiKeyNotFoundByAdminShouldCauseException() {
         when(restTemplateMock.getForEntity(anyString(), eq(ApiKey.class)))
                 .thenReturn(new ResponseEntity<>(null, HttpStatus.OK));
-        assertThrows(ApiKeyFetchingFailedException.class, () -> apiKeyFetcher.requestApiKeyFromAdmin(apiKey.getKeyValue()));
+        assertThrows(ApiKeyFetchingFailedException.class, () -> apiKeyFetcher.requestHashedApiKeyFromAdmin(hashedApiKey.hashedApiKeyValue));
     }
 
     @Test
     public void apiKeyNotFoundByAdminAndNonOkHttpStatusShouldCauseException() {
-        when(restTemplateMock.getForEntity(anyString(), eq(ApiKey.class)))
+        when(restTemplateMock.getForEntity(anyString(), eq(HashedApiKey.class)))
                 .thenReturn(new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR));
         assertThrows(ApiKeyFetchingFailedException.class,
-                () -> apiKeyFetcher.requestApiKeyFromAdmin(apiKey.getKeyValue()));
+                () -> apiKeyFetcher.requestHashedApiKeyFromAdmin(hashedApiKey.hashedApiKeyValue));
     }
 
 }

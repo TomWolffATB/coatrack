@@ -19,6 +19,7 @@ package eu.coatrack.proxy.security;/*-
  */
 
 import eu.coatrack.api.ApiKey;
+import eu.coatrack.api.HashedApiKey;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.web.client.RestTemplate;
 
@@ -36,17 +37,20 @@ public abstract class ApiKeyFetcher_AbstractTestSetup {
     protected RestTemplate restTemplateMock;
     protected UrlResourcesProvider urlResourcesProviderMock;
     protected ApiKey apiKey;
-    protected ApiKey[] apiKeys;
-    protected List<ApiKey> apiKeyList;
+    protected HashedApiKey hashedApiKey;
+    protected HashedApiKey[] hashedApiKeys;
+    protected List<HashedApiKey> apiKeyList;
 
     @BeforeEach
     public void setup() {
         apiKey = new ApiKey();
         apiKey.setKeyValue("ca716b82-745c-4f6d-a38b-ff8fe140ffd1");
 
-        apiKeys = new ApiKey[1];
-        apiKeys[0] = apiKey;
-        apiKeyList = Arrays.asList(apiKeys);
+        hashedApiKey = apiKey.convertToHashedApiKey();
+
+        hashedApiKeys = new HashedApiKey[1];
+        hashedApiKeys[0] = hashedApiKey;
+        apiKeyList = Arrays.asList(hashedApiKeys);
 
         restTemplateMock = mock(RestTemplate.class);
         urlResourcesProviderMock = createUrlResourcesProviderMock();

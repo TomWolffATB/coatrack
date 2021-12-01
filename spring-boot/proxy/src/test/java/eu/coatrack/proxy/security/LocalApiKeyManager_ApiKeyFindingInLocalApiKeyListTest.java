@@ -21,6 +21,7 @@ package eu.coatrack.proxy.security;
  */
 
 import eu.coatrack.api.ApiKey;
+import eu.coatrack.api.HashedApiKey;
 import eu.coatrack.proxy.security.exceptions.ApiKeyFetchingFailedException;
 import eu.coatrack.proxy.security.exceptions.ApiKeyNotFoundInLocalApiKeyListException;
 import eu.coatrack.proxy.security.exceptions.ApiKeyValueWasNullException;
@@ -56,7 +57,7 @@ public class LocalApiKeyManager_ApiKeyFindingInLocalApiKeyListTest extends Local
 
     @Test
     public void apiKeyIsNotFoundInLocalApiKeyListWhichCausesException() {
-        List<ApiKey> apiKeyListNotContainingTheIncomingApiKey = createApiKeyListNotContainingTheIncomingApiKey();
+        List<HashedApiKey> apiKeyListNotContainingTheIncomingApiKey = createApiKeyListNotContainingTheIncomingApiKey();
 
         reset(apiKeyFetcherMock);
         when(apiKeyFetcherMock.requestLatestHashedApiKeyListFromAdmin()).thenReturn(apiKeyListNotContainingTheIncomingApiKey);
@@ -65,15 +66,12 @@ public class LocalApiKeyManager_ApiKeyFindingInLocalApiKeyListTest extends Local
         assertThrows(ApiKeyNotFoundInLocalApiKeyListException.class, () -> localApiKeyManager.getApiKeyEntityFromLocalCache(apiKey.getKeyValue()));
     }
 
-    private List<ApiKey> createApiKeyListNotContainingTheIncomingApiKey() {
-        List<ApiKey> listWithoutTheIncomingApiKey = new ArrayList<>();
+    private List<HashedApiKey> createApiKeyListNotContainingTheIncomingApiKey() {
+        List<HashedApiKey> listWithoutTheIncomingApiKey = new ArrayList<>();
 
-        ApiKey wrongApiKey1 = new ApiKey();
-        wrongApiKey1.setKeyValue("not matching value 1");
+        HashedApiKey wrongApiKey1 = new HashedApiKey("not matching value 1");
         listWithoutTheIncomingApiKey.add(wrongApiKey1);
-
-        ApiKey wrongApiKey2 = new ApiKey();
-        wrongApiKey2.setKeyValue("not matching value 2");
+        HashedApiKey wrongApiKey2 = new HashedApiKey("not matching value 2");
         listWithoutTheIncomingApiKey.add(wrongApiKey2);
 
         return listWithoutTheIncomingApiKey;

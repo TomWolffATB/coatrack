@@ -93,7 +93,7 @@ public class ApiKeyFetcher {
         return errorMessage;
     }
 
-    public ApiKey requestApiKeyFromAdmin(String apiKeyValue) {
+    public ApiKey requestHashedApiKeyFromAdmin(String apiKeyValue) {
         log.debug("Requesting API key with the value {} from CoatRack admin.", apiKeyValue);
 
         try {

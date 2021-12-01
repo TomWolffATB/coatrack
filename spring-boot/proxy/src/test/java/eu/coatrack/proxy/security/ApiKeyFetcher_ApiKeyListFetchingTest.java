@@ -21,6 +21,7 @@ package eu.coatrack.proxy.security;
  */
 
 import eu.coatrack.api.ApiKey;
+import eu.coatrack.api.HashedApiKey;
 import eu.coatrack.proxy.security.exceptions.ApiKeyFetchingFailedException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -38,12 +39,12 @@ public class ApiKeyFetcher_ApiKeyListFetchingTest extends ApiKeyFetcher_Abstract
 
     @AfterEach
     public void verifyRestTemplateMockCall() {
-        verify(restTemplateMock).getForEntity(anyString(), eq(ApiKey[].class));
+        verify(restTemplateMock).getForEntity(anyString(), eq(HashedApiKey[].class));
     }
 
     @Test
     public void nullApiKeyListResponseEntityShouldCauseException() {
-        when(restTemplateMock.getForEntity(anyString(), eq(ApiKey[].class))).thenReturn(null);
+        when(restTemplateMock.getForEntity(anyString(), eq(HashedApiKey[].class))).thenReturn(null);
         assertThrows(ApiKeyFetchingFailedException.class, () -> apiKeyFetcher.requestLatestHashedApiKeyListFromAdmin());
     }
 
@@ -56,9 +57,9 @@ public class ApiKeyFetcher_ApiKeyListFetchingTest extends ApiKeyFetcher_Abstract
 
     @Test
     public void validApiKeyListResponseEntityShouldContainApiKey() {
-        when(restTemplateMock.getForEntity(anyString(), eq(ApiKey[].class)))
-                .thenReturn(new ResponseEntity<>(apiKeys, HttpStatus.OK));
-        assertTrue(apiKeyFetcher.requestLatestHashedApiKeyListFromAdmin().contains(apiKey));
+        when(restTemplateMock.getForEntity(anyString(), eq(HashedApiKey[].class)))
+                .thenReturn(new ResponseEntity<>(hashedApiKeys, HttpStatus.OK));
+        assertTrue(apiKeyFetcher.requestLatestHashedApiKeyListFromAdmin().contains(hashedApiKey));
     }
 
     @Test
@@ -70,8 +71,8 @@ public class ApiKeyFetcher_ApiKeyListFetchingTest extends ApiKeyFetcher_Abstract
 
     @Test
     public void badHttpStatusShouldCauseException() {
-        when(restTemplateMock.getForEntity(anyString(), eq(ApiKey[].class)))
-                .thenReturn(new ResponseEntity<>(apiKeys, HttpStatus.INTERNAL_SERVER_ERROR));
+        when(restTemplateMock.getForEntity(anyString(), eq(HashedApiKey[].class)))
+                .thenReturn(new ResponseEntity<>(hashedApiKeys, HttpStatus.INTERNAL_SERVER_ERROR));
         assertThrows(ApiKeyFetchingFailedException.class, () -> apiKeyFetcher.requestLatestHashedApiKeyListFromAdmin());
     }
 

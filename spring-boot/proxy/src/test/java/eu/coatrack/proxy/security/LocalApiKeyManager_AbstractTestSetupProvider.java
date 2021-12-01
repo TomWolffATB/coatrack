@@ -21,6 +21,7 @@ package eu.coatrack.proxy.security;
  */
 
 import eu.coatrack.api.ApiKey;
+import eu.coatrack.api.HashedApiKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ import static org.mockito.Mockito.mock;
 public abstract class LocalApiKeyManager_AbstractTestSetupProvider {
 
     protected ApiKey apiKey;
-    protected List<ApiKey> hashedApiKeyList;
+    protected List<HashedApiKey> hashedApiKeyList;
     protected ApiKeyFetcher apiKeyFetcherMock;
     protected LocalApiKeyManager localApiKeyManager;
 
@@ -40,9 +41,7 @@ public abstract class LocalApiKeyManager_AbstractTestSetupProvider {
         apiKey.setKeyValue("ca716b82-745c-4f6d-a38b-ff8fe140ffd1");
 
         hashedApiKeyList = new ArrayList<>();
-        ApiKey hashedApiKey = apiKey.clone();
-        String hashedKeyValue = sha256Hex(apiKey.getKeyValue());
-        hashedApiKey.setKeyValue(hashedKeyValue);
+        HashedApiKey hashedApiKey = apiKey.convertToHashedApiKey();
         hashedApiKeyList.add(hashedApiKey);
 
         apiKeyFetcherMock = mock(ApiKeyFetcher.class);

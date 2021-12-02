@@ -36,7 +36,7 @@ public class WaiterUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(WaiterUtils.class);
 
-    public static void waitUntilHostListensOnPort(String host, int port) {
+    public static void waitUpToTwoMinutesUntilHostListensOnPort(String host, int port) {
         boolean isConnectionEstablished = false;
         int counter = 0;
         while (!isConnectionEstablished){
@@ -45,14 +45,14 @@ public class WaiterUtils {
                 isConnectionEstablished = true;
                 socket.close();
             } catch (Exception e){
-                logger.info("Host {}:{} is not reachable, yet. Therefore the current process is waiting it.", host, port);
+                logger.info("Host {}:{} is not reachable, yet. Therefore the current process is waiting for it.", host, port, e);
                 counter++;
                 sleepMillis(5000);
             }
 
-            if (counter >= 12)
+            if (counter >= 24)
                 throw new HostWasNotReachableWithinAMinuteException("All attempts to establish a connection to "
-                        + host + ":" + port + " failed within a minute.");
+                        + host + ":" + port + " failed within two minutes.");
         }
     }
 

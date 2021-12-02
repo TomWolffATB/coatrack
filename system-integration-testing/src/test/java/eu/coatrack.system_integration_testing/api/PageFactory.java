@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 
-import static eu.coatrack.system_integration_testing.api.tools.WaiterUtils.waitUntilHostListensOnPort;
+import static eu.coatrack.system_integration_testing.api.tools.WaiterUtils.waitUpToTwoMinutesUntilHostListensOnPort;
 import static eu.coatrack.system_integration_testing.configuration.CookieInjector.injectAuthenticationCookieToDriver;
 import static eu.coatrack.system_integration_testing.configuration.PageConfiguration.*;
 
@@ -69,7 +69,7 @@ public class PageFactory {
     private static WebDriver createRemoteWebDriver() {
         try {
             URL remoteWebDriverUrl = new URL("http://" + seleniumServerHostName + ":" + seleniumServerPort);
-            waitUntilHostListensOnPort(seleniumServerHostName, seleniumServerPort);
+            waitUpToTwoMinutesUntilHostListensOnPort(seleniumServerHostName, seleniumServerPort);
             return new RemoteWebDriver(remoteWebDriverUrl, new FirefoxOptions());
         } catch (Exception e) {
             throw new RemoteWebDriverCreationFailedException("The creation of a RemoteWebDriver failed due to:", e);

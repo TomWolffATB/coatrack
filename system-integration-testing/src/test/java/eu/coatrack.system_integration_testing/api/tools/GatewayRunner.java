@@ -36,7 +36,7 @@ import java.io.IOException;
 
 import static eu.coatrack.system_integration_testing.api.PageFactory.*;
 import static eu.coatrack.system_integration_testing.api.UtilFactory.driver;
-import static eu.coatrack.system_integration_testing.api.tools.WaiterUtils.waitUntilHostListensOnPort;
+import static eu.coatrack.system_integration_testing.api.tools.WaiterUtils.waitUpToTwoMinutesUntilHostListensOnPort;
 import static eu.coatrack.system_integration_testing.configuration.CookieInjector.sessionCookie;
 import static eu.coatrack.system_integration_testing.configuration.PageConfiguration.host;
 import static eu.coatrack.system_integration_testing.configuration.PageConfiguration.localGatewayAccessUrl;
@@ -108,7 +108,7 @@ public class GatewayRunner {
         });
         jarExecutionThread.setDaemon(true);
         jarExecutionThread.start();
-        waitUntilHostListensOnPort("localhost", 8088);
+        waitUpToTwoMinutesUntilHostListensOnPort("localhost", 8088);
 
         return jarExecutionThread;
     }

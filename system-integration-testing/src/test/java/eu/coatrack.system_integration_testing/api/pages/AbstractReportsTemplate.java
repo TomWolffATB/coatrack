@@ -52,7 +52,7 @@ public abstract class AbstractReportsTemplate {
         driver.findElement(By.id("searchBtn")).click();
         waiterUtils.waitForElementWithId("reportTable");
         List<WebElement> resultRowCells = driver.findElement(By.id("reportTable")).findElement(By.cssSelector("tbody")).findElements(By.cssSelector("td"));
-        if (resultRowCells.get(0).getText().contains("No data available in table"))
+        if (resultRowCells.size() == 0 || resultRowCells.get(0).getText().contains("No data available in table"))
             return 0;
         else
             return Integer.parseInt(resultRowCells.get(1).getText());

@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-cd "$(dirname "$0")" || exit
+cd "$PWD" || exit
 . ./init-variables.sh
 . ./stop.sh
 

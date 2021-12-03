@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 NETWORK="host"
 TEST_EXECUTOR="selenium-test-executor"

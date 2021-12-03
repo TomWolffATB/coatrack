@@ -1,7 +1,15 @@
-#!/bin/sh
+#!/bin/bash
+
+BROWSER=$1
+
 set -e
 
-cd "$(dirname "$0")"
+if [ "$BROWSER" == "" ]; then
+  BROWSER="firefox"
+fi
+#TODO To be implemented for firefox, edge, chrome and opera
+
+cd "$PWD" || exit
 . ./init-variables.sh
 . ./stop.sh
 
@@ -23,7 +31,7 @@ printf "\nSetting up Selenium server\n"
 docker run --rm -d --network="$NETWORK" --shm-size="2g" --name "$SELENIUM_SERVER" selenium/standalone-firefox
 
 printf "\nSetting up Selenium test executor\n"
-docker run --rm -d --network="$NETWORK" --name "$TEST_EXECUTOR" "$TEST_EXECUTOR"
+docker run --rm -d --network="$NETWORK" --name "$TEST_EXECUTOR" -e BROWSER="$BROWSER" "$TEST_EXECUTOR"
 
 printf "\nCopying project files to java test application container\n"
 cd .. || exit
@@ -34,4 +42,5 @@ docker cp pom.xml "${TEST_EXECUTOR}:/home"
 printf "\nPrinting the test execution logs:\n\n"
 docker logs -f "$TEST_EXECUTOR"
 
-. ./scripts/stop.sh
+cd scripts
+. ./stop.sh

@@ -13,11 +13,11 @@ cd "$PWD" || exit
 . ./init-variables.sh
 . ./stop.sh
 
-if docker images | grep -q "selenium/standalone-firefox"; then
-  printf "\nA selenium server image is already installed. No pull required.\n"
+if docker images | grep -q "selenium/standalone-${BROWSER}"; then
+  printf "\nA selenium server image for '%s' browser is already installed. No pull required.\n" ${BROWSER}
 else
-  printf "\nSelenium server image is pulled.\n"
-  docker pull selenium/standalone-firefox
+  printf "\nSelenium server image for '%s' browser is pulled.\n" ${BROWSER}
+  docker pull "selenium/standalone-${BROWSER}"
 fi
 
 if docker images | grep -q "$TEST_EXECUTOR"; then
@@ -28,7 +28,7 @@ else
 fi
 
 printf "\nSetting up Selenium server\n"
-docker run --rm -d --network="$NETWORK" --shm-size="2g" --name "$SELENIUM_SERVER" selenium/standalone-firefox
+docker run --rm -d --network="$NETWORK" --shm-size="2g" --name "$SELENIUM_SERVER" selenium/standalone-${BROWSER}
 
 printf "\nSetting up Selenium test executor\n"
 docker run --rm -d --network="$NETWORK" --name "$TEST_EXECUTOR" -e BROWSER="$BROWSER" "$TEST_EXECUTOR"

@@ -31,11 +31,19 @@ import eu.coatrack.system_integration_testing.api.pages.serviceProvider.serviceO
 import eu.coatrack.system_integration_testing.api.tools.GatewayRunner;
 import eu.coatrack.system_integration_testing.api.tools.UrlReachabilityTools;
 import eu.coatrack.system_integration_testing.exceptions.RemoteWebDriverCreationFailedException;
+import eu.coatrack.system_integration_testing.exceptions.UnsupportedBrowserDriverException;
 import eu.coatrack.system_integration_testing.exceptions.UnsupportedOperatingSystemException;
 import org.apache.commons.lang3.SystemUtils;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.opera.OperaDriver;
+import org.openqa.selenium.opera.OperaOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,9 +78,25 @@ public class PageFactory {
         try {
             URL remoteWebDriverUrl = new URL("http://" + seleniumServerHostName + ":" + seleniumServerPort);
             waitUpToTwoMinutesUntilHostListensOnPort(seleniumServerHostName, seleniumServerPort);
-            return new RemoteWebDriver(remoteWebDriverUrl, new FirefoxOptions());
+            return new RemoteWebDriver(remoteWebDriverUrl, getBrowserOptions());
         } catch (Exception e) {
             throw new RemoteWebDriverCreationFailedException("The creation of a RemoteWebDriver failed due to:", e);
+        }
+    }
+
+    private static Capabilities getBrowserOptions() {
+        final String BROWSER = System.getenv("BROWSER");
+        switch (BROWSER) {
+            case "firefox":
+                return new FirefoxOptions();
+            case "chrome":
+                return new ChromeOptions();
+            case "edge":
+                return new EdgeOptions();
+            case "opera":
+                return new OperaOptions();
+            default:
+                throw new UnsupportedBrowserDriverException("The browser " + BROWSER + " is not supported.");
         }
     }
 

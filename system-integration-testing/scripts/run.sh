@@ -7,7 +7,6 @@ set -e
 if [ "$BROWSER" == "" ]; then
   BROWSER="firefox"
 fi
-#TODO To be implemented for firefox, edge, chrome and opera
 
 cd "$PWD" || exit
 . ./init-variables.sh
@@ -38,6 +37,7 @@ cd .. || exit
 docker cp config.properties "${TEST_EXECUTOR}:/home"
 docker cp src "${TEST_EXECUTOR}:/home"
 docker cp pom.xml "${TEST_EXECUTOR}:/home"
+docker cp entrypoint.sh "${TEST_EXECUTOR}:/home"
 
 printf "\nPrinting the test execution logs:\n\n"
 docker logs -f "$TEST_EXECUTOR"

@@ -26,6 +26,8 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 import static eu.coatrack.system_integration_testing.api.UtilFactory.driver;
+import static eu.coatrack.system_integration_testing.api.UtilFactory.waiterUtils;
+import static eu.coatrack.system_integration_testing.api.tools.WaiterUtils.sleepMillis;
 import static eu.coatrack.system_integration_testing.configuration.PageConfiguration.serviceProviderReportsUrl;
 import static eu.coatrack.system_integration_testing.configuration.PageConfiguration.username;
 
@@ -48,6 +50,7 @@ public abstract class AbstractReportsTemplate {
         }
 
         driver.findElement(By.id("searchBtn")).click();
+        waiterUtils.waitForElementWithId("reportTable");
         List<WebElement> resultRowCells = driver.findElement(By.id("reportTable")).findElement(By.cssSelector("tbody")).findElements(By.cssSelector("td"));
         if (resultRowCells.get(0).getText().contains("No data available in table"))
             return 0;

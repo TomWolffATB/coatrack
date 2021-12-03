@@ -38,6 +38,9 @@ docker cp config.properties "${TEST_EXECUTOR}:/home"
 docker cp src "${TEST_EXECUTOR}:/home"
 docker cp pom.xml "${TEST_EXECUTOR}:/home"
 docker cp entrypoint.sh "${TEST_EXECUTOR}:/home"
+if [ -f "sessionCookieSaveFile.txt" ]; then
+    docker cp sessionCookieSaveFile.txt "${TEST_EXECUTOR}:/home"
+fi
 
 printf "\nPrinting the test execution logs:\n\n"
 docker logs -f "$TEST_EXECUTOR"

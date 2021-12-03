@@ -25,11 +25,10 @@ import eu.coatrack.system_integration_testing.exceptions.FileCouldNotBeDeletedEx
 import eu.coatrack.system_integration_testing.exceptions.GatewayDownloadFailedException;
 import eu.coatrack.system_integration_testing.exceptions.GatewayRunnerInitializationException;
 import eu.coatrack.system_integration_testing.exceptions.ServiceCouldNotBeAccessedUsingApiKeyException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.openqa.selenium.By;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,9 +40,8 @@ import static eu.coatrack.system_integration_testing.configuration.CookieInjecto
 import static eu.coatrack.system_integration_testing.configuration.PageConfiguration.host;
 import static eu.coatrack.system_integration_testing.configuration.PageConfiguration.localGatewayAccessUrl;
 
+@Slf4j
 public class GatewayRunner {
-
-    private static final Logger logger = LoggerFactory.getLogger(GatewayRunner.class);
 
     private Thread jarThread;
     private ItemDetails itemDetails;
@@ -103,7 +101,7 @@ public class GatewayRunner {
             try {
                 executor.execute(cmdLine);
             } catch (IOException e) {
-                logger.info("The execution of the jar file was interrupted.");
+                log.info("The execution of the jar file was interrupted.");
             }
         });
         jarExecutionThread.setDaemon(true);

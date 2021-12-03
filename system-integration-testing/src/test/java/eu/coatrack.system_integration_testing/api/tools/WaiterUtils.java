@@ -20,21 +20,19 @@ package eu.coatrack.system_integration_testing.api.tools;
  * #L%
  */
 
-import eu.coatrack.system_integration_testing.exceptions.HostWasNotReachableWithinAMinuteException;
+import eu.coatrack.system_integration_testing.exceptions.HostWasNotReachableWithinTimeSpanException;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.Socket;
 import java.time.Duration;
 
 import static eu.coatrack.system_integration_testing.api.UtilFactory.driver;
 
+@Slf4j
 public class WaiterUtils {
-
-    private static final Logger logger = LoggerFactory.getLogger(WaiterUtils.class);
 
     public static void waitUpToTwoMinutesUntilHostListensOnPort(String host, int port) {
         boolean isConnectionEstablished = false;
@@ -45,13 +43,13 @@ public class WaiterUtils {
                 isConnectionEstablished = true;
                 socket.close();
             } catch (Exception e){
-                logger.info("Host {}:{} is not reachable, yet. Therefore the current process is waiting for it.", host, port);
+                log.info("Host {}:{} is not reachable, yet. Therefore the current process is waiting for it.", host, port);
                 counter++;
                 sleepMillis(5000);
             }
 
             if (counter >= 24)
-                throw new HostWasNotReachableWithinAMinuteException("All attempts to establish a connection to "
+                throw new HostWasNotReachableWithinTimeSpanException("All attempts to establish a connection to "
                         + host + ":" + port + " failed within two minutes.");
         }
     }
@@ -64,7 +62,7 @@ public class WaiterUtils {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e){
-            logger.info("The sleep process was interrupted.", e);
+            log.info("The sleep process was interrupted.", e);
         }
     }
 

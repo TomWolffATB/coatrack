@@ -33,20 +33,15 @@ import eu.coatrack.system_integration_testing.api.tools.UrlReachabilityTools;
 import eu.coatrack.system_integration_testing.exceptions.RemoteWebDriverCreationFailedException;
 import eu.coatrack.system_integration_testing.exceptions.UnsupportedBrowserDriverException;
 import eu.coatrack.system_integration_testing.exceptions.UnsupportedOperatingSystemException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.opera.OperaDriver;
-import org.openqa.selenium.opera.OperaOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 
@@ -54,19 +49,18 @@ import static eu.coatrack.system_integration_testing.api.tools.WaiterUtils.waitU
 import static eu.coatrack.system_integration_testing.configuration.CookieInjector.injectAuthenticationCookieToDriver;
 import static eu.coatrack.system_integration_testing.configuration.PageConfiguration.*;
 
+@Slf4j
 public class PageFactory {
-
-    private static final Logger logger = LoggerFactory.getLogger(PageFactory.class);
 
     static final WebDriver driver = createWebDriver();
 
     private static WebDriver createWebDriver() {
         WebDriver driver;
         if (SystemUtils.IS_OS_LINUX) {
-            logger.info("Creating RemoteWebDriver via Selenium server.");
+            log.info("Creating RemoteWebDriver via Selenium server.");
             driver = createRemoteWebDriver();
         } else if (SystemUtils.IS_OS_WINDOWS) {
-            logger.info("Creating WebDriver with local driver instance.");
+            log.info("Creating WebDriver with local driver instance.");
             driver = new FirefoxDriver();
         } else {
             throw new UnsupportedOperatingSystemException("Only Windows and Linux are allowed as Operating Systems.");
@@ -117,10 +111,10 @@ public class PageFactory {
     public static final ServiceConsumerTutorial serviceConsumerTutorial     = new ServiceConsumerTutorial();
 
     static {
-        logger.info("Injecting authentication cookie.");
+        log.info("Injecting authentication cookie.");
         injectAuthenticationCookieToDriver(driver);
 
-        logger.info("Cleanup: Deleting all items of the user.");
+        log.info("Cleanup: Deleting all items of the user.");
         serviceProviderServices.deleteAllServices();
         serviceProviderGateways.deleteAllGateways();
         serviceProviderApiKeys.deleteAllApiKeys();

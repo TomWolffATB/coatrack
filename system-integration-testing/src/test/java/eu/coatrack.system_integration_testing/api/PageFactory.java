@@ -93,8 +93,6 @@ public class PageFactory {
                 return new ChromeOptions();
             case "edge":
                 return new EdgeOptions();
-            case "opera":
-                return new OperaOptions();
             default:
                 throw new UnsupportedBrowserDriverException("The browser " + BROWSER + " is not supported.");
         }

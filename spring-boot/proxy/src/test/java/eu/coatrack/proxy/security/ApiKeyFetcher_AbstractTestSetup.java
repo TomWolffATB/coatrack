@@ -20,6 +20,8 @@ package eu.coatrack.proxy.security;/*-
 
 import eu.coatrack.api.ApiKey;
 import eu.coatrack.api.HashedApiKey;
+import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.apiKeyFetcher.ApiKeyFetcher;
+import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.apiKeyFetcher.UrlResourcesProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

@@ -21,6 +21,9 @@ package eu.coatrack.proxy.security;
  */
 
 import eu.coatrack.api.HashedApiKey;
+import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.apiKeyFetcher.ApiKeyFetcher;
+import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.LocalApiKeyManager;
+import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.LocalApiKeyManagerUpdater;
 import eu.coatrack.proxy.security.exceptions.ApiKeyFetchingFailedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,8 +34,8 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 
-import static eu.coatrack.proxy.security.GatewayMode.OFFLINE;
-import static eu.coatrack.proxy.security.GatewayMode.ONLINE;
+import static eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.GatewayMode.OFFLINE;
+import static eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.GatewayMode.ONLINE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 

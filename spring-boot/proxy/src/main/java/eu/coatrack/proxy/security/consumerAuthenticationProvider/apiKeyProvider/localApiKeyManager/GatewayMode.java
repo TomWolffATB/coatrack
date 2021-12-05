@@ -1,4 +1,4 @@
-package eu.coatrack.proxy.security;
+package eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager;
 
 /*
     If the gateway successfully receives the latest list of API keys from CoatRack admin, it goes to online mode.

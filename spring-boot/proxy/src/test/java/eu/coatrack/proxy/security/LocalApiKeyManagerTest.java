@@ -22,6 +22,7 @@ package eu.coatrack.proxy.security;
 
 import eu.coatrack.api.ApiKey;
 import eu.coatrack.api.HashedApiKey;
+import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.LocalApiKeyManager;
 import eu.coatrack.proxy.security.exceptions.ApiKeyNotFoundInLocalApiKeyListException;
 import eu.coatrack.proxy.security.exceptions.ApiKeyValueWasNullException;
 import eu.coatrack.proxy.security.exceptions.LocalApiKeyListWasNotInitializedException;
@@ -34,7 +35,6 @@ import java.util.List;
 
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 public class LocalApiKeyManagerTest {
 

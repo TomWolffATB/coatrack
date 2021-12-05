@@ -1,4 +1,4 @@
-package eu.coatrack.proxy.security;
+package eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager;
 
 /*-
  * #%L
@@ -21,6 +21,7 @@ package eu.coatrack.proxy.security;
  */
 
 import eu.coatrack.api.HashedApiKey;
+import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.apiKeyFetcher.ApiKeyFetcher;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;

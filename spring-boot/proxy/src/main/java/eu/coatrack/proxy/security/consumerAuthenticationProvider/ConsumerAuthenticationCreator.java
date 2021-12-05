@@ -1,6 +1,9 @@
-package eu.coatrack.proxy.security;
+package eu.coatrack.proxy.security.consumerAuthenticationProvider;
 
 import eu.coatrack.api.ApiKey;
+import eu.coatrack.proxy.security.ApiKeyAuthToken;
+import eu.coatrack.proxy.security.ServiceApiAccessRightsVoter;
+import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.ApiKeyProvider;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;

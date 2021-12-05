@@ -2,6 +2,9 @@ package eu.coatrack.proxy.security;
 
 import eu.coatrack.api.ApiKey;
 import eu.coatrack.api.ServiceApi;
+import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.ApiKeyProvider;
+import eu.coatrack.proxy.security.consumerAuthenticationProvider.ApiKeyValidator;
+import eu.coatrack.proxy.security.consumerAuthenticationProvider.ConsumerAuthenticationCreator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,9 +18,12 @@ import static org.mockito.Mockito.when;
 
 public class ConsumerAuthenticationCreatorTest {
 
-    @Mock ApiKeyProvider apiKeyProvider;
-    @Mock ApiKeyValidator apiKeyValidator;
-    @InjectMocks ConsumerAuthenticationCreator consumerAuthenticationCreator;
+    @Mock
+    ApiKeyProvider apiKeyProvider;
+    @Mock
+    ApiKeyValidator apiKeyValidator;
+    @InjectMocks
+    ConsumerAuthenticationCreator consumerAuthenticationCreator;
 
     private final String apiKeyValue = "some API key value";
     private final String serviceUriIdentifier = "some uriIdentifier";

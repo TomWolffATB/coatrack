@@ -1,6 +1,8 @@
-package eu.coatrack.proxy.security;
+package eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider;
 
 import eu.coatrack.api.ApiKey;
+import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.apiKeyFetcher.ApiKeyFetcher;
+import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.LocalApiKeyManager;
 import eu.coatrack.proxy.security.exceptions.ApiKeyFetchingFailedException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -23,6 +23,8 @@ package eu.coatrack.proxy.security;
 import eu.coatrack.api.ApiKey;
 import eu.coatrack.api.HashedApiKey;
 import eu.coatrack.proxy.security.exceptions.ApiKeyFetchingFailedException;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -43,17 +45,12 @@ import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
  */
 
 @Service
+@Slf4j
+@AllArgsConstructor
 public class ApiKeyFetcher {
-
-    private static final Logger log = LoggerFactory.getLogger(ApiKeyFetcher.class);
 
     private final UrlResourcesProvider urlResourcesProvider;
     private final RestTemplate restTemplate;
-
-    public ApiKeyFetcher(RestTemplate restTemplate, UrlResourcesProvider urlResourcesProvider) {
-        this.restTemplate = restTemplate;
-        this.urlResourcesProvider = urlResourcesProvider;
-    }
 
     public List<HashedApiKey> requestLatestHashedApiKeyListFromAdmin() {
         log.debug("Requesting latest API key list from from " + urlResourcesProvider.getHashedApiKeyListRequestUrl());
@@ -70,9 +67,7 @@ public class ApiKeyFetcher {
     }
 
     private Object extractBodyFromResponseEntity(ResponseEntity<?> responseEntity) {
-
         Optional<String> errorMessage = validateResponseEntityAndCreateErrorMessageInCaseOfProblems(responseEntity);
-
         if (errorMessage.isPresent())
             throw new ApiKeyFetchingFailedException("A problem occurred referring to the ResponseEntity. "
                     + errorMessage.get());
@@ -82,7 +77,6 @@ public class ApiKeyFetcher {
 
     private Optional<String> validateResponseEntityAndCreateErrorMessageInCaseOfProblems(ResponseEntity<?> responseEntity) {
         Optional<String> errorMessage = Optional.empty();
-
         if (responseEntity == null) {
             errorMessage = Optional.of("The ResponseEntity was null.");
         } else if (responseEntity.getBody() == null) {
@@ -90,7 +84,6 @@ public class ApiKeyFetcher {
         } else if (responseEntity.getStatusCode() != HttpStatus.OK) {
             errorMessage = Optional.of("The HTTP status was not OK.");
         }
-
         return errorMessage;
     }
 

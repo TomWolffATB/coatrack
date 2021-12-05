@@ -21,6 +21,9 @@ package eu.coatrack.proxy.security;/*-
 import eu.coatrack.api.ApiKey;
 import eu.coatrack.api.HashedApiKey;
 import org.junit.jupiter.api.BeforeEach;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -31,11 +34,12 @@ import static org.mockito.Mockito.*;
 
 public abstract class ApiKeyFetcher_AbstractTestSetup {
 
+    @Mock protected UrlResourcesProvider urlResourcesProviderMock;
+    @Mock protected RestTemplate restTemplateMock;
+    @InjectMocks protected ApiKeyFetcher apiKeyFetcher;
+
     protected static final String someApiKeyValue = "ee11ee22-ee33-ee44-ee55-ee66ee77ee88";
 
-    protected ApiKeyFetcher apiKeyFetcher;
-    protected RestTemplate restTemplateMock;
-    protected UrlResourcesProvider urlResourcesProviderMock;
     protected ApiKey apiKey;
     protected HashedApiKey hashedApiKey;
     protected HashedApiKey[] hashedApiKeys;
@@ -44,7 +48,7 @@ public abstract class ApiKeyFetcher_AbstractTestSetup {
     @BeforeEach
     public void setup() {
         apiKey = new ApiKey();
-        apiKey.setKeyValue("ee11ee22-ee33-ee44-ee55-ee66ee77ee88");
+        apiKey.setKeyValue(someApiKeyValue);
 
         hashedApiKey = apiKey.convertToHashedApiKey();
 
@@ -52,16 +56,9 @@ public abstract class ApiKeyFetcher_AbstractTestSetup {
         hashedApiKeys[0] = hashedApiKey;
         apiKeyList = Arrays.asList(hashedApiKeys);
 
-        restTemplateMock = mock(RestTemplate.class);
-        urlResourcesProviderMock = createUrlResourcesProviderMock();
-
-        apiKeyFetcher = new ApiKeyFetcher(restTemplateMock, urlResourcesProviderMock);
+        MockitoAnnotations.openMocks(this);
+        when(urlResourcesProviderMock.getHashedApiKeyListRequestUrl()).thenReturn("test");
+        when(urlResourcesProviderMock.getApiKeyRequestUrl(anyString())).thenReturn("test");
     }
 
-    private UrlResourcesProvider createUrlResourcesProviderMock() {
-        UrlResourcesProvider mock = mock(UrlResourcesProvider.class);
-        when(mock.getHashedApiKeyListRequestUrl()).thenReturn("test");
-        when(mock.getApiKeyRequestUrl(anyString())).thenReturn("test");
-        return mock;
-    }
 }

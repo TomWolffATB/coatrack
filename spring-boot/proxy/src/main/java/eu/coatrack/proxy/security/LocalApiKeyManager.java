@@ -26,6 +26,8 @@ import eu.coatrack.proxy.security.exceptions.ApiKeyNotFoundInLocalApiKeyListExce
 import eu.coatrack.proxy.security.exceptions.ApiKeyValueWasNullException;
 import eu.coatrack.proxy.security.exceptions.LocalApiKeyListWasNotInitializedException;
 import eu.coatrack.proxy.security.exceptions.OfflineWorkingTimeExceedingException;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,34 +51,23 @@ import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
  * @author Christoph Baier
  */
 
-@EnableAsync
+@Slf4j
 @Service
 public class LocalApiKeyManager {
 
-    private final static Logger log = LoggerFactory.getLogger(LocalApiKeyManager.class);
-
-    public final static String switchingToOfflineModeMessage = "Gateway is switching to offline mode.";
-    public final static String switchingToOnlineModeMessage = "Gateway is switching to online mode.";
-
     private List<HashedApiKey> localHashedApiKeyList;
     private LocalDateTime deadlineWhenOfflineModeShallStopWorking;
+
+    private final long numberOfMinutesTheGatewayShallWorkInOfflineMode;
     private boolean isLocalApiKeyListInitialized = false;
 
-    private final ApiKeyFetcher apiKeyFetcher;
-    private final long numberOfMinutesTheGatewayShallWorkInOfflineMode;
-
-    private GatewayMode lastModeDisplayedInLog = GatewayMode.OFFLINE;
-
-    public LocalApiKeyManager(
-            ApiKeyFetcher apiKeyFetcher,
-            @Value("${number-of-minutes-the-gateway-shall-work-in-offline-mode}") long minutesInOfflineMode) {
-        this.apiKeyFetcher = apiKeyFetcher;
+    public LocalApiKeyManager(@Value("${number-of-minutes-the-gateway-shall-work-in-offline-mode}") long minutesInOfflineMode) {
         this.numberOfMinutesTheGatewayShallWorkInOfflineMode = minutesInOfflineMode;
     }
 
     public ApiKey getApiKeyEntityFromLocalCache(String apiKeyValue) {
         //This is only a fallback solution if connection to admin does not work. Therefore offline mode is triggered.
-        updateGatewayMode(GatewayMode.OFFLINE);
+        //TODO updateGatewayMode(GatewayMode.OFFLINE); some class should implement this logic.
 
         if (!isLocalApiKeyListInitialized) {
             throw new LocalApiKeyListWasNotInitializedException("The gateway is currently not able to validate " +
@@ -123,45 +114,11 @@ public class LocalApiKeyManager {
         return apiKey;
     }
 
-    @Async
-    @Scheduled(fixedRateString = "${local-api-key-list-update-interval-in-millis}")
-    public void refreshLocalApiKeyCacheWithApiKeysFromAdmin() {
-        log.debug("Trying to update the local API key list by contacting CoatRack admin.");
-
-        try {
-            List<HashedApiKey> fetchedHashedApiKeyList = apiKeyFetcher.requestLatestHashedApiKeyListFromAdmin();
-            updateApiKeyList(fetchedHashedApiKeyList);
-            updateGatewayMode(GatewayMode.ONLINE);
-        } catch (Exception e) {
-            log.error("API key list fetching process failed: ", e);
-            updateGatewayMode(GatewayMode.OFFLINE);
-        }
-    }
-
-    private void updateApiKeyList(List<HashedApiKey> fetchedHashedApiKeyList) {
-        Assert.notNull(fetchedHashedApiKeyList, "The local API key list will not be " +
-                "updated since the fetched API key list was null.");
-        localHashedApiKeyList = fetchedHashedApiKeyList;
+    public void updateLocalHashedApiKeyListWith(List<HashedApiKey> newLocalHashedApiKeyList) {
+        localHashedApiKeyList = newLocalHashedApiKeyList;
         deadlineWhenOfflineModeShallStopWorking = LocalDateTime.now()
                 .plusMinutes(numberOfMinutesTheGatewayShallWorkInOfflineMode);
-
         if(!isLocalApiKeyListInitialized)
             isLocalApiKeyListInitialized = true;
-    }
-
-    private void updateGatewayMode(GatewayMode currentGatewayMode) {
-        if (lastModeDisplayedInLog != currentGatewayMode) {
-            log.info(currentGatewayMode == GatewayMode.ONLINE ? switchingToOnlineModeMessage : switchingToOfflineModeMessage);
-            lastModeDisplayedInLog = currentGatewayMode;
-        }
-    }
-
-    /*
-        If the gateway successfully receives the latest list of API keys from CoatRack admin, it goes to online mode.
-        If a connection attempt to CoatRack admin server failed, it goes to the time-limited functioning offline mode.
-     */
-
-    private enum GatewayMode {
-        ONLINE, OFFLINE;
     }
 }

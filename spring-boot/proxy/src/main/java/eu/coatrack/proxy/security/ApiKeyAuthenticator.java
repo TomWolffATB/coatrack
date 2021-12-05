@@ -50,16 +50,11 @@ public class ApiKeyAuthenticator implements AuthenticationManager {
 
     private static final Logger log = LoggerFactory.getLogger(ApiKeyAuthenticator.class);
 
-    private final LocalApiKeyManager localApiKeyManager;
-    private final ApiKeyFetcher apiKeyFetcher;
-    private final ApiKeyValidator apiKeyValidator;
     private final Set<SimpleGrantedAuthority> authoritiesGrantedToCoatRackAdminApp = new HashSet<>();
+    private final ConsumerAuthenticationCreator consumerAuthenticationCreator;
 
-    public ApiKeyAuthenticator(LocalApiKeyManager localApiKeyManager,
-                               ApiKeyFetcher apiKeyFetcher, ApiKeyValidator apiKeyValidator) {
-        this.localApiKeyManager = localApiKeyManager;
-        this.apiKeyFetcher = apiKeyFetcher;
-        this.apiKeyValidator = apiKeyValidator;
+    public ApiKeyAuthenticator(ConsumerAuthenticationCreator consumerAuthenticationCreator) {
+        this.consumerAuthenticationCreator = consumerAuthenticationCreator;
 
         authoritiesGrantedToCoatRackAdminApp.add(new SimpleGrantedAuthority(
                 ServiceApiAccessRightsVoter.ACCESS_SERVICE_AUTHORITY_PREFIX + "refresh"));
@@ -99,7 +94,7 @@ public class ApiKeyAuthenticator implements AuthenticationManager {
         if (doesApiKeyBelongToAdminApp(apiKeyValue))
             return createAdminAuthTokenFromApiKey(apiKeyValue);
         else
-            return createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue);
+            return consumerAuthenticationCreator.createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue);
     }
 
     private boolean doesApiKeyBelongToAdminApp(String apiKeyValue) {
@@ -112,39 +107,5 @@ public class ApiKeyAuthenticator implements AuthenticationManager {
         ApiKeyAuthToken apiKeyAuthTokenForValidApiKey = new ApiKeyAuthToken(apiKeyValue, authoritiesGrantedToCoatRackAdminApp);
         apiKeyAuthTokenForValidApiKey.setAuthenticated(true);
         return apiKeyAuthTokenForValidApiKey;
-    }
-
-    private Authentication createConsumerAuthTokenIfApiKeyIsValid(String apiKeyValue) {
-        log.debug("Verifying the API with the hashed value {} from consumer.", sha256Hex(apiKeyValue));
-
-        ApiKey apiKey = getApiKeyEntityByApiKeyValue(apiKeyValue);
-        if (apiKeyValidator.isApiKeyValid(apiKey))
-            return createAuthTokenGrantingAccessToServiceApi(apiKey);
-        else
-            throw new BadCredentialsException("The API key with the hashed value " + sha256Hex(apiKeyValue) + " is not valid.");
-    }
-
-    private ApiKey getApiKeyEntityByApiKeyValue(String apiKeyValue) {
-        ApiKey apiKey;
-        try {
-            apiKey = apiKeyFetcher.requestApiKeyFromAdmin(apiKeyValue);
-        } catch (ApiKeyFetchingFailedException e) {
-            log.debug("Trying to verify consumers API key with the hash value {}, the connection to admin failed. " +
-                    "Therefore checking the local API key list as fallback solution.", sha256Hex(apiKeyValue));
-            apiKey = localApiKeyManager.getApiKeyEntityFromLocalCache(apiKeyValue);
-        }
-        return apiKey;
-    }
-
-    private ApiKeyAuthToken createAuthTokenGrantingAccessToServiceApi(ApiKey apiKey) {
-        log.debug("Create consumers authentication token using API key with the hash value {}.", sha256Hex(apiKey.getKeyValue()));
-
-        String serviceUriIdentifier = apiKey.getServiceApi().getUriIdentifier();
-        ApiKeyAuthToken apiKeyAuthToken = new ApiKeyAuthToken(apiKey.getKeyValue(), Collections.singleton(
-                new SimpleGrantedAuthority(ServiceApiAccessRightsVoter.ACCESS_SERVICE_AUTHORITY_PREFIX
-                        + serviceUriIdentifier)));
-        apiKeyAuthToken.setAuthenticated(true);
-
-        return apiKeyAuthToken;
     }
 }

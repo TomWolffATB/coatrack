@@ -22,6 +22,7 @@ package eu.coatrack.proxy.security;
 
 import eu.coatrack.api.ApiKey;
 import eu.coatrack.proxy.security.exceptions.*;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,9 +47,8 @@ import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
  */
 
 @Service
+@Slf4j
 public class ApiKeyAuthenticator implements AuthenticationManager {
-
-    private static final Logger log = LoggerFactory.getLogger(ApiKeyAuthenticator.class);
 
     private final Set<SimpleGrantedAuthority> authoritiesGrantedToCoatRackAdminApp = new HashSet<>();
     private final ConsumerAuthenticationCreator consumerAuthenticationCreator;

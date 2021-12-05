@@ -36,7 +36,7 @@ import static eu.coatrack.proxy.security.GatewayMode.ONLINE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class LocalApiKeyUpdaterTest {
+public class LocalApiKeyManagerUpdaterTest {
 
     @Mock private ApiKeyFetcher apiKeyFetcher;
     @Mock private LocalApiKeyManager localApiKeyManager;

@@ -28,12 +28,16 @@ import eu.coatrack.proxy.security.exceptions.LocalApiKeyListWasNotInitializedExc
 import eu.coatrack.proxy.security.exceptions.OfflineWorkingTimeExceedingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.GatewayMode.OFFLINE;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
 /**
@@ -51,16 +55,18 @@ public class LocalApiKeyManager {
     private List<HashedApiKey> localHashedApiKeyList;
     private LocalDateTime deadlineWhenOfflineModeShallStopWorking;
 
+    private final LoggingApiKeyFetcherProxy loggingApiKeyFetcherProxy;
     private final long numberOfMinutesTheGatewayShallWorkInOfflineMode;
     private boolean isLocalApiKeyListInitialized = false;
 
-    public LocalApiKeyManager(@Value("${number-of-minutes-the-gateway-shall-work-in-offline-mode}") long minutesInOfflineMode) {
+    public LocalApiKeyManager(LoggingApiKeyFetcherProxy loggingApiKeyFetcherProxy,
+                              @Value("${number-of-minutes-the-gateway-shall-work-in-offline-mode}") long minutesInOfflineMode) {
         this.numberOfMinutesTheGatewayShallWorkInOfflineMode = minutesInOfflineMode;
+        this.loggingApiKeyFetcherProxy = loggingApiKeyFetcherProxy;
     }
 
     public ApiKey getApiKeyEntityFromLocalCache(String apiKeyValue) {
-        //This is only a fallback solution if connection to admin does not work. Therefore offline mode is triggered.
-        //TODO updateGatewayMode(GatewayMode.OFFLINE); some class should implement this logic.
+        loggingApiKeyFetcherProxy.updateGatewayMode(OFFLINE);
 
         if (!isLocalApiKeyListInitialized) {
             throw new LocalApiKeyListWasNotInitializedException("The gateway is currently not able to validate " +
@@ -107,11 +113,19 @@ public class LocalApiKeyManager {
         return apiKey;
     }
 
-    public void updateLocalHashedApiKeyListWith(List<HashedApiKey> newLocalHashedApiKeyList) {
-        localHashedApiKeyList = newLocalHashedApiKeyList;
-        deadlineWhenOfflineModeShallStopWorking = LocalDateTime.now()
-                .plusMinutes(numberOfMinutesTheGatewayShallWorkInOfflineMode);
-        if(!isLocalApiKeyListInitialized)
-            isLocalApiKeyListInitialized = true;
+    @Async
+    @PostConstruct
+    @Scheduled(fixedRateString = "${local-api-key-list-update-interval-in-millis}")
+    public void refreshLocalApiKeyCacheWithApiKeysFromAdmin() {
+        try {
+            localHashedApiKeyList = loggingApiKeyFetcherProxy.obtainHashedApiKeyListFromAdmin();
+            deadlineWhenOfflineModeShallStopWorking = LocalDateTime.now()
+                    .plusMinutes(numberOfMinutesTheGatewayShallWorkInOfflineMode);
+            if(!isLocalApiKeyListInitialized)
+                isLocalApiKeyListInitialized = true;
+        } catch (Exception e) {
+            log.error("Trying to obtain the hashed API key list, an error occurred. ", e);
+        }
+
     }
 }

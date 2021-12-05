@@ -22,8 +22,7 @@ package eu.coatrack.proxy.security;
 
 import eu.coatrack.api.HashedApiKey;
 import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.apiKeyFetcher.ApiKeyFetcher;
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.LocalApiKeyManager;
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.LocalApiKeyManagerUpdater;
+import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.LoggingApiKeyFetcherProxy;
 import eu.coatrack.proxy.security.exceptions.ApiKeyFetchingFailedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,13 +36,13 @@ import java.util.List;
 import static eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.GatewayMode.OFFLINE;
 import static eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.GatewayMode.ONLINE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-public class LocalApiKeyManagerUpdaterTest {
+public class LoggingApiKeyFetcherProxyTest {
 
     @Mock private ApiKeyFetcher apiKeyFetcher;
-    @Mock private LocalApiKeyManager localApiKeyManager;
-    @InjectMocks private LocalApiKeyManagerUpdater localApiKeyManagerUpdater;
+    @InjectMocks private LoggingApiKeyFetcherProxy loggingApiKeyFetcherProxy;
 
     private List<HashedApiKey> hashedApiKeyList;
 
@@ -55,42 +54,37 @@ public class LocalApiKeyManagerUpdaterTest {
 
     @Test
     public void dontPerformAnyGatewayModeSwitchesAndExpectNoSwitchingLogMessages() {
-        assertEquals(OFFLINE, localApiKeyManagerUpdater.getCurrentGatewayMode());
+        assertEquals(OFFLINE, loggingApiKeyFetcherProxy.getCurrentGatewayMode());
     }
 
     @Test
     public void switchingToOfflineFromOnlineMode() {
-        localApiKeyManagerUpdater.updateGatewayMode(ONLINE);
-        localApiKeyManagerUpdater.updateGatewayMode(OFFLINE);
-        assertEquals(OFFLINE, localApiKeyManagerUpdater.getCurrentGatewayMode());
+        loggingApiKeyFetcherProxy.updateGatewayMode(ONLINE);
+        loggingApiKeyFetcherProxy.updateGatewayMode(OFFLINE);
+        assertEquals(OFFLINE, loggingApiKeyFetcherProxy.getCurrentGatewayMode());
     }
 
     @Test
     public void switchingToOfflineTwoTimes() {
-        localApiKeyManagerUpdater.updateGatewayMode(OFFLINE);
-        localApiKeyManagerUpdater.updateGatewayMode(OFFLINE);
-        assertEquals(OFFLINE, localApiKeyManagerUpdater.getCurrentGatewayMode());
+        loggingApiKeyFetcherProxy.updateGatewayMode(OFFLINE);
+        loggingApiKeyFetcherProxy.updateGatewayMode(OFFLINE);
+        assertEquals(OFFLINE, loggingApiKeyFetcherProxy.getCurrentGatewayMode());
     }
 
     @Test
     public void fetchingApiKeyListShouldCauseSwitchToOnlineMode() {
         when(apiKeyFetcher.requestLatestHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
-
-        localApiKeyManagerUpdater.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
-
-        assertEquals(ONLINE, localApiKeyManagerUpdater.getCurrentGatewayMode());
-        verify(localApiKeyManager).updateLocalHashedApiKeyListWith(hashedApiKeyList);
+        loggingApiKeyFetcherProxy.obtainHashedApiKeyListFromAdmin();
+        assertEquals(ONLINE, loggingApiKeyFetcherProxy.getCurrentGatewayMode());
     }
 
     @Test
-    public void apiKeyListFetchingFailedExceptionShouldCauseSwitchingToOfflineMode() {
-        localApiKeyManagerUpdater.updateGatewayMode(ONLINE);
+    public void apiKeyListFetchingFailedExceptionShouldCauseSwitchingToOfflineModeAndRethrowException() {
+        loggingApiKeyFetcherProxy.updateGatewayMode(ONLINE);
         when(apiKeyFetcher.requestLatestHashedApiKeyListFromAdmin()).thenThrow(ApiKeyFetchingFailedException.class);
 
-        localApiKeyManagerUpdater.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
-
-        assertEquals(OFFLINE, localApiKeyManagerUpdater.getCurrentGatewayMode());
-        verify(localApiKeyManager, times(0)).updateLocalHashedApiKeyListWith(hashedApiKeyList);
+        assertThrows(ApiKeyFetchingFailedException.class, () -> loggingApiKeyFetcherProxy.obtainHashedApiKeyListFromAdmin());
+        assertEquals(OFFLINE, loggingApiKeyFetcherProxy.getCurrentGatewayMode());
     }
 
 }

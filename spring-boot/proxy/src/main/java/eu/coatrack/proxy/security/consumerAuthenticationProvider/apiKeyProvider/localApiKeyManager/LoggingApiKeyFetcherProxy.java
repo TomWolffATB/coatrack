@@ -24,20 +24,17 @@ import eu.coatrack.api.HashedApiKey;
 import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.apiKeyFetcher.ApiKeyFetcher;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Slf4j
 @Service
 @EnableAsync
 @AllArgsConstructor
-public class LocalApiKeyManagerUpdater {
+public class LoggingApiKeyFetcherProxy {
 
     public final static String switchingToOfflineModeMessage = "Gateway is switching to offline mode.";
     public final static String switchingToOnlineModeMessage = "Gateway is switching to online mode.";
@@ -45,23 +42,19 @@ public class LocalApiKeyManagerUpdater {
     private static GatewayMode currentGatewayMode = GatewayMode.OFFLINE;
 
     private final ApiKeyFetcher apiKeyFetcher;
-    private final LocalApiKeyManager localApiKeyManager;
 
-    @Async
-    @PostConstruct
-    @Scheduled(fixedRateString = "${local-api-key-list-update-interval-in-millis}")
-    public void refreshLocalApiKeyCacheWithApiKeysFromAdmin() {
+    public List<HashedApiKey> obtainHashedApiKeyListFromAdmin() {
         log.debug("Trying to update the local API key list by contacting CoatRack admin.");
 
         try {
             List<HashedApiKey> fetchedHashedApiKeyList = apiKeyFetcher.requestLatestHashedApiKeyListFromAdmin();
             Assert.notNull(fetchedHashedApiKeyList, "The local API key list will not be " +
                     "updated since the fetched API key list was null.");
-            localApiKeyManager.updateLocalHashedApiKeyListWith(fetchedHashedApiKeyList);
             updateGatewayMode(GatewayMode.ONLINE);
+            return fetchedHashedApiKeyList;
         } catch (Exception e) {
-            log.error("API key list fetching process failed: ", e);
             updateGatewayMode(GatewayMode.OFFLINE);
+            throw e;
         }
     }
 

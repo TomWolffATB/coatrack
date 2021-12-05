@@ -23,6 +23,9 @@ import eu.coatrack.api.ServiceApi;
 import eu.coatrack.proxy.security.exceptions.LocalApiKeyListWasNotInitializedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 
@@ -32,38 +35,25 @@ import static org.mockito.Mockito.when;
 
 public class ApiKeyAuthenticatorTest {
 
+    @Mock private ConsumerAuthenticationCreator consumerAuthenticationCreatorMock;
+    @InjectMocks private ApiKeyAuthenticator apiKeyAuthenticator;
+
     private ApiKeyAuthToken apiKeyAuthToken;
-    private ApiKeyAuthenticator apiKeyAuthenticator;
-    private ApiKey apiKey;
-    private ConsumerAuthenticationCreator consumerAuthenticationCreatorMock;
+    private final String apiKeyValue = "ee11ee22-ee33-ee44-ee55-ee66ee77ee88";
 
     @BeforeEach
     public void setup() {
-        apiKey = createSampleApiKeyForTesting();
-
         // Create an auth token for a valid api key without any granted authorities.
-        apiKeyAuthToken = new ApiKeyAuthToken(apiKey.getKeyValue(), null);
+        apiKeyAuthToken = new ApiKeyAuthToken(apiKeyValue, null);
         apiKeyAuthToken.setAuthenticated(false);
 
-        consumerAuthenticationCreatorMock = mock(ConsumerAuthenticationCreator.class);
-        apiKeyAuthenticator = new ApiKeyAuthenticator(consumerAuthenticationCreatorMock);
-    }
-
-    private ApiKey createSampleApiKeyForTesting() {
-        ServiceApi serviceApi = new ServiceApi();
-        serviceApi.setUriIdentifier("weather-data-service");
-
-        ApiKey localApiKey = new ApiKey();
-        localApiKey.setKeyValue("ee11ee22-ee33-ee44-ee55-ee66ee77ee88");
-        localApiKey.setServiceApi(serviceApi);
-
-        return localApiKey;
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     public void validAuthenticationShouldBeAccepted() {
         apiKeyAuthToken.setAuthenticated(true);
-        when(consumerAuthenticationCreatorMock.createConsumerAuthTokenIfApiKeyIsValid(apiKey.getKeyValue())).thenReturn(apiKeyAuthToken);
+        when(consumerAuthenticationCreatorMock.createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue)).thenReturn(apiKeyAuthToken);
 
         Authentication resultAuthentication = apiKeyAuthenticator.authenticate(apiKeyAuthToken);
         assertTrue(resultAuthentication.isAuthenticated());
@@ -102,13 +92,13 @@ public class ApiKeyAuthenticatorTest {
 
     @Test
     public void invalidApiKeyShouldCauseBadCredentialsException() {
-        when(consumerAuthenticationCreatorMock.createConsumerAuthTokenIfApiKeyIsValid(apiKey.getKeyValue())).thenThrow(BadCredentialsException.class);
+        when(consumerAuthenticationCreatorMock.createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue)).thenThrow(BadCredentialsException.class);
         assertThrows(BadCredentialsException.class, () -> apiKeyAuthenticator.authenticate(apiKeyAuthToken));
     }
 
     @Test
     public void undecidableApiKeyValidityShouldReturnNull() {
-        when(consumerAuthenticationCreatorMock.createConsumerAuthTokenIfApiKeyIsValid(apiKey.getKeyValue())).thenThrow(RuntimeException.class);
+        when(consumerAuthenticationCreatorMock.createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue)).thenThrow(RuntimeException.class);
         assertNull(apiKeyAuthenticator.authenticate(apiKeyAuthToken));
     }
 }

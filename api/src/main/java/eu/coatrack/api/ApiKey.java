@@ -154,8 +154,8 @@ public class ApiKey {
                 + '}';
     }
 
-    public HashedApiKey convertToHashedApiKey() {
-        String hashedKeyValue = sha256Hex(keyValue);
+    public HashedApiKey convertToHashedApiKey(String gatewayIdSalt) {
+        String hashedKeyValue = sha256Hex(keyValue + gatewayIdSalt);
         HashedApiKey hashedApiKey = new HashedApiKey();
         hashedApiKey.hashedKeyValue = hashedKeyValue;
         hashedApiKey.validUntil = validUntil;

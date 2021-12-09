@@ -41,6 +41,7 @@ public abstract class RemoteApiKeyProvider_AbstractTestSetup {
     @InjectMocks protected RemoteApiKeyProvider remoteApiKeyProvider;
 
     protected static final String someApiKeyValue = "ee11ee22-ee33-ee44-ee55-ee66ee77ee88";
+    protected final String gatewayId = "aa11aa22-aa33-aa44-aa55-aa66aa77aa88";
 
     protected ApiKey apiKey;
     protected HashedApiKey hashedApiKey;
@@ -52,7 +53,7 @@ public abstract class RemoteApiKeyProvider_AbstractTestSetup {
         apiKey = new ApiKey();
         apiKey.setKeyValue(someApiKeyValue);
 
-        hashedApiKey = apiKey.convertToHashedApiKey();
+        hashedApiKey = apiKey.convertToHashedApiKey(gatewayId);
 
         hashedApiKeys = new HashedApiKey[1];
         hashedApiKeys[0] = hashedApiKey;

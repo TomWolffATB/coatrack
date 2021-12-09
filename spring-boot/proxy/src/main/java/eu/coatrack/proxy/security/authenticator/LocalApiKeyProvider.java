@@ -57,12 +57,15 @@ public class LocalApiKeyProvider {
 
     private final LoggingRemoteApiKeyProviderProxy loggingRemoteApiKeyProviderProxy;
     private final long numberOfMinutesTheGatewayShallWorkInOfflineMode;
+    private final String gatewayId;
     private boolean isLocalApiKeyListInitialized = false;
 
     public LocalApiKeyProvider(LoggingRemoteApiKeyProviderProxy loggingRemoteApiKeyProviderProxy,
-                               @Value("${number-of-minutes-the-gateway-shall-work-in-offline-mode}") long minutesInOfflineMode) {
+                               @Value("${number-of-minutes-the-gateway-shall-work-in-offline-mode}") long minutesInOfflineMode,
+                               @Value("${proxy-id}") String gatewayId) {
         this.numberOfMinutesTheGatewayShallWorkInOfflineMode = minutesInOfflineMode;
         this.loggingRemoteApiKeyProviderProxy = loggingRemoteApiKeyProviderProxy;
+        this.gatewayId = gatewayId;
     }
 
     public ApiKey getApiKeyEntityFromLocalCache(String apiKeyValue) {
@@ -91,7 +94,7 @@ public class LocalApiKeyProvider {
 
         log.debug("Trying to extract the API key with the hashed value {} from the local list.", sha256Hex(apiKeyValue));
 
-        String hashedApiKeyValue = sha256Hex(apiKeyValue);
+        String hashedApiKeyValue = sha256Hex(apiKeyValue + gatewayId);
         Optional<HashedApiKey> optionalApiKey = localHashedApiKeyList.stream().filter(
                 apiKeyFromLocalList -> apiKeyFromLocalList.hashedKeyValue.equals(hashedApiKeyValue)
         ).findFirst();

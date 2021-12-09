@@ -40,6 +40,7 @@ import static org.mockito.Mockito.*;
 public class LocalApiKeyProviderTest {
 
     private final String apiKeyValue = "ee11ee22-ee33-ee44-ee55-ee66ee77ee88";
+    private final String gatewayId = "aa11aa22-aa33-aa44-aa55-aa66aa77aa88";
     private HashedApiKey hashedApiKey;
     private List<HashedApiKey> hashedApiKeyList;
     private LocalApiKeyProvider localApiKeyProvider;
@@ -54,13 +55,13 @@ public class LocalApiKeyProviderTest {
         apiKey.setDeletedWhen(new Date());
 
         hashedApiKeyList = new ArrayList<>();
-        hashedApiKey = apiKey.convertToHashedApiKey();
+        hashedApiKey = apiKey.convertToHashedApiKey(gatewayId);
         hashedApiKeyList.add(hashedApiKey);
 
         loggingRemoteApiKeyProviderProxyMock = mock(LoggingRemoteApiKeyProviderProxy.class);
         long timeInMinutesTheGatewayWorksWithoutConnectionToAdmin = 60;
         localApiKeyProvider = new LocalApiKeyProvider(loggingRemoteApiKeyProviderProxyMock,
-                timeInMinutesTheGatewayWorksWithoutConnectionToAdmin);
+                timeInMinutesTheGatewayWorksWithoutConnectionToAdmin, gatewayId);
     }
 
     @Test
@@ -105,7 +106,8 @@ public class LocalApiKeyProviderTest {
     public void offlineWorkingTimeIsNotExceeded() {
         long deadlineIsOneMinuteAfterNow = 1;
 
-        LocalApiKeyProvider localApiKeyProvider = new LocalApiKeyProvider(loggingRemoteApiKeyProviderProxyMock, deadlineIsOneMinuteAfterNow);
+        LocalApiKeyProvider localApiKeyProvider = new LocalApiKeyProvider(loggingRemoteApiKeyProviderProxyMock,
+                deadlineIsOneMinuteAfterNow, gatewayId);
         when(loggingRemoteApiKeyProviderProxyMock.obtainHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
         localApiKeyProvider.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
 
@@ -117,7 +119,8 @@ public class LocalApiKeyProviderTest {
     public void offlineWorkingTimeIsExceededWhichCausesException() {
         long deadlineIsOneMinuteBeforeNow = -1;
 
-        LocalApiKeyProvider localApiKeyProvider = new LocalApiKeyProvider(loggingRemoteApiKeyProviderProxyMock, deadlineIsOneMinuteBeforeNow);
+        LocalApiKeyProvider localApiKeyProvider = new LocalApiKeyProvider(loggingRemoteApiKeyProviderProxyMock,
+                deadlineIsOneMinuteBeforeNow, gatewayId);
         when(loggingRemoteApiKeyProviderProxyMock.obtainHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
         localApiKeyProvider.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
 

@@ -32,8 +32,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
-import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
-
 @Service
 @Slf4j
 @AllArgsConstructor
@@ -43,17 +41,17 @@ public class ServiceConsumerAuthenticationCreator {
     private final ApiKeyValidator apiKeyValidator;
 
     public Authentication createConsumerAuthTokenIfApiKeyIsValid(String apiKeyValue) {
-        log.debug("Verifying the API with the hashed value {} from consumer.", sha256Hex(apiKeyValue));
+        log.debug("Verifying the API from consumer.");
 
         ApiKey apiKey = apiKeyProvider.getApiKeyEntityByApiKeyValue(apiKeyValue);
         if (apiKeyValidator.isApiKeyValid(apiKey))
             return createAuthTokenGrantingAccessToServiceApi(apiKey);
         else
-            throw new BadCredentialsException("The API key with the hashed value " + sha256Hex(apiKeyValue) + " is not valid.");
+            throw new BadCredentialsException("The API key is not valid.");
     }
 
     private ApiKeyAuthToken createAuthTokenGrantingAccessToServiceApi(ApiKey apiKey) {
-        log.debug("Create consumers authentication token using API key with the hash value {}.", sha256Hex(apiKey.getKeyValue()));
+        log.debug("Create consumers authentication token using API key create at {}.", apiKey.getCreated());
 
         String serviceUriIdentifier = apiKey.getServiceApi().getUriIdentifier();
         ApiKeyAuthToken apiKeyAuthToken = new ApiKeyAuthToken(apiKey.getKeyValue(), Collections.singleton(

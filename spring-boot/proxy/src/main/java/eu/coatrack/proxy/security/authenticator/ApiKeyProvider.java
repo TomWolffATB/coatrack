@@ -26,8 +26,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
-
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -41,8 +39,8 @@ public class ApiKeyProvider {
         try {
             apiKey = remoteApiKeyProvider.requestApiKeyFromAdmin(apiKeyValue);
         } catch (ApiKeyFetchingFailedException e) {
-            log.debug("Trying to verify consumers API key with the hash value {}, the connection to admin failed. " +
-                    "Therefore checking the local API key list as fallback solution.", sha256Hex(apiKeyValue));
+            log.debug("Trying to verify consumers API, the connection to admin failed. " +
+                    "Therefore checking the local API key list as fallback solution.");
             apiKey = localApiKeyProvider.getApiKeyEntityFromLocalCache(apiKeyValue);
         }
         return apiKey;

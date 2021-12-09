@@ -38,8 +38,6 @@ import java.util.regex.Pattern;
 
 import eu.coatrack.api.ApiKey;
 
-import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
-
 public class MetricsCounterService {
 
     private static final Logger log = LoggerFactory.getLogger(MetricsCounterService.class);
@@ -59,10 +57,9 @@ public class MetricsCounterService {
     private static final String counterSessionID = UUID.randomUUID().toString();
 
     public void increment(HttpServletRequest request, String apiKeyValue, MetricType metricType, Integer httpResponseCode) {
-        log.debug(String.format("incrementing metric '%s' for URI '%s' and API key with hash value %s",
+        log.debug(String.format("incrementing metric '%s' for URI '%s'",
                 metricType,
-                request.getRequestURI(),
-                sha256Hex(apiKeyValue)
+                request.getRequestURI()
         ));
 
         String requestMethod = request.getMethod();

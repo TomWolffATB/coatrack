@@ -35,8 +35,6 @@ import org.springframework.util.Assert;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
-
 /**
  *  Checks if the API key token value sent by the client is valid. If so, an authentication object
  *  including the granted authorities is generated, to be further handled by access decision voters.
@@ -93,12 +91,12 @@ public class ApiKeyAuthenticator implements AuthenticationManager {
     }
 
     private boolean doesApiKeyBelongToAdminApp(String apiKeyValue) {
-        log.debug("Checking if API key with hashed value '{}' is an API key of the admin application.", sha256Hex(apiKeyValue));
+        log.debug("Checking if API key is an API key of the admin application.");
         return apiKeyValue.equals(ApiKey.API_KEY_FOR_YGG_ADMIN_TO_ACCESS_PROXIES);
     }
 
     private Authentication createAdminAuthTokenFromApiKey(String apiKeyValue) {
-        log.debug("Creating admin authentication token using API key with the hashed value {}.", sha256Hex(apiKeyValue));
+        log.debug("Creating admin authentication token.");
         ApiKeyAuthToken apiKeyAuthTokenForValidApiKey = new ApiKeyAuthToken(apiKeyValue, authoritiesGrantedToCoatRackAdminApp);
         apiKeyAuthTokenForValidApiKey.setAuthenticated(true);
         return apiKeyAuthTokenForValidApiKey;

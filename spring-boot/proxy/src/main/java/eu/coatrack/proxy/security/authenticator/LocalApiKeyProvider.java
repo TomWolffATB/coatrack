@@ -92,7 +92,7 @@ public class LocalApiKeyProvider {
             throw new ApiKeyValueWasNullException("The API key could not be found in the local API key list " +
                     "because its value was null.");
 
-        log.debug("Trying to extract the API key with the hashed value {} from the local list.", sha256Hex(apiKeyValue));
+        log.debug("Trying to extract the API key from the local list.");
 
         String hashedApiKeyValue = sha256Hex(apiKeyValue + gatewayId);
         Optional<HashedApiKey> optionalApiKey = localHashedApiKeyList.stream().filter(
@@ -102,8 +102,7 @@ public class LocalApiKeyProvider {
         if (optionalApiKey.isPresent()) {
             return recreateApiKey(optionalApiKey.get(), apiKeyValue);
         } else {
-            throw new ApiKeyNotFoundInLocalApiKeyListException("The API key with the hashed value "
-                    + sha256Hex(apiKeyValue) + " could not be found in the local API key list.");
+            throw new ApiKeyNotFoundInLocalApiKeyListException("The API key could not be found in the local API key list.");
         }
     }
 

@@ -1,4 +1,4 @@
-package eu.coatrack.proxy.security.exceptions;
+package eu.coatrack.proxy.security.authenticator.exceptions;
 
 /*-
  * #%L
@@ -20,13 +20,13 @@ package eu.coatrack.proxy.security.exceptions;
  * #L%
  */
 
-import org.springframework.security.authentication.BadCredentialsException;
-
 /**
- * Is thrown when an incoming API key could not be matched with any API key of the local API key list.
+ * Is thrown, when the local API key list shall be used but has not been initialized. The gateway
+ * never received a list of API Keys from CoatRack admin before and can therefore not
+ * be used for that purpose.
  */
-public class ApiKeyNotFoundInLocalApiKeyListException extends BadCredentialsException {
-    public ApiKeyNotFoundInLocalApiKeyListException(String message) {
-        super(message);
+public class LocalApiKeyListWasNotInitializedException extends RuntimeException {
+    public LocalApiKeyListWasNotInitializedException(String msg) {
+        super(msg);
     }
 }

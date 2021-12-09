@@ -1,4 +1,4 @@
-package eu.coatrack.proxy.security.exceptions;
+package eu.coatrack.proxy.security.authenticator;
 
 /*-
  * #%L
@@ -20,13 +20,11 @@ package eu.coatrack.proxy.security.exceptions;
  * #L%
  */
 
-/**
- * Is thrown, when the local API key list shall be used but has not been initialized. The gateway
- * never received a list of API Keys from CoatRack admin before and can therefore not
- * be used for that purpose.
+/*
+    If the gateway successfully receives the latest list of API keys from CoatRack admin, it goes to online mode.
+    If a connection attempt to CoatRack admin server failed, it goes to the time-limited functioning offline mode.
  */
-public class LocalApiKeyListWasNotInitializedException extends RuntimeException {
-    public LocalApiKeyListWasNotInitializedException(String msg) {
-        super(msg);
-    }
+
+public enum GatewayMode {
+    ONLINE, OFFLINE
 }

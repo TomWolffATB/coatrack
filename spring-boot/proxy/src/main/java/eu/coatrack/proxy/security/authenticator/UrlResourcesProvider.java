@@ -1,4 +1,4 @@
-package eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.apiKeyFetcher;
+package eu.coatrack.proxy.security.authenticator;
 
 /*-
  * #%L

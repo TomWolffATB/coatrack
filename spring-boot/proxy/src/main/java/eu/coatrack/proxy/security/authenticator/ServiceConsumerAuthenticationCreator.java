@@ -1,4 +1,4 @@
-package eu.coatrack.proxy.security.consumerAuthenticationProvider;
+package eu.coatrack.proxy.security.authenticator;
 
 /*-
  * #%L
@@ -23,7 +23,6 @@ package eu.coatrack.proxy.security.consumerAuthenticationProvider;
 import eu.coatrack.api.ApiKey;
 import eu.coatrack.proxy.security.ApiKeyAuthToken;
 import eu.coatrack.proxy.security.ServiceApiAccessRightsVoter;
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.ApiKeyProvider;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -38,7 +37,7 @@ import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 @Service
 @Slf4j
 @AllArgsConstructor
-public class ConsumerAuthenticationCreator {
+public class ServiceConsumerAuthenticationCreator {
 
     private final ApiKeyProvider apiKeyProvider;
     private final ApiKeyValidator apiKeyValidator;

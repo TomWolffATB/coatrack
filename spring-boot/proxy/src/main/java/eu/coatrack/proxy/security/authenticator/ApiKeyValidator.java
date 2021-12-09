@@ -1,4 +1,4 @@
-package eu.coatrack.proxy.security.exceptions;
+package eu.coatrack.proxy.security.authenticator;
 
 /*-
  * #%L
@@ -20,13 +20,29 @@ package eu.coatrack.proxy.security.exceptions;
  * #L%
  */
 
+import eu.coatrack.api.ApiKey;
+import org.springframework.stereotype.Service;
+
 /**
- * Indicates that the maximum time the gateway is allowed to work in offline mode
- * was exceeded. This means that locally cached API keys should be considered
- * invalid until the online mode is re-established.
+ * This class provides a method to determine the validity of an API key.
+ *
+ * @author Christoph Baier
  */
-public class OfflineWorkingTimeExceedingException extends RuntimeException {
-    public OfflineWorkingTimeExceedingException(String message) {
-        super(message);
+
+@Service
+public class ApiKeyValidator {
+
+    public boolean isApiKeyValid(ApiKey apiKey) {
+        return apiKey != null
+                && isApiKeyNotDeleted(apiKey)
+                && isApiKeyNotExpired(apiKey);
+    }
+
+    private boolean isApiKeyNotDeleted(ApiKey apiKey) {
+        return apiKey.getDeletedWhen() == null;
+    }
+
+    private boolean isApiKeyNotExpired(ApiKey apiKey) {
+        return apiKey.getValidUntil().getTime() > System.currentTimeMillis();
     }
 }

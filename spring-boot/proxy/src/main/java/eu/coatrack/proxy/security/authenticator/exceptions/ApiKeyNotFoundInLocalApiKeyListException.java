@@ -1,4 +1,4 @@
-package eu.coatrack.proxy.security.exceptions;
+package eu.coatrack.proxy.security.authenticator.exceptions;
 
 /*-
  * #%L
@@ -9,9 +9,9 @@ package eu.coatrack.proxy.security.exceptions;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,15 +20,13 @@ package eu.coatrack.proxy.security.exceptions;
  * #L%
  */
 
-/**
- * Thrown by the ApiKeyFetcher to indicate that it was not able to fetch API keys from the CoatRack admin application.
- */
-public class ApiKeyFetchingFailedException extends RuntimeException {
-    public ApiKeyFetchingFailedException(String message) {
-        super(message);
-    }
+import org.springframework.security.authentication.BadCredentialsException;
 
-    public ApiKeyFetchingFailedException(String message, Exception rootCause) {
-        super(message, rootCause);
+/**
+ * Is thrown when an incoming API key could not be matched with any API key of the local API key list.
+ */
+public class ApiKeyNotFoundInLocalApiKeyListException extends BadCredentialsException {
+    public ApiKeyNotFoundInLocalApiKeyListException(String message) {
+        super(message);
     }
 }

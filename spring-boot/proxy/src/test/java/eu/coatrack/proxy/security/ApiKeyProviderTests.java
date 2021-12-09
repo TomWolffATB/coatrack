@@ -21,10 +21,10 @@ package eu.coatrack.proxy.security;
  */
 
 import eu.coatrack.api.ApiKey;
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.apiKeyFetcher.ApiKeyFetcher;
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.ApiKeyProvider;
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.LocalApiKeyManager;
-import eu.coatrack.proxy.security.exceptions.ApiKeyFetchingFailedException;
+import eu.coatrack.proxy.security.authenticator.RemoteApiKeyProvider;
+import eu.coatrack.proxy.security.authenticator.ApiKeyProvider;
+import eu.coatrack.proxy.security.authenticator.LocalApiKeyProvider;
+import eu.coatrack.proxy.security.authenticator.exceptions.ApiKeyFetchingFailedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -37,8 +37,8 @@ import static org.mockito.Mockito.when;
 
 public class ApiKeyProviderTests {
 
-    @Mock private ApiKeyFetcher apiKeyFetcherMock;
-    @Mock private LocalApiKeyManager localApiKeyManagerMock;
+    @Mock private RemoteApiKeyProvider remoteApiKeyProviderMock;
+    @Mock private LocalApiKeyProvider localApiKeyProviderMock;
     @InjectMocks private ApiKeyProvider apiKeyProvider;
 
     private final String apiKeyValue = "some API key value";
@@ -53,24 +53,24 @@ public class ApiKeyProviderTests {
 
     @Test
     public void apiFetchedFromAdminShouldBeReturned() {
-        when(apiKeyFetcherMock.requestApiKeyFromAdmin(apiKeyValue)).thenReturn(apiKeyToBeReturned);
+        when(remoteApiKeyProviderMock.requestApiKeyFromAdmin(apiKeyValue)).thenReturn(apiKeyToBeReturned);
         assertSame(apiKeyToBeReturned, apiKeyProvider.getApiKeyEntityByApiKeyValue(apiKeyValue));
     }
 
     @Test
     public void whenFetchingFromAdminFails_LocalApiKeyShouldBeProvided() {
-        when(apiKeyFetcherMock.requestApiKeyFromAdmin(apiKeyValue)).thenThrow(ApiKeyFetchingFailedException.class);
-        when(localApiKeyManagerMock.getApiKeyEntityFromLocalCache(apiKeyValue)).thenReturn(apiKeyToBeReturned);
+        when(remoteApiKeyProviderMock.requestApiKeyFromAdmin(apiKeyValue)).thenThrow(ApiKeyFetchingFailedException.class);
+        when(localApiKeyProviderMock.getApiKeyEntityFromLocalCache(apiKeyValue)).thenReturn(apiKeyToBeReturned);
 
         assertSame(apiKeyToBeReturned, apiKeyProvider.getApiKeyEntityByApiKeyValue(apiKeyValue));
     }
 
     @Test
     public void whenAlsoLocalSearchFails_TheExceptionShouldBeRedirected() {
-        when(apiKeyFetcherMock.requestApiKeyFromAdmin(apiKeyValue)).thenThrow(ApiKeyFetchingFailedException.class);
-        when(localApiKeyManagerMock.getApiKeyEntityFromLocalCache(apiKeyValue)).thenThrow(RuntimeException.class);
+        when(remoteApiKeyProviderMock.requestApiKeyFromAdmin(apiKeyValue)).thenThrow(ApiKeyFetchingFailedException.class);
+        when(localApiKeyProviderMock.getApiKeyEntityFromLocalCache(apiKeyValue)).thenThrow(RuntimeException.class);
 
-        assertThrows(RuntimeException.class, () -> localApiKeyManagerMock.getApiKeyEntityFromLocalCache(apiKeyValue));
+        assertThrows(RuntimeException.class, () -> localApiKeyProviderMock.getApiKeyEntityFromLocalCache(apiKeyValue));
     }
 
 }

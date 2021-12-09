@@ -19,7 +19,8 @@ package eu.coatrack.proxy.security;/*-
  */
 
 import eu.coatrack.api.ApiKey;
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.ConsumerAuthenticationCreator;
+import eu.coatrack.proxy.security.authenticator.ApiKeyAuthenticator;
+import eu.coatrack.proxy.security.authenticator.ServiceConsumerAuthenticationCreator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -34,7 +35,7 @@ import static org.mockito.Mockito.when;
 
 public class ApiKeyAuthenticatorTest {
 
-    @Mock private ConsumerAuthenticationCreator consumerAuthenticationCreatorMock;
+    @Mock private ServiceConsumerAuthenticationCreator serviceConsumerAuthenticationCreatorMock;
     @InjectMocks private ApiKeyAuthenticator apiKeyAuthenticator;
 
     private ApiKeyAuthToken apiKeyAuthToken;
@@ -52,7 +53,7 @@ public class ApiKeyAuthenticatorTest {
     @Test
     public void validAuthenticationShouldBeAccepted() {
         apiKeyAuthToken.setAuthenticated(true);
-        when(consumerAuthenticationCreatorMock.createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue)).thenReturn(apiKeyAuthToken);
+        when(serviceConsumerAuthenticationCreatorMock.createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue)).thenReturn(apiKeyAuthToken);
 
         Authentication resultAuthentication = apiKeyAuthenticator.authenticate(apiKeyAuthToken);
         assertTrue(resultAuthentication.isAuthenticated());
@@ -91,13 +92,13 @@ public class ApiKeyAuthenticatorTest {
 
     @Test
     public void invalidApiKeyShouldCauseBadCredentialsException() {
-        when(consumerAuthenticationCreatorMock.createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue)).thenThrow(BadCredentialsException.class);
+        when(serviceConsumerAuthenticationCreatorMock.createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue)).thenThrow(BadCredentialsException.class);
         assertThrows(BadCredentialsException.class, () -> apiKeyAuthenticator.authenticate(apiKeyAuthToken));
     }
 
     @Test
     public void undecidableApiKeyValidityShouldReturnNull() {
-        when(consumerAuthenticationCreatorMock.createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue)).thenThrow(RuntimeException.class);
+        when(serviceConsumerAuthenticationCreatorMock.createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue)).thenThrow(RuntimeException.class);
         assertNull(apiKeyAuthenticator.authenticate(apiKeyAuthToken));
     }
 }

@@ -1,4 +1,4 @@
-package eu.coatrack.proxy.security;
+package eu.coatrack.proxy.security.authenticator;
 
 /*-
  * #%L
@@ -21,7 +21,8 @@ package eu.coatrack.proxy.security;
  */
 
 import eu.coatrack.api.ApiKey;
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.ConsumerAuthenticationCreator;
+import eu.coatrack.proxy.security.ApiKeyAuthToken;
+import eu.coatrack.proxy.security.ServiceApiAccessRightsVoter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -48,10 +49,10 @@ import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 public class ApiKeyAuthenticator implements AuthenticationManager {
 
     private final Set<SimpleGrantedAuthority> authoritiesGrantedToCoatRackAdminApp = new HashSet<>();
-    private final ConsumerAuthenticationCreator consumerAuthenticationCreator;
+    private final ServiceConsumerAuthenticationCreator serviceConsumerAuthenticationCreator;
 
-    public ApiKeyAuthenticator(ConsumerAuthenticationCreator consumerAuthenticationCreator) {
-        this.consumerAuthenticationCreator = consumerAuthenticationCreator;
+    public ApiKeyAuthenticator(ServiceConsumerAuthenticationCreator serviceConsumerAuthenticationCreator) {
+        this.serviceConsumerAuthenticationCreator = serviceConsumerAuthenticationCreator;
 
         authoritiesGrantedToCoatRackAdminApp.add(new SimpleGrantedAuthority(
                 ServiceApiAccessRightsVoter.ACCESS_SERVICE_AUTHORITY_PREFIX + "refresh"));
@@ -91,7 +92,7 @@ public class ApiKeyAuthenticator implements AuthenticationManager {
         if (doesApiKeyBelongToAdminApp(apiKeyValue))
             return createAdminAuthTokenFromApiKey(apiKeyValue);
         else
-            return consumerAuthenticationCreator.createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue);
+            return serviceConsumerAuthenticationCreator.createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue);
     }
 
     private boolean doesApiKeyBelongToAdminApp(String apiKeyValue) {

@@ -22,9 +22,9 @@ package eu.coatrack.proxy.security;
 
 import eu.coatrack.api.ApiKey;
 import eu.coatrack.api.ServiceApi;
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.ApiKeyProvider;
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.ApiKeyValidator;
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.ConsumerAuthenticationCreator;
+import eu.coatrack.proxy.security.authenticator.ApiKeyProvider;
+import eu.coatrack.proxy.security.authenticator.ApiKeyValidator;
+import eu.coatrack.proxy.security.authenticator.ServiceConsumerAuthenticationCreator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -36,14 +36,14 @@ import org.springframework.security.core.Authentication;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-public class ConsumerAuthenticationCreatorTest {
+public class ServiceConsumerAuthenticationCreatorTest {
 
     @Mock
     ApiKeyProvider apiKeyProvider;
     @Mock
     ApiKeyValidator apiKeyValidator;
     @InjectMocks
-    ConsumerAuthenticationCreator consumerAuthenticationCreator;
+    ServiceConsumerAuthenticationCreator serviceConsumerAuthenticationCreator;
 
     private final String apiKeyValue = "some API key value";
     private final String serviceUriIdentifier = "some uriIdentifier";
@@ -64,7 +64,7 @@ public class ConsumerAuthenticationCreatorTest {
     @Test
     public void validKeyShouldReturnedValidAuthentication() {
         when(apiKeyValidator.isApiKeyValid(apiKey)).thenReturn(true);
-        Authentication consumerAuthentication = consumerAuthenticationCreator.createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue);
+        Authentication consumerAuthentication = serviceConsumerAuthenticationCreator.createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue);
 
         assertTrue(consumerAuthentication.isAuthenticated());
         assertEquals(consumerAuthentication.getCredentials(), apiKeyValue);
@@ -77,7 +77,7 @@ public class ConsumerAuthenticationCreatorTest {
     @Test
     public void invalidKeyShouldCauseBadCredentialsException() {
         when(apiKeyValidator.isApiKeyValid(apiKey)).thenReturn(false);
-        assertThrows(BadCredentialsException.class, () -> consumerAuthenticationCreator.createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue));
+        assertThrows(BadCredentialsException.class, () -> serviceConsumerAuthenticationCreator.createConsumerAuthTokenIfApiKeyIsValid(apiKeyValue));
     }
 
 }

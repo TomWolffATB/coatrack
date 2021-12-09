@@ -20,7 +20,7 @@ package eu.coatrack.proxy.metrics;
  * #L%
  */
 
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.apiKeyFetcher.UrlResourcesProvider;
+import eu.coatrack.proxy.security.authenticator.UrlResourcesProvider;
 import eu.coatrack.api.ApiKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

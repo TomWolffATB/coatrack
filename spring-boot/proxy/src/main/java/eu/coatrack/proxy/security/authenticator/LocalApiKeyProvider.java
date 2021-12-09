@@ -1,4 +1,4 @@
-package eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager;
+package eu.coatrack.proxy.security.authenticator;
 
 /*-
  * #%L
@@ -22,10 +22,10 @@ package eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider
 
 import eu.coatrack.api.ApiKey;
 import eu.coatrack.api.HashedApiKey;
-import eu.coatrack.proxy.security.exceptions.ApiKeyNotFoundInLocalApiKeyListException;
-import eu.coatrack.proxy.security.exceptions.ApiKeyValueWasNullException;
-import eu.coatrack.proxy.security.exceptions.LocalApiKeyListWasNotInitializedException;
-import eu.coatrack.proxy.security.exceptions.OfflineWorkingTimeExceedingException;
+import eu.coatrack.proxy.security.authenticator.exceptions.ApiKeyNotFoundInLocalApiKeyListException;
+import eu.coatrack.proxy.security.authenticator.exceptions.ApiKeyValueWasNullException;
+import eu.coatrack.proxy.security.authenticator.exceptions.LocalApiKeyListWasNotInitializedException;
+import eu.coatrack.proxy.security.authenticator.exceptions.OfflineWorkingTimeExceedingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -37,7 +37,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.GatewayMode.OFFLINE;
+import static eu.coatrack.proxy.security.authenticator.GatewayMode.OFFLINE;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
 /**
@@ -50,23 +50,23 @@ import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
 @Slf4j
 @Service
-public class LocalApiKeyManager {
+public class LocalApiKeyProvider {
 
     private List<HashedApiKey> localHashedApiKeyList;
     private LocalDateTime deadlineWhenOfflineModeShallStopWorking;
 
-    private final LoggingApiKeyFetcherProxy loggingApiKeyFetcherProxy;
+    private final LoggingRemoteApiKeyProviderProxy loggingRemoteApiKeyProviderProxy;
     private final long numberOfMinutesTheGatewayShallWorkInOfflineMode;
     private boolean isLocalApiKeyListInitialized = false;
 
-    public LocalApiKeyManager(LoggingApiKeyFetcherProxy loggingApiKeyFetcherProxy,
-                              @Value("${number-of-minutes-the-gateway-shall-work-in-offline-mode}") long minutesInOfflineMode) {
+    public LocalApiKeyProvider(LoggingRemoteApiKeyProviderProxy loggingRemoteApiKeyProviderProxy,
+                               @Value("${number-of-minutes-the-gateway-shall-work-in-offline-mode}") long minutesInOfflineMode) {
         this.numberOfMinutesTheGatewayShallWorkInOfflineMode = minutesInOfflineMode;
-        this.loggingApiKeyFetcherProxy = loggingApiKeyFetcherProxy;
+        this.loggingRemoteApiKeyProviderProxy = loggingRemoteApiKeyProviderProxy;
     }
 
     public ApiKey getApiKeyEntityFromLocalCache(String apiKeyValue) {
-        loggingApiKeyFetcherProxy.updateGatewayMode(OFFLINE);
+        loggingRemoteApiKeyProviderProxy.updateGatewayMode(OFFLINE);
 
         if (!isLocalApiKeyListInitialized) {
             throw new LocalApiKeyListWasNotInitializedException("The gateway is currently not able to validate " +
@@ -118,7 +118,7 @@ public class LocalApiKeyManager {
     @Scheduled(fixedRateString = "${local-api-key-list-update-interval-in-millis}")
     public void refreshLocalApiKeyCacheWithApiKeysFromAdmin() {
         try {
-            localHashedApiKeyList = loggingApiKeyFetcherProxy.obtainHashedApiKeyListFromAdmin();
+            localHashedApiKeyList = loggingRemoteApiKeyProviderProxy.obtainHashedApiKeyListFromAdmin();
             deadlineWhenOfflineModeShallStopWorking = LocalDateTime.now()
                     .plusMinutes(numberOfMinutesTheGatewayShallWorkInOfflineMode);
             if(!isLocalApiKeyListInitialized)

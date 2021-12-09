@@ -1,4 +1,4 @@
-package eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.apiKeyFetcher;
+package eu.coatrack.proxy.security.authenticator;
 
 /*-
  * #%L
@@ -22,7 +22,7 @@ package eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider
 
 import eu.coatrack.api.ApiKey;
 import eu.coatrack.api.HashedApiKey;
-import eu.coatrack.proxy.security.exceptions.ApiKeyFetchingFailedException;
+import eu.coatrack.proxy.security.authenticator.exceptions.ApiKeyFetchingFailedException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -45,7 +45,7 @@ import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 @Service
 @Slf4j
 @AllArgsConstructor
-public class ApiKeyFetcher {
+public class RemoteApiKeyProvider {
 
     private final UrlResourcesProvider urlResourcesProvider;
     private final RestTemplate restTemplate;

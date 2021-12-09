@@ -22,27 +22,26 @@ package eu.coatrack.proxy.security;
 
 import eu.coatrack.api.ApiKey;
 import eu.coatrack.api.HashedApiKey;
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.LocalApiKeyManager;
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.LoggingApiKeyFetcherProxy;
-import eu.coatrack.proxy.security.exceptions.*;
+import eu.coatrack.proxy.security.authenticator.LocalApiKeyProvider;
+import eu.coatrack.proxy.security.authenticator.LoggingRemoteApiKeyProviderProxy;
+import eu.coatrack.proxy.security.authenticator.exceptions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager.GatewayMode.OFFLINE;
-import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
+import static eu.coatrack.proxy.security.authenticator.GatewayMode.OFFLINE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class LocalApiKeyManagerTest {
+public class LocalApiKeyProviderTest {
 
     private final String apiKeyValue = "ee11ee22-ee33-ee44-ee55-ee66ee77ee88";
     private HashedApiKey hashedApiKey;
     private List<HashedApiKey> hashedApiKeyList;
-    private LocalApiKeyManager localApiKeyManager;
-    private LoggingApiKeyFetcherProxy loggingApiKeyFetcherProxyMock;
+    private LocalApiKeyProvider localApiKeyProvider;
+    private LoggingRemoteApiKeyProviderProxy loggingRemoteApiKeyProviderProxyMock;
 
     @BeforeEach
     public void setupLocalApiKeyManagerWithoutInitializingLocalApiKeyList() {
@@ -53,27 +52,27 @@ public class LocalApiKeyManagerTest {
         hashedApiKey = apiKey.convertToHashedApiKey();
         hashedApiKeyList.add(hashedApiKey);
 
-        loggingApiKeyFetcherProxyMock = mock(LoggingApiKeyFetcherProxy.class);
+        loggingRemoteApiKeyProviderProxyMock = mock(LoggingRemoteApiKeyProviderProxy.class);
         long timeInMinutesTheGatewayWorksWithoutConnectionToAdmin = 60;
-        localApiKeyManager = new LocalApiKeyManager(loggingApiKeyFetcherProxyMock,
+        localApiKeyProvider = new LocalApiKeyProvider(loggingRemoteApiKeyProviderProxyMock,
                 timeInMinutesTheGatewayWorksWithoutConnectionToAdmin);
     }
 
     @Test
     public void nonInitializedLocalApiKeyManagerShouldThrowSuchException() {
-        assertThrows(LocalApiKeyListWasNotInitializedException.class, () -> localApiKeyManager.getApiKeyEntityFromLocalCache(null));
+        assertThrows(LocalApiKeyListWasNotInitializedException.class, () -> localApiKeyProvider.getApiKeyEntityFromLocalCache(null));
     }
 
     @Test
     public void nullApiKeyValueShouldCauseException() {
-        localApiKeyManager.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
-        assertThrows(ApiKeyValueWasNullException.class, () -> localApiKeyManager.getApiKeyEntityFromLocalCache(null));
+        localApiKeyProvider.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
+        assertThrows(ApiKeyValueWasNullException.class, () -> localApiKeyProvider.getApiKeyEntityFromLocalCache(null));
     }
 
     @Test
     public void apiKeyIsFoundInLocalApiKeyListAndThereforeReturned() {
         initializeGatewayWithHashedApiKeyList();
-        ApiKey apiKeyFoundInLocalList = localApiKeyManager.getApiKeyEntityFromLocalCache(apiKeyValue);
+        ApiKey apiKeyFoundInLocalList = localApiKeyProvider.getApiKeyEntityFromLocalCache(apiKeyValue);
 
         assertEquals(apiKeyValue, apiKeyFoundInLocalList.getKeyValue());
         assertSame(hashedApiKey.serviceApi, apiKeyFoundInLocalList.getServiceApi());
@@ -82,8 +81,8 @@ public class LocalApiKeyManagerTest {
     }
 
     private void initializeGatewayWithHashedApiKeyList() {
-        when(loggingApiKeyFetcherProxyMock.obtainHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
-        localApiKeyManager.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
+        when(loggingRemoteApiKeyProviderProxyMock.obtainHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
+        localApiKeyProvider.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
     }
 
     @Test
@@ -94,18 +93,18 @@ public class LocalApiKeyManagerTest {
         hashedApiKeyList.add(wrongHashedApiKey);
 
         initializeGatewayWithHashedApiKeyList();
-        assertThrows(ApiKeyNotFoundInLocalApiKeyListException.class, () -> localApiKeyManager.getApiKeyEntityFromLocalCache(apiKeyValue));
+        assertThrows(ApiKeyNotFoundInLocalApiKeyListException.class, () -> localApiKeyProvider.getApiKeyEntityFromLocalCache(apiKeyValue));
     }
 
     @Test
     public void offlineWorkingTimeIsNotExceeded() {
         long deadlineIsOneMinuteAfterNow = 1;
 
-        LocalApiKeyManager localApiKeyManager = new LocalApiKeyManager(loggingApiKeyFetcherProxyMock, deadlineIsOneMinuteAfterNow);
-        when(loggingApiKeyFetcherProxyMock.obtainHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
-        localApiKeyManager.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
+        LocalApiKeyProvider localApiKeyProvider = new LocalApiKeyProvider(loggingRemoteApiKeyProviderProxyMock, deadlineIsOneMinuteAfterNow);
+        when(loggingRemoteApiKeyProviderProxyMock.obtainHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
+        localApiKeyProvider.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
 
-        ApiKey apiKeyFoundInLocalList = localApiKeyManager.getApiKeyEntityFromLocalCache(apiKeyValue);
+        ApiKey apiKeyFoundInLocalList = localApiKeyProvider.getApiKeyEntityFromLocalCache(apiKeyValue);
         assertEquals(apiKeyValue, apiKeyFoundInLocalList.getKeyValue());
     }
 
@@ -113,35 +112,35 @@ public class LocalApiKeyManagerTest {
     public void offlineWorkingTimeIsExceededWhichCausesException() {
         long deadlineIsOneMinuteBeforeNow = -1;
 
-        LocalApiKeyManager localApiKeyManager = new LocalApiKeyManager(loggingApiKeyFetcherProxyMock, deadlineIsOneMinuteBeforeNow);
-        when(loggingApiKeyFetcherProxyMock.obtainHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
-        localApiKeyManager.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
+        LocalApiKeyProvider localApiKeyProvider = new LocalApiKeyProvider(loggingRemoteApiKeyProviderProxyMock, deadlineIsOneMinuteBeforeNow);
+        when(loggingRemoteApiKeyProviderProxyMock.obtainHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
+        localApiKeyProvider.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
 
         assertThrows(OfflineWorkingTimeExceedingException.class,
-                () -> localApiKeyManager.getApiKeyEntityFromLocalCache(apiKeyValue));
+                () -> localApiKeyProvider.getApiKeyEntityFromLocalCache(apiKeyValue));
     }
 
     @Test
     public void apiKeyFetchingFailedExceptionShouldNotAffectLatestHashedApiKeyList() {
         initializedGatewayLosesConnectionToAdmin();
-        ApiKey apiKeyFoundInLocalList = localApiKeyManager.getApiKeyEntityFromLocalCache(apiKeyValue);
+        ApiKey apiKeyFoundInLocalList = localApiKeyProvider.getApiKeyEntityFromLocalCache(apiKeyValue);
         assertEquals(apiKeyValue, apiKeyFoundInLocalList.getKeyValue());
     }
 
     private void initializedGatewayLosesConnectionToAdmin() {
-        when(loggingApiKeyFetcherProxyMock.obtainHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
-        localApiKeyManager.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
+        when(loggingRemoteApiKeyProviderProxyMock.obtainHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
+        localApiKeyProvider.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
 
-        reset(loggingApiKeyFetcherProxyMock);
-        when(loggingApiKeyFetcherProxyMock.obtainHashedApiKeyListFromAdmin()).thenThrow(ApiKeyFetchingFailedException.class);
-        localApiKeyManager.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
+        reset(loggingRemoteApiKeyProviderProxyMock);
+        when(loggingRemoteApiKeyProviderProxyMock.obtainHashedApiKeyListFromAdmin()).thenThrow(ApiKeyFetchingFailedException.class);
+        localApiKeyProvider.refreshLocalApiKeyCacheWithApiKeysFromAdmin();
     }
 
     @Test
     public void apiKeyFetchingFailedExceptionShouldCauseSwitchToOfflineMode() {
         initializedGatewayLosesConnectionToAdmin();
-        localApiKeyManager.getApiKeyEntityFromLocalCache(apiKeyValue);
-        verify(loggingApiKeyFetcherProxyMock).updateGatewayMode(OFFLINE);
+        localApiKeyProvider.getApiKeyEntityFromLocalCache(apiKeyValue);
+        verify(loggingRemoteApiKeyProviderProxyMock).updateGatewayMode(OFFLINE);
     }
 
 }

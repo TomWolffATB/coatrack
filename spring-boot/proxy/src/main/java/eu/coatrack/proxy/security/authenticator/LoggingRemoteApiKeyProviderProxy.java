@@ -1,4 +1,4 @@
-package eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.localApiKeyManager;
+package eu.coatrack.proxy.security.authenticator;
 
 /*-
  * #%L
@@ -21,7 +21,6 @@ package eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider
  */
 
 import eu.coatrack.api.HashedApiKey;
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.apiKeyFetcher.ApiKeyFetcher;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -34,20 +33,20 @@ import java.util.List;
 @Service
 @EnableAsync
 @AllArgsConstructor
-public class LoggingApiKeyFetcherProxy {
+public class LoggingRemoteApiKeyProviderProxy {
 
     public final static String switchingToOfflineModeMessage = "Gateway is switching to offline mode.";
     public final static String switchingToOnlineModeMessage = "Gateway is switching to online mode.";
 
     private static GatewayMode currentGatewayMode = GatewayMode.OFFLINE;
 
-    private final ApiKeyFetcher apiKeyFetcher;
+    private final RemoteApiKeyProvider remoteApiKeyProvider;
 
     public List<HashedApiKey> obtainHashedApiKeyListFromAdmin() {
         log.debug("Trying to update the local API key list by contacting CoatRack admin.");
 
         try {
-            List<HashedApiKey> fetchedHashedApiKeyList = apiKeyFetcher.requestLatestHashedApiKeyListFromAdmin();
+            List<HashedApiKey> fetchedHashedApiKeyList = remoteApiKeyProvider.requestLatestHashedApiKeyListFromAdmin();
             Assert.notNull(fetchedHashedApiKeyList, "The local API key list will not be " +
                     "updated since the fetched API key list was null.");
             updateGatewayMode(GatewayMode.ONLINE);

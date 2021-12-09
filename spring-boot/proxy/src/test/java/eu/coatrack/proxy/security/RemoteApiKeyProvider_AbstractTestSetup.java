@@ -20,8 +20,8 @@ package eu.coatrack.proxy.security;/*-
 
 import eu.coatrack.api.ApiKey;
 import eu.coatrack.api.HashedApiKey;
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.apiKeyFetcher.ApiKeyFetcher;
-import eu.coatrack.proxy.security.consumerAuthenticationProvider.apiKeyProvider.apiKeyFetcher.UrlResourcesProvider;
+import eu.coatrack.proxy.security.authenticator.RemoteApiKeyProvider;
+import eu.coatrack.proxy.security.authenticator.UrlResourcesProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -34,11 +34,11 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-public abstract class ApiKeyFetcher_AbstractTestSetup {
+public abstract class RemoteApiKeyProvider_AbstractTestSetup {
 
     @Mock protected UrlResourcesProvider urlResourcesProviderMock;
     @Mock protected RestTemplate restTemplateMock;
-    @InjectMocks protected ApiKeyFetcher apiKeyFetcher;
+    @InjectMocks protected RemoteApiKeyProvider remoteApiKeyProvider;
 
     protected static final String someApiKeyValue = "ee11ee22-ee33-ee44-ee55-ee66ee77ee88";
 

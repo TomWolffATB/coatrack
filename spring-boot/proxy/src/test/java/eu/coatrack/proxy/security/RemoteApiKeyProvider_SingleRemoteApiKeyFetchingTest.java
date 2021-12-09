@@ -36,7 +36,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ApiKeyFetcher_SingleRemoteApiKeyFetchingTest extends RemoteApiKeyProvider_AbstractTestSetup {
+public class RemoteApiKeyProvider_SingleRemoteApiKeyFetchingTest extends RemoteApiKeyProvider_AbstractTestSetup {
 
     @AfterEach
     public void verifyRestTemplateMockCall() {

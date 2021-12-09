@@ -76,9 +76,6 @@ public class ApiKeyAuthenticator implements AuthenticationManager {
 
     private String extractApiKeyValueFromAuthentication(Authentication authentication) {
         try{
-            Assert.notNull(authentication.getCredentials(), "The credentials of " + authentication.getName()
-                    + " were null.");
-            Assert.isInstanceOf(String.class, authentication.getCredentials());
             String apiKeyValue = (String) authentication.getCredentials();
             Assert.hasText(apiKeyValue, "The credentials did not contain any letters.");
             return apiKeyValue;

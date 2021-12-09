@@ -35,13 +35,12 @@ import java.util.List;
 
 import static eu.coatrack.proxy.security.authenticator.GatewayMode.OFFLINE;
 import static eu.coatrack.proxy.security.authenticator.GatewayMode.ONLINE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class LoggingRemoteApiKeyProviderProxyTest {
 
-    @Mock private RemoteApiKeyProvider remoteApiKeyProvider;
+    @Mock private RemoteApiKeyProvider remoteApiKeyProviderMock;
     @InjectMocks private LoggingRemoteApiKeyProviderProxy loggingRemoteApiKeyProviderProxy;
 
     private List<HashedApiKey> hashedApiKeyList;
@@ -73,7 +72,7 @@ public class LoggingRemoteApiKeyProviderProxyTest {
 
     @Test
     public void fetchingApiKeyListShouldCauseSwitchToOnlineMode() {
-        when(remoteApiKeyProvider.requestLatestHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
+        when(remoteApiKeyProviderMock.requestLatestHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
         loggingRemoteApiKeyProviderProxy.obtainHashedApiKeyListFromAdmin();
         assertEquals(ONLINE, loggingRemoteApiKeyProviderProxy.getCurrentGatewayMode());
     }
@@ -81,10 +80,24 @@ public class LoggingRemoteApiKeyProviderProxyTest {
     @Test
     public void apiKeyListFetchingFailedExceptionShouldCauseSwitchingToOfflineModeAndRethrowException() {
         loggingRemoteApiKeyProviderProxy.updateGatewayMode(ONLINE);
-        when(remoteApiKeyProvider.requestLatestHashedApiKeyListFromAdmin()).thenThrow(ApiKeyFetchingFailedException.class);
-
+        when(remoteApiKeyProviderMock.requestLatestHashedApiKeyListFromAdmin()).thenThrow(ApiKeyFetchingFailedException.class);
         assertThrows(ApiKeyFetchingFailedException.class, () -> loggingRemoteApiKeyProviderProxy.obtainHashedApiKeyListFromAdmin());
         assertEquals(OFFLINE, loggingRemoteApiKeyProviderProxy.getCurrentGatewayMode());
+    }
+
+    @Test
+    public void apiKeyListRedirectionAsProxyWorks() {
+        when(remoteApiKeyProviderMock.requestLatestHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
+        List<HashedApiKey> obtainedHashedApiKeyList = loggingRemoteApiKeyProviderProxy.obtainHashedApiKeyListFromAdmin();
+        assertSame(hashedApiKeyList, obtainedHashedApiKeyList);
+    }
+
+    @Test
+    public void successfullyObtainingHashedApiKeyListShouldCauseSwitchingToOnlineMode() {
+        loggingRemoteApiKeyProviderProxy.updateGatewayMode(OFFLINE);
+        when(remoteApiKeyProviderMock.requestLatestHashedApiKeyListFromAdmin()).thenReturn(hashedApiKeyList);
+        loggingRemoteApiKeyProviderProxy.obtainHashedApiKeyListFromAdmin();
+        assertEquals(ONLINE, loggingRemoteApiKeyProviderProxy.getCurrentGatewayMode());
     }
 
 }

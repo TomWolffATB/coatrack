@@ -104,7 +104,7 @@ public class LocalApiKeyProvider {
         }
     }
 
-    private ApiKey recreateApiKey(HashedApiKey hashedApiKey, String apiKeyValue) {;
+    private ApiKey recreateApiKey(HashedApiKey hashedApiKey, String apiKeyValue) {
         ApiKey apiKey = new ApiKey();
         apiKey.setKeyValue(apiKeyValue);
         apiKey.setServiceApi(hashedApiKey.serviceApi);

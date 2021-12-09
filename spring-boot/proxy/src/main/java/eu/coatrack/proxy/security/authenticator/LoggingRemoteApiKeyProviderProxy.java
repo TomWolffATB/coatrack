@@ -47,8 +47,6 @@ public class LoggingRemoteApiKeyProviderProxy {
 
         try {
             List<HashedApiKey> fetchedHashedApiKeyList = remoteApiKeyProvider.requestLatestHashedApiKeyListFromAdmin();
-            Assert.notNull(fetchedHashedApiKeyList, "The local API key list will not be " +
-                    "updated since the fetched API key list was null.");
             updateGatewayMode(GatewayMode.ONLINE);
             return fetchedHashedApiKeyList;
         } catch (Exception e) {

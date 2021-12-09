@@ -22,6 +22,7 @@ package eu.coatrack.proxy.security;
 
 import eu.coatrack.api.ApiKey;
 import eu.coatrack.api.HashedApiKey;
+import eu.coatrack.api.ServiceApi;
 import eu.coatrack.proxy.security.authenticator.LocalApiKeyProvider;
 import eu.coatrack.proxy.security.authenticator.LoggingRemoteApiKeyProviderProxy;
 import eu.coatrack.proxy.security.authenticator.exceptions.*;
@@ -29,6 +30,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static eu.coatrack.proxy.security.authenticator.GatewayMode.OFFLINE;
@@ -47,6 +49,9 @@ public class LocalApiKeyProviderTest {
     public void setupLocalApiKeyManagerWithoutInitializingLocalApiKeyList() {
         ApiKey apiKey = new ApiKey();
         apiKey.setKeyValue(apiKeyValue);
+        apiKey.setServiceApi(new ServiceApi());
+        apiKey.setValidUntil(new Date());
+        apiKey.setDeletedWhen(new Date());
 
         hashedApiKeyList = new ArrayList<>();
         hashedApiKey = apiKey.convertToHashedApiKey();

@@ -35,7 +35,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
-public class ApiKeyFetcher_Remote_ApiKeyListFetchingTest extends RemoteApiKeyProvider_AbstractTestSetup {
+public class RemoteApiKeyProvider_ApiKeyListFetchingTest extends RemoteApiKeyProvider_AbstractTestSetup {
 
     @AfterEach
     public void verifyRestTemplateMockCall() {
@@ -50,7 +50,7 @@ public class ApiKeyFetcher_Remote_ApiKeyListFetchingTest extends RemoteApiKeyPro
 
     @Test
     public void exceptionAtApiKeyListFetchingShouldCauseException() {
-        when(restTemplateMock.getForEntity(anyString(), eq(ApiKey[].class)))
+        when(restTemplateMock.getForEntity(anyString(), eq(HashedApiKey[].class)))
                 .thenThrow(new RestClientException("test"));
         assertThrows(ApiKeyFetchingFailedException.class, () -> remoteApiKeyProvider.requestLatestHashedApiKeyListFromAdmin());
     }
